@@ -9,16 +9,17 @@ from pytest import LogCaptureFixture
 
 @patch.object(sys, "argv", ["super_resolution", "--integer_a", "4", "--integer_b", "5"])
 def test_main(caplog: LogCaptureFixture) -> None:
-    """Test main for example_entrypoint_b.
+    """Test main.
 
     Parameters
     ----------
     caplog : LogCaptureFixture
         The caplog fixture
+
     """
-    from super_resolution.example_entrypoint_b import main
+    from super_resolution.example_entrypoint import main
 
     with caplog.at_level(logging.INFO):
         main()
-        assert "Worse Calculator Output" in caplog.records[0].message
+        assert "Bad Calculator Output" in caplog.records[0].message
         assert "9" in caplog.records[0].message

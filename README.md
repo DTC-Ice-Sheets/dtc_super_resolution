@@ -26,19 +26,13 @@ pip install git+https://github.com/dtc-ice-sheets/super_resolution.git
 You can then use this package as follows (obviously you will need to edit this section after copying this template):
 
 ```
-python -m super_resolution.example_entrypoint_a --integer_a <number_a> --integer_b <number_b>
-```
-
-or
-
-```
-python -m super_resolution.example_entrypoint_b --integer_a <number_a> --integer_b <number_b>
+python -m super_resolution --integer_a <number_a> --integer_b <number_b>
 ```
 
 For more help, run:
 
 ```
-python -m super_resolution.example_entrypoint_a -h
+python -m super_resolution -h
 ```
 
 ## Installation for Development
