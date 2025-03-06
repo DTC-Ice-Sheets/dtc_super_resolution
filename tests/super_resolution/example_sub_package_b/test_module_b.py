@@ -2,7 +2,7 @@
 
 import pytest
 
-from use_case_3.example_sub_package_b.example_module_b import WorseCalculator
+from super_resolution.example_sub_package_b.example_module_b import WorseCalculator
 
 
 @pytest.fixture

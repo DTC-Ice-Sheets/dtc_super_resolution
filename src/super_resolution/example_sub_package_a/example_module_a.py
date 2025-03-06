@@ -1,4 +1,4 @@
-"""Example for use_case_3."""
+"""Example for super_resolution."""
 
 import numpy as np
 from numpy.typing import NDArray

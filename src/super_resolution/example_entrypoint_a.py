@@ -1,4 +1,4 @@
-"""Entrypoint for package b.
+"""Entrypoint for subpackage a.
 
 Note that not all packages need a command line entry point.
 """
@@ -6,18 +6,18 @@ Note that not all packages need a command line entry point.
 import argparse
 import logging
 
-from use_case_3.example_sub_package_b.example_module_b import WorseCalculator
-from use_case_3.monitoring import setup_logging
-from use_case_3.schemas import ExampleEntryPointSchema
+from super_resolution.example_sub_package_a.example_module_a import BadCalculator
+from super_resolution.monitoring import setup_logging
+from super_resolution.schemas import ExampleEntryPointSchema
 
 logger = logging.getLogger(__name__)
 
 
-def main(*args) -> None:
+def main() -> None:
     """Calculate numbers poorly."""
     setup_logging()
     parser = argparse.ArgumentParser(
-        prog="use_case_3",
+        prog="super_resolution",
         description="Perform some bad calculations on two integers.",
     )
 
@@ -39,10 +39,10 @@ def main(*args) -> None:
     model = ExampleEntryPointSchema(**vars(args))
 
     # Instantiate the calculator and perform calculations
-    worse_calculator = WorseCalculator(max_output_array_length=10)
+    bad_calculator = BadCalculator(output_array_length=5)
     logger.info(
-        "Worse Calculator Output: %s",
-        worse_calculator.add_two_numbers(model.integer_a, model.integer_b),
+        "Bad Calculator Output: %s",
+        bad_calculator.add_two_numbers(model.integer_a, model.integer_b),
     )
 
 

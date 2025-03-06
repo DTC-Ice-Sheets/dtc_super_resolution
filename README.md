@@ -1,9 +1,9 @@
-![example workflow](https://github.com/dtc-ice-sheets/use_case_3/actions/workflows/use_case_3_test.yml/badge.svg)
-![example workflow](https://github.com/dtc-ice-sheets/use_case_3/actions/workflows/use_case_3_deploy.yml/badge.svg)
+![example workflow](https://github.com/dtc-ice-sheets/super_resolution/actions/workflows/super_resolution_test.yml/badge.svg)
+![example workflow](https://github.com/dtc-ice-sheets/super_resolution/actions/workflows/super_resolution_deploy.yml/badge.svg)
 
-# use_case_3
+# super_resolution
 
-DTC-IS Hydropower modules aimed to predict climatically driven changes to freshwater flux from the Greenland Ice Sheet into the proglacial environment.
+DTC-IS Super Resolution Module to leverage super-resolution modeling techniques to enhance the monitoring and prediction of surface climate conditions over Greenland and Antarctica.
 
 **Please familiarise yourself with the [DTC Ice Sheets Development Guide](https://dtc-ice-sheets.github.io/dtc_python_template/) before proceeding.**
 
@@ -20,25 +20,25 @@ organisation.
 Then, to download and install the latest version from the Use case 1 GitHub repository:
 
 ```
-pip install git+https://github.com/dtc-ice-sheets/use_case_3.git
+pip install git+https://github.com/dtc-ice-sheets/super_resolution.git
 ```
 
 You can then use this package as follows (obviously you will need to edit this section after copying this template):
 
 ```
-python -m use_case_3.example_entrypoint_a --integer_a <number_a> --integer_b <number_b>
+python -m super_resolution.example_entrypoint_a --integer_a <number_a> --integer_b <number_b>
 ```
 
 or
 
 ```
-python -m use_case_3.example_entrypoint_b --integer_a <number_a> --integer_b <number_b>
+python -m super_resolution.example_entrypoint_b --integer_a <number_a> --integer_b <number_b>
 ```
 
 For more help, run:
 
 ```
-python -m use_case_3.example_entrypoint_a -h
+python -m super_resolution.example_entrypoint_a -h
 ```
 
 ## Installation for Development
@@ -46,8 +46,8 @@ python -m use_case_3.example_entrypoint_a -h
 To develop this package, please clone the repository:
 
 ```
-git clone https://github.com/dtc-ice-sheets/use_case_3.git
-cd use_case_3
+git clone https://github.com/dtc-ice-sheets/super_resolution.git
+cd super_resolution
 ```
 
 This project uses poetry to manage package dependencies and virtual environments.

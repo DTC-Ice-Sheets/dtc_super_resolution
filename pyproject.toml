@@ -3,14 +3,14 @@ requires = ["poetry>=1.5"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "use_case_3"
-version = "0.0.1"
-description = "DTC-IS State and fate of Antarctic Ice Shelves demonstrator will enable the stakeholders to gain information on the State and fate of Antarctic Ice Shelves"
-authors = ["Earthwave Ltd <info@earthwave.co.uk>"]
+name = "super_resolution"
+version = "0.0.0"
+description = "Leverage super-resolution modeling techniques to enhance the monitoring and prediction of surface climate conditions over Greenland and Antarctica"
+authors = ["Katholike Universiteit Leuven"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/dtc-ice-sheets/use_case_3"
-packages = [{ include = "use_case_3", from = "src" }]
+homepage = "https://github.com/dtc-ice-sheets/super_resolution"
+packages = [{ include = "super_resolution", from = "src" }]
 
 [tool.poetry.dependencies]
 python = ">=3.12,<4.0"
@@ -71,8 +71,8 @@ convention = "numpy" # Accepts: "google", "numpy", or "pep257"
 skips = ['*_test.py', '*/test_*.py']
 
 [tool.pytest.ini_options]
-addopts = "--disable-warnings --cov use_case_3 --cov-fail-under=80"
-typeguard-packages = """use_case_3"""
+addopts = "--disable-warnings --cov super_resolution --cov-fail-under=80"
+typeguard-packages = """super_resolution"""
 typeguard-debug-instrumentation = true
 typeguard-forward-ref-policy = "ERROR"
 typeguard-collection-check-strategy = "ALL_ITEMS"
