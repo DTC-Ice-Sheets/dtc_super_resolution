@@ -6,18 +6,16 @@ Note that not all packages need a command line entry point.
 import argparse
 import logging
 
-from use_case_3.example_sub_package_a.example_module_a import BadCalculator
-from use_case_3.monitoring import setup_logging
-from use_case_3.schemas import ExampleEntryPointSchema
+from super_resolution.example_module import BadCalculator
+from super_resolution.schemas import ExampleEntryPointSchema
 
 logger = logging.getLogger(__name__)
 
 
 def main() -> None:
     """Calculate numbers poorly."""
-    setup_logging()
     parser = argparse.ArgumentParser(
-        prog="use_case_3",
+        prog="super_resolution",
         description="Perform some bad calculations on two integers.",
     )
 
@@ -44,7 +42,3 @@ def main() -> None:
         "Bad Calculator Output: %s",
         bad_calculator.add_two_numbers(model.integer_a, model.integer_b),
     )
-
-
-if __name__ == "__main__":
-    main()

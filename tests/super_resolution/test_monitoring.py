@@ -3,11 +3,11 @@
 import logging
 from unittest.mock import patch
 
-from use_case_3.monitoring import setup_logging
+from super_resolution.monitoring import setup_logging
 
 
 def test_setup_logging() -> None:
-    with patch("use_case_3.monitoring.logging.getLogger") as mock_get_logger:
+    with patch("super_resolution.monitoring.logging.getLogger") as mock_get_logger:
         mock_logger = mock_get_logger.return_value
         setup_logging()
 

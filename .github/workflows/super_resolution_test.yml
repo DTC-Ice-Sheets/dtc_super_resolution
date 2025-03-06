@@ -1,5 +1,5 @@
 # When pushing to a branch, test
-name: use_case_3_test
+name: super_resolution_test
 
 on:
   push:
@@ -10,20 +10,20 @@ jobs:
   # build_container_if_needed:
   #   uses: ./.github/workflows/generic_build_container_if_needed.yml
   #   with:
-  #     package_name: use_case_3
+  #     package_name: super_resolution
   #   secrets: inherit
 
   # test_with_container:
   #   needs: build_container_if_needed
   #   uses: ./.github/workflows/generic_test_with_container.yml
   #   with:
-  #     package_name: use_case_3
+  #     package_name: super_resolution
   #     notebooks_allowed: true
   #   secrets: inherit
 
   test:
     uses: ./.github/workflows/generic_test.yml
     with:
-      package_name: use_case_3
+      package_name: super_resolution
       notebooks_allowed: true
     secrets: inherit
