@@ -1,0 +1,37 @@
+"""Example for use_case_3."""
+
+import numpy as np
+from numpy.typing import NDArray
+
+
+class BadCalculator:
+    """Simple class for Python testing."""
+
+    def __init__(self, output_array_length: int) -> None:
+        """Initialise the Bad Calculator.
+
+        Parameters
+        ----------
+        output_array_length : int
+            Output is returned as an array of this length for no apparent reason.
+
+        """
+        self.output_array_length = output_array_length
+
+    def add_two_numbers(self, number_a: float, number_b: float) -> NDArray[np.float64]:
+        """Add two numbers and return the result repeated several times.
+
+        Parameters
+        ----------
+        number_a : float
+            The first number
+        number_b : float
+            The second number
+
+        Returns
+        -------
+        np.ndarray[float]
+            The result of the bad calculation
+
+        """
+        return np.ones(self.output_array_length) * (number_a + number_b)

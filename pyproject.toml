@@ -1,0 +1,78 @@
+[build-system]
+requires = ["poetry>=1.5"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "use_case_3"
+version = "0.0.1"
+description = "DTC-IS State and fate of Antarctic Ice Shelves demonstrator will enable the stakeholders to gain information on the State and fate of Antarctic Ice Shelves"
+authors = ["Earthwave Ltd <info@earthwave.co.uk>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/dtc-ice-sheets/use_case_3"
+packages = [{ include = "use_case_3", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.12,<4.0"
+numpy = "^2.2"
+pydantic = "^2.10.6"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+typeguard = "^4.4.2"
+pre-commit = "^4.1"
+ruff = "^0.9.9"
+bandit = "^1.8.3"
+pytest-cov = "^6.0.0"
+sphinx = "^8.2.3"
+sphinx-rtd-theme = "^3.0.2"
+sphinx-copybutton = "^0.5.2"
+commitizen = "^4.3.0"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "T201", # Disallow print statements
+    "A",    # Ambiguity
+    "B",    # Bad practices
+    "C",    # Complexity
+    "D",    # Documentation
+    "E",    # Errors
+    "I",    # Imports
+    "N",    # Naming
+    "Q",    # Quoting
+    "S",    # Stylistic
+    "W",    # Warnings
+]
+
+mccabe = { max-complexity = 10 }
+
+ignore = [
+    "D203", # One blank line required before class docstring (conflicts with D211)
+    "D204", # One blank line required after class docstring
+    "D205", # Docstring with no content
+    "D212", # Multi-line docstring summary should start at the second line
+    "D213", # Multi-line docstring summary should start at the first line
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "T201", # Allow print statements in test files, as they are commonly used for debugging
+    "E402", # Allow 'import' statements not being at the top of the file (common in test files for clarity)
+    "S101", # Allow the use of 'assert' statements in test files (common practice in pytest)
+    "D103", # Ignore missing docstring warnings for functions in test files (commonly not required for small test functions)
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy" # Accepts: "google", "numpy", or "pep257"
+[tool.bandit.assert_used]
+skips = ['*_test.py', '*/test_*.py']
+
+[tool.pytest.ini_options]
+addopts = "--disable-warnings --cov use_case_3 --cov-fail-under=80"
+typeguard-packages = """use_case_3"""
+typeguard-debug-instrumentation = true
+typeguard-forward-ref-policy = "ERROR"
+typeguard-collection-check-strategy = "ALL_ITEMS"
