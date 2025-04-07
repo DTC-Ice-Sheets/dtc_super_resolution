@@ -27,7 +27,7 @@ pytest-cov = "^6.0.0"
 sphinx = "^8.2.3"
 sphinx-rtd-theme = "^3.0.2"
 sphinx-copybutton = "^0.5.2"
-commitizen = "^4.3.0"
+commitizen = "^4.5.0"
 
 [tool.ruff]
 line-length = 120
