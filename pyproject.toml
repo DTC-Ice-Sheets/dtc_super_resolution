@@ -14,7 +14,7 @@ packages = [{ include = "super_resolution", from = "src" }]
 
 [tool.poetry.dependencies]
 python = ">=3.12,<4.0"
-numpy = "^2.2"
+numpy = "^2.3"
 pydantic = "^2.11.7"
 
 [tool.poetry.group.dev.dependencies]
