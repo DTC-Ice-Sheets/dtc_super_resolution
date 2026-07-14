@@ -5,17 +5,15 @@ from numpy.typing import NDArray
 
 
 class BadCalculator:
-    """Simple class for Python testing."""
+    """Simple class for Python testing.
+
+    Parameters
+    ----------
+    output_array_length : int
+        Output is returned as an array of this length for no apparent reason.
+    """
 
     def __init__(self, output_array_length: int) -> None:
-        """Initialise the Bad Calculator.
-
-        Parameters
-        ----------
-        output_array_length : int
-            Output is returned as an array of this length for no apparent reason.
-
-        """
         self.output_array_length = output_array_length
 
     def add_two_numbers(self, number_a: float, number_b: float) -> NDArray[np.float64]:
@@ -30,7 +28,7 @@ class BadCalculator:
 
         Returns
         -------
-        np.ndarray[float]
+        NDArray[np.float64]
             The result of the bad calculation
 
         """

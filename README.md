@@ -26,13 +26,13 @@ pip install git+https://github.com/dtc-ice-sheets/super_resolution.git
 You can then use this package as follows (obviously you will need to edit this section after copying this template):
 
 ```
-python -m super_resolution --integer_a <number_a> --integer_b <number_b>
+python -m super_resolution.example_entrypoint --integer_a <number_a> --integer_b <number_b>
 ```
 
 For more help, run:
 
 ```
-python -m super_resolution -h
+python -m super_resolution.example_entrypoint -h
 ```
 
 ## Installation for Development
@@ -108,6 +108,13 @@ pytest
 Pushing directly to main is prohibited. If you wish your work to be included, first push a separate branch to
 the repository and then open a Pull Request. All branches that have not received a commit for more than 30 days
 will be automatically deleted.
+
+## Building locally
+
+To build the Sphinx documentation locally, run:
+
+    poetry run sphinx-build -M html docs/source docs/build
+
 
 ## Versioning and releases
 
