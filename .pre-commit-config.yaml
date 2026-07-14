@@ -6,9 +6,20 @@ repos:
     hooks:
       - id: check-yaml
       - id: end-of-file-fixer
+        files: .*\.(py|yaml)$
       - id: trailing-whitespace
       - id: name-tests-test
         args: ["--pytest-test-first"]
+
+# TODO: Remove this precommit hook once ruff fully supports pydoclint functionality:
+# https://github.com/astral-sh/ruff/issues/12434
+  - repo: https://github.com/jsh9/pydoclint
+    rev: 0.6.7
+    hooks:
+      - id: pydoclint
+        name: Check docstrings with pydoclint
+        args: ["--config=pyproject.toml", "--quiet"]
+        files: .*\.(py|ipynb)$
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
@@ -17,7 +28,7 @@ repos:
       - id: ruff
         name: Check linting with ruff
         args: ["--config=pyproject.toml", "--fix"]
-        files: .*\.py$
+        files: .*\.(py|ipynb)$
 
   - repo: https://github.com/PyCQA/bandit
     rev: 1.8.3

@@ -3,42 +3,41 @@
 Note that not all packages need a command line entry point.
 """
 
-import argparse
 import logging
 
+import cyclopts
+
 from super_resolution.example_module import BadCalculator
-from super_resolution.schemas import ExampleEntryPointSchema
+from super_resolution.monitoring import setup_logging
 
 logger = logging.getLogger(__name__)
 
 
-def main() -> None:
-    """Calculate numbers poorly."""
-    parser = argparse.ArgumentParser(
-        prog="super_resolution",
-        description="Perform some bad calculations on two integers.",
-    )
+app = cyclopts.App()
 
-    # Add arguments to the parser
-    for name, field in ExampleEntryPointSchema.model_fields.items():
-        parser.add_argument(
-            f"--{name}",
-            dest=name,
-            type=field.annotation if field.annotation is not None else int,
-            default=field.default,
-            help=field.description,
-            required=name in ["integer_a", "integer_b"],
-        )
 
-    # Parse the input arguments
-    args = parser.parse_args()
+@app.default
+def main(
+    integer_a: int,
+    integer_b: int,
+) -> None:
+    """Calculate numbers poorly, and log the result.
 
-    # Create the model from parsed arguments
-    model = ExampleEntryPointSchema(**vars(args))
-
+    Parameters
+    ----------
+    integer_a : int
+        The first integer.
+    integer_b : int
+        The second integer.
+    """
+    setup_logging()
     # Instantiate the calculator and perform calculations
     bad_calculator = BadCalculator(output_array_length=5)
     logger.info(
         "Bad Calculator Output: %s",
-        bad_calculator.add_two_numbers(model.integer_a, model.integer_b),
+        bad_calculator.add_two_numbers(integer_a, integer_b),
     )
+
+
+if __name__ == "__main__":
+    app()
