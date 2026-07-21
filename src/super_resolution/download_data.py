@@ -14,7 +14,7 @@ import data_download_module as ddm
 dotenv.load_dotenv()
 
 # provisionally we download from edh, but the right dataset will be served from DDM as well
-def download_era5_from_edh(start_date: str, end_date: str, output_dir: str) -> xr.Dataset:
+def download_era5_from_edh(start_date: str, end_date: str, output_dir: str) -> str:
     """
     Download ERA5 data from the Earth Data Hub.
     Both dataset cover the time period from 2010-01-01 to 2023-12-31, which was used for training.
@@ -38,13 +38,16 @@ def download_era5_from_edh(start_date: str, end_date: str, output_dir: str) -> x
     # define antarctica as 90° S to 60° S in latitude and full longitude
     era5_ds = era5_ds.sel(latitude=slice(-40, -90), longitude=slice(0, 360))
 
-    # slice temporally to match RCM data 
-    era5_ds = era5_ds.sel(valid_time=slice(start_date, end_date))  
+    # slice temporally 
+    try:
+        era5_ds = era5_ds.sel(valid_time=slice(start_date, end_date))  
+    except KeyError:
+        raise ValueError("No ERA5 data available for the specified date range.")
 
     era5_ds = era5_ds.compute()  # materialize into memory here
 
     # save to netcdf 
-    name = "ERA5_monthly_means_2010-2023.nc"
+    name = f"ERA5_monthly_means_{start_date}_{end_date}.nc"
     era5path = os.path.join(output_dir, name)
     era5_ds.to_netcdf(era5path)
 

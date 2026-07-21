@@ -5,15 +5,12 @@ import argparse
 import os
 import logging
 
-from super_resolution.monitoring import setup_logging
 from super_resolution.download_data import download_data
 from super_resolution.pre_processing_module.preprocessing import run_preprocessing
 from super_resolution.ml_module.inference import run_inference
 from super_resolution.ml_module.inference_helpers import run_postprocessing
-
 from super_resolution.ml_module.plots import predictions_plot
 
-# setup_logging()
 logger = logging.getLogger(__name__)
 
 RACMO_PATH = "/home/ngaillard/super_resolution/src/super_resolution/data/RACMO/RACMO__start_2020-01-01T00:00:00__end_2020-02-01T00:00:00__polygon_area_None__variables_surface_mass_balance_glaciated__mask_False__raw_False__21e0066e.zarr"
@@ -46,8 +43,7 @@ def main() -> None:
                 args.start_date,
                 args.end_date)
     
-    # data_paths = download_data(args.start_date, args.end_date, args.output_dir)
-    data_paths = {"era5": os.path.join(args.output_dir, "ERA5_monthly_means_2010-2023.nc"), "rcm": RACMO_PATH}
+    data_paths = download_data(args.start_date, args.end_date, args.output_dir)
 
     # 2. PRE-PROCESSING
     logger.info("Pre-processing the downloaded data...")

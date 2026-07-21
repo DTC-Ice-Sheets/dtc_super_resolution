@@ -88,7 +88,7 @@ def make_tiles(era5: xr.DataArray,
 
 
 def generate_tile_indices(racmo: xr.DataArray, era5: xr.DataArray, tile_racmo_h: int, tile_racmo_w: int,
-                          scale_x: int, scale_y: int, stride_frac: float = 1.0, context_pad: int = 0) -> list:
+                          scale_x: int, scale_y: int, stride_frac: float = 1.0, context_pad: tuple[int, int] = (0, 0)) -> list:
     """
     Generate paired RACMO / ERA5 index slices for all tiles.
 
@@ -102,10 +102,10 @@ def generate_tile_indices(racmo: xr.DataArray, era5: xr.DataArray, tile_racmo_h:
     stride_frac : float
         Fraction of tile size used as stride.
         1.0 → non-overlapping,  0.5 → 50 % overlap, etc.
-    context_pad : int
-        Extra ERA5 pixels added on each side of the ERA5 patch, providing
-        spatial context beyond the RACMO target region.
-        E.g. context_pad=2 gives an ERA5 patch of
+    context_pad : tuple[int, int]
+        Extra ERA5 pixels added on each side of the ERA5 patch (height, width),
+        providing spatial context beyond the RACMO target region.
+        E.g. context_pad=(2, 2) gives an ERA5 patch of
         (tile_era5_h + 4) x (tile_era5_w + 4).
         Tiles where the padded ERA5 patch would exceed the array bounds
         are dropped.
