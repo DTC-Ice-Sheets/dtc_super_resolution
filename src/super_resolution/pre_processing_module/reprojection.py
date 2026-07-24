@@ -113,7 +113,8 @@ def reproject_ERA5_to_RACMO_grid(era5_ds: xr.Dataset, gridx: np.ndarray, gridy: 
     logger.info("Reprojecting  ERA5 to RACMO grid")
 
     # Normalise ERA5 longitudes from 0–360 to –180–180
-    era5 = era5_ds.assign_coords(longitude=((era5_ds.longitude + 180) % 360) - 180).sortby('longitude')
+    # This line is needed when ERA5 is downloaded from edh, DDM takes care of this internally.
+    # era5 = era5_ds.assign_coords(longitude=((era5_ds.longitude + 180) % 360) - 180).sortby('longitude')
 
     # Build 2D meshgrid of target x/y and back-transform to lat/lon
     xmesh, ymesh = np.meshgrid(gridx, gridy)
@@ -125,16 +126,17 @@ def reproject_ERA5_to_RACMO_grid(era5_ds: xr.Dataset, gridx: np.ndarray, gridy: 
 
     logger.info(f"Interpolating {list(era5_ds.data_vars)} onto {len(gridx)}x{len(gridy)} grid...")
 
-    era5_interp = era5.interp(
-        {'longitude': lon_da, 'latitude': lat_da},
+    era5_xy = era5_ds.interp(
+        {'x': lon_da, 'y': lat_da},
         method='nearest'
     ).load()
 
     # Replace lat/lon coords with x/y
-    era5_xy = era5_interp.assign_coords({
+    era5_xy = era5_xy.assign_coords({
         'x': (('x',), gridx.data),
         'y': (('y',), gridy.data)
-    }).drop_vars(['longitude', 'latitude']).reset_coords()
+    })
+    # .drop_vars(['longitude', 'latitude']).reset_coords()
 
     era5_xy = era5_xy.rio.write_crs("epsg:3031")
 

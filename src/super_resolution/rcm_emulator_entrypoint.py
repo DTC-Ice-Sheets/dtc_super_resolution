@@ -2,6 +2,7 @@
 
 import argparse
 import argparse
+from datetime import datetime
 import os
 import logging
 
@@ -63,6 +64,8 @@ def main() -> None:
     final_output_da.to_zarr(output_zarr_path, mode="w")
 
     # save plots
+    logger.info("Saving plots of the predictions...")
+    
     predictions_plot(final_output_da, month=3, args=args)
 
     logger.info("Saved the final output to %s", output_zarr_path)

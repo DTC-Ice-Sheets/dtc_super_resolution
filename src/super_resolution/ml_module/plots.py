@@ -40,22 +40,29 @@ def predictions_plot(predictions_da: xr.Dataset, month: int = 0, args=None, save
     if args is not None:
         savedir = args.output_dir
         start_month = int(args.start_date.split('-')[1]) 
-        plot_month = start_month + month
-        month_name = MONTHS_DICT.get(plot_month, "Unknown")
+        
 
     # month = 0  # January 
     map_proj = ccrs.SouthPolarStereo(central_longitude=0.0)
 
-    fig, ax = plt.subplots(figsize=(5, 5), subplot_kw={'projection': map_proj})
+    tot_months = len(predictions_da.time)
 
-    predictions_da.isel(valid_time=month).plot(
-        ax=ax, x='x', y='y',
-        transform=ccrs.SouthPolarStereo(),
-        add_colorbar=True,
-        cmap='RdBu_r')
-    ax.coastlines('10m')
-    ax.gridlines(draw_labels=False)
-    ax.set_title(f'Predicted SMB — {month_name} {args.start_date[:4]}', fontsize=10)
-    plt.savefig(os.path.join(savedir, f'predicted_smb_month_{args.start_date[:4]}_{plot_month}.png'), dpi=300, bbox_inches='tight')
-    plt.close()
+    for m in range(tot_months):
+        plot_month = start_month + m
+        if plot_month > 12:
+            plot_month = plot_month - 12
+        month_name = MONTHS_DICT.get(plot_month, "Unknown")
+
+        fig, ax = plt.subplots(figsize=(5, 5), subplot_kw={'projection': map_proj})
+
+        predictions_da.isel(time=m).plot(
+            ax=ax, x='x', y='y',
+            transform=ccrs.SouthPolarStereo(),
+            add_colorbar=True,
+            cmap='RdBu_r')
+        ax.coastlines('10m')
+        ax.gridlines(draw_labels=False)
+        ax.set_title(f'Predicted SMB — {month_name} {args.start_date[:4]}', fontsize=10)
+        plt.savefig(os.path.join(savedir, f'predicted_smb_month_{args.start_date[:4]}_{m}.png'), dpi=300, bbox_inches='tight')
+        plt.close()
     return 

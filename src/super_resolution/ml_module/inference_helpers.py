@@ -51,8 +51,8 @@ def load_model(config: dict) -> nn.Module:
                            bilinear=False)
 
     # load the model weights
-    # model_path = os.path.join(os.getcwd(), config["weights_path"])
-    model_path = Path(__file__).resolve().parent / config["weights_path"]
+    model_path = os.path.join(os.getcwd(), config["weights_path"])
+    # model_path = Path(__file__).resolve().parent / config["weights_path"]
     print(f"Loading model weights from {model_path}")
     model.load_state_dict(torch.load(model_path, weights_only=True))
 
@@ -165,8 +165,8 @@ def run_postprocessing(monthly_predictions: np.ndarray, metadata: list, tiles: l
     reshaped_predictions = np.array(reshaped_predictions)  # (T, H, W)
 
     pred_racmo_da = xr.DataArray(data=reshaped_predictions,
-                                 dims=["valid_time", "y", "x"],
-                                 coords={"valid_time": era5_xy.valid_time.values,
+                                 dims=["time", "y", "x"],
+                                 coords={"time": era5_xy.time.values,
                                          "y": rcm_ds.y.values,
                                          "x": rcm_ds.x.values},
                                  name="surface_mass_balance_glaciated"

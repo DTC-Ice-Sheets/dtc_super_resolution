@@ -88,7 +88,7 @@ def generate_era5_patches(era5: xr.Dataset, tiles: list):
     era5_vars = [v for v in era5.data_vars
                 if "x" in era5[v].dims and "y" in era5[v].dims]
     # time dimension
-    era5_time = era5.valid_time.values
+    era5_time = era5.time.values
     # get numpy array (months, channels, height, width)
     era5_arr = np.stack([era5[v].compute().values for v in era5_vars], axis=1)
     era5_arr = np.nan_to_num(era5_arr, nan=0.0)  # replace NaN with 0
