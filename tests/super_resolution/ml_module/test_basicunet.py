@@ -1,17 +1,15 @@
 """Tests for the basicUNet module."""
 
-import numpy as np
-import pytest
 import torch
 import torch.nn as nn
-
 
 # ---------------------------------------------------------------------------
 # Component-level tests (unet_parts)
 # ---------------------------------------------------------------------------
 
+
 def test_double_conv_output_shape():
-    from super_resolution.ml_module.basicUNet.unet_parts import DoubleConv
+    from super_resolution.ml_module.basic_unet.unet_parts import DoubleConv
 
     conv = DoubleConv(in_channels=4, out_channels=8)
     x = torch.zeros(1, 4, 16, 16)
@@ -20,7 +18,7 @@ def test_double_conv_output_shape():
 
 
 def test_down_output_shapes():
-    from super_resolution.ml_module.basicUNet.unet_parts import Down
+    from super_resolution.ml_module.basic_unet.unet_parts import Down
 
     down = Down(in_channels=8, out_channels=16)
     x = torch.zeros(1, 8, 16, 16)
@@ -32,13 +30,13 @@ def test_down_output_shapes():
 
 
 def test_up_output_shape():
-    from super_resolution.ml_module.basicUNet.unet_parts import Up
+    from super_resolution.ml_module.basic_unet.unet_parts import Up
 
     # With bilinear=False, Up uses ConvTranspose2d(in_channels, in_channels//2).
     # x1 must have in_channels channels; x2 has in_channels//2 channels.
     in_ch = 32
     up = Up(in_channels=in_ch, out_channels=16, bilinear=False)
-    x1 = torch.zeros(1, in_ch, 4, 4)   # input to be upsampled
+    x1 = torch.zeros(1, in_ch, 4, 4)  # input to be upsampled
     x2 = torch.zeros(1, in_ch // 2, 8, 8)  # skip connection
     out = up(x1, x2)
     assert out.shape[0] == 1
@@ -46,7 +44,7 @@ def test_up_output_shape():
 
 
 def test_initial_conv_downsampling():
-    from super_resolution.ml_module.basicUNet.unet_parts import InitialConv
+    from super_resolution.ml_module.basic_unet.unet_parts import InitialConv
 
     conv = InitialConv(in_channels=7, out_channels=32, size_in=48, size_out=64)
     x = torch.zeros(1, 7, 48, 48)
@@ -55,7 +53,7 @@ def test_initial_conv_downsampling():
 
 
 def test_initial_conv_upsampling():
-    from super_resolution.ml_module.basicUNet.unet_parts import InitialConv
+    from super_resolution.ml_module.basic_unet.unet_parts import InitialConv
 
     # size_in < size_out → upsampling path
     conv = InitialConv(in_channels=7, out_channels=32, size_in=32, size_out=64)
@@ -65,7 +63,7 @@ def test_initial_conv_upsampling():
 
 
 def test_linear_upsampling_z():
-    from super_resolution.ml_module.basicUNet.unet_parts import LinearUpsamplingZ
+    from super_resolution.ml_module.basic_unet.unet_parts import LinearUpsamplingZ
 
     linz = LinearUpsamplingZ(in_channels=16, out_channels=1024)
     z = torch.zeros(2, 16, 1, 1)
@@ -74,7 +72,7 @@ def test_linear_upsampling_z():
 
 
 def test_out_conv_output_shape():
-    from super_resolution.ml_module.basicUNet.unet_parts import OutConv
+    from super_resolution.ml_module.basic_unet.unet_parts import OutConv
 
     conv = OutConv(in_channels=16, out_channels=1)
     x = torch.zeros(1, 16, 32, 32)
@@ -83,7 +81,7 @@ def test_out_conv_output_shape():
 
 
 def test_up_last_conv_output_shape():
-    from super_resolution.ml_module.basicUNet.unet_parts import UpLastConv
+    from super_resolution.ml_module.basic_unet.unet_parts import UpLastConv
 
     up = UpLastConv(in_channels=64, out_channels=32, mid_channels=32, bilinear=False)
     x = torch.zeros(1, 64, 32, 32)
@@ -96,8 +94,9 @@ def test_up_last_conv_output_shape():
 # UNetBaseline instantiation
 # ---------------------------------------------------------------------------
 
+
 def test_unet_baseline_instantiation():
-    from super_resolution.ml_module.basicUNet.unet import UNetBaseline
+    from super_resolution.ml_module.basic_unet.unet import UNetBaseline
 
     model = UNetBaseline(n_channels_x=7, n_channels_z=16, size=64, filter=64, bilinear=False)
     assert isinstance(model, nn.Module)
@@ -106,7 +105,7 @@ def test_unet_baseline_instantiation():
 
 
 def test_unet_baseline_has_expected_layers():
-    from super_resolution.ml_module.basicUNet.unet import UNetBaseline
+    from super_resolution.ml_module.basic_unet.unet import UNetBaseline
 
     model = UNetBaseline(n_channels_x=7, n_channels_z=16, size=64, filter=64)
     assert hasattr(model, "initialconv")

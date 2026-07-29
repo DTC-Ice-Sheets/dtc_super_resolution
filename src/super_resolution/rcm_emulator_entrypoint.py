@@ -1,17 +1,17 @@
 """Entrypoint for the RCM emulator pipeline."""
 
 import argparse
-import argparse
-from datetime import datetime
-import os
 import logging
+import pathlib
 
 from super_resolution.download_data import download_data
-from super_resolution.pre_processing_module.preprocessing import run_preprocessing
 from super_resolution.ml_module.inference import run_inference
 from super_resolution.ml_module.inference_helpers import run_postprocessing
 from super_resolution.ml_module.plots import predictions_plot
+from super_resolution.monitoring import setup_logging
+from super_resolution.pre_processing_module.preprocessing import run_preprocessing
 
+setup_logging()
 logger = logging.getLogger(__name__)
 
 RACMO_PATH = "/home/ngaillard/super_resolution/src/super_resolution/data/RACMO/RACMO__start_2020-01-01T00:00:00__end_2020-02-01T00:00:00__polygon_area_None__variables_surface_mass_balance_glaciated__mask_False__raw_False__21e0066e.zarr"
@@ -22,28 +22,36 @@ def parse_args():
     parser.add_argument("--start_date", type=str, required=True, help="Start date for data download (YYYY-MM-DD)")
     parser.add_argument("--end_date", type=str, required=True, help="End date for data download (YYYY-MM-DD)")
     parser.add_argument("--output_dir", type=str, required=True, help="Directory to store downloaded data")
-    parser.add_argument("--model_name", type=str, required=True, help="Name of the model to use for inference", 
-                        choices=["model_unet", "model_attention_unet"])
+    parser.add_argument(
+        "--model_name",
+        type=str,
+        required=True,
+        help="Name of the model to use for inference",
+        choices=["model_unet", "model_attention_unet"],
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     """
-    High-level pipeline for the RCM emulator. This function orchestrates the entire process, 
+    Run the high-level RCM emulator pipeline.
+
+    This function orchestrates the entire process,
     from data download to inference and saving the final output.
     """
-
     # Parse the input arguments
     args = parse_args()
 
-    if not os.path.exists(args.output_dir):
-        os.makedirs(args.output_dir)
+    if not pathlib.Path(args.output_dir).exists():
+        pathlib.Path(args.output_dir).mkdir(parents=True)
 
     # 1. LOAD DATA
-    logger.info("Downloading ERA5 and RCM data from Data Download Module for the period %s to %s...",
-                args.start_date,
-                args.end_date)
-    
+    logger.info(
+        "Downloading ERA5 and RCM data from Data Download Module for the period %s to %s...",
+        args.start_date,
+        args.end_date,
+    )
+
     data_paths = download_data(args.start_date, args.end_date, args.output_dir)
 
     # 2. PRE-PROCESSING
@@ -60,18 +68,17 @@ def main() -> None:
     # 5. SAVING OUTPUT
     logger.info("Saving the final output to Zarr format...")
     outdir = args.output_dir + "/output/"
-    output_zarr_path = os.path.join(outdir, f"predicted_smb_{args.start_date}_{args.end_date}.zarr")
+    output_zarr_path = pathlib.Path(outdir) / f"predicted_smb_{args.start_date}_{args.end_date}.zarr"
     final_output_da.to_zarr(output_zarr_path, mode="w")
 
     # save plots
     logger.info("Saving plots of the predictions...")
-    
+
     predictions_plot(final_output_da, month=3, args=args)
 
     logger.info("Saved the final output to %s", output_zarr_path)
     return
 
 
-if __name__ == "__main__":  
+if __name__ == "__main__":
     main()
-

@@ -95,6 +95,8 @@ ignore = [
     "E402", # Allow 'import' statements not being at the top of the file (common in test files for clarity)
     "S101", # Allow the use of 'assert' statements in test files (common practice in pytest)
     "D103", # Ignore missing docstring warnings for functions in test files (commonly not required for small test functions)
+    "D102", # Ignore missing docstring warnings for classes in test files
+    "D101", # Ignore missing docstring warnings in test files
     "ANN",  # Ignore missing type annotations for functions in test files (commonly not required for small test functions)
 ]
 

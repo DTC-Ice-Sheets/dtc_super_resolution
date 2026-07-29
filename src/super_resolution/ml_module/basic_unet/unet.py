@@ -1,11 +1,11 @@
-""" Full assembly of the parts to form the complete network """
+"""Full assembly of the parts to form the complete network."""
+
 # Source UNet: https://github.com/milesial/Pytorch-UNet
 from .unet_parts import *
 
+
 class UNetBaseline(nn.Module):
-    def __init__(
-        self, n_channels_x=8, n_channels_z=18, size=64, filter=64, bilinear=False
-    ):
+    def __init__(self, n_channels_x=8, n_channels_z=18, size=64, filter=64, bilinear=False) -> None:
         super().__init__()
         self.n_channels_x = n_channels_x
         self.n_channels_z = n_channels_z
@@ -28,7 +28,7 @@ class UNetBaseline(nn.Module):
         self.last_conv_down = DoubleConv(1024, 1024)
 
         # linewar downsampling of z:
-        self.linz = LinearUpsamplingZ(self.n_channels_z , 1024)
+        self.linz = LinearUpsamplingZ(self.n_channels_z, 1024)
 
         # upsampling:
         self.up1 = Up(2048, 1024, self.bilinear)
@@ -54,38 +54,27 @@ class UNetBaseline(nn.Module):
         x5, x5_bm = self.d4(x4)  # (batch, 512, 4, 4)
         # x6, x6_bm = self.d5(x5)  # (batch, 1024, 2, 2)
         x7 = self.last_conv_down(x5)  # (batch, 1024, 2, 2)
-        print(f"x7.shape: {x7.shape}")
 
         # Upsample second input to have same shape as last_conv [1024, 1, 1]
         z1 = self.linz(z)
-        print(f"z1.shape: {z1.shape}")
 
         # expand z1 spatially to match x7 (handles any bottleneck size, e.g. 2x2 when size=64)
         z1 = z1.expand(-1, -1, x7.size(2), x7.size(3))
-        print(f"z1_expanded.shape: {z1.shape}")
 
         # concatenate both:
         x8 = torch.cat([x7, z1], dim=1)  # (batch, 2048, H, H)
-        print(f"x8.shape: {x8.shape}")
 
         # Upsampling (decoder)
         x = self.up1(x8, x5_bm)  # (batch, 1024, 4, 4)
         # x = self.up2(x, x5_bm)   # (batch, 512,  8, 8)
-        x = self.up3(x, x4_bm)   # (batch, 256, 16, 16)
-        x = self.up4(x, x3_bm)   # (batch, 128, 32, 32)
-        x = self.up5(x, x2_bm)   # (batch,  64, 64, 64)
+        x = self.up3(x, x4_bm)  # (batch, 256, 16, 16)
+        x = self.up4(x, x3_bm)  # (batch, 128, 32, 32)
+        x = self.up5(x, x2_bm)  # (batch,  64, 64, 64)
 
         # Post-decoder upsampling
         x = self.up6(x, zsize=128)  # (batch, 32, 128, 128)
         x = self.up7(x, zsize=256)  # (batch, 16, 256, 256)
 
         # Linear spatial adapter: 256x256 -> 224x224, 16ch -> 1ch
-        x = self.final(x)           # (batch,  1, 224, 224)
-        x = x.squeeze(1)  # (batch, 224, 224)
-        return x
-    
-    
-    
-    
-
-    
+        x = self.final(x)  # (batch,  1, 224, 224)
+        return x.squeeze(1)  # (batch, 224, 224)

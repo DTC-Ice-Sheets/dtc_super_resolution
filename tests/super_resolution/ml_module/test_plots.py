@@ -4,7 +4,7 @@ from argparse import Namespace
 from unittest.mock import MagicMock, patch
 
 import numpy as np
-import pytest
+import rioxarray  # noqa: F401  registers the .rio accessor
 import xarray as xr
 from typeguard import suppress_type_checks
 
@@ -17,18 +17,17 @@ def _make_predictions_da(n_months=5):
     data = np.random.rand(n_months, len(y), len(x)).astype(np.float32)
     da = xr.DataArray(
         data,
-        dims=["valid_time", "y", "x"],
-        coords={"valid_time": times, "y": y, "x": x},
+        dims=["time", "y", "x"],
+        coords={"time": times, "y": y, "x": x},
         name="surface_mass_balance_glaciated",
     )
-    da = da.rio.write_crs("epsg:3031")
-    return da
+    return da.rio.write_crs("epsg:3031")
 
 
-@patch("super_resolution.ml_module.plots.plt.close")
+@patch("super_resolution.ml_module.plots.plt.close", new=MagicMock())
 @patch("super_resolution.ml_module.plots.plt.savefig")
 @patch("super_resolution.ml_module.plots.plt.subplots")
-def test_predictions_plot_saves_file(mock_subplots, mock_savefig, mock_close, tmp_path):
+def test_predictions_plot_saves_file(mock_subplots, mock_savefig, tmp_path):
     from super_resolution.ml_module.plots import predictions_plot
 
     mock_fig = MagicMock()
@@ -46,10 +45,10 @@ def test_predictions_plot_saves_file(mock_subplots, mock_savefig, mock_close, tm
     assert str(tmp_path) in saved_path
 
 
-@patch("super_resolution.ml_module.plots.plt.close")
-@patch("super_resolution.ml_module.plots.plt.savefig")
+@patch("super_resolution.ml_module.plots.plt.close", new=MagicMock())
+@patch("super_resolution.ml_module.plots.plt.savefig", new=MagicMock())
 @patch("super_resolution.ml_module.plots.plt.subplots")
-def test_predictions_plot_uses_correct_month_name(mock_subplots, mock_savefig, mock_close, tmp_path):
+def test_predictions_plot_uses_correct_month_name(mock_subplots, tmp_path):
     from super_resolution.ml_module.plots import predictions_plot
 
     mock_fig = MagicMock()
@@ -69,9 +68,9 @@ def test_predictions_plot_uses_correct_month_name(mock_subplots, mock_savefig, m
 
 
 @patch("super_resolution.ml_module.plots.plt.close")
-@patch("super_resolution.ml_module.plots.plt.savefig")
+@patch("super_resolution.ml_module.plots.plt.savefig", new=MagicMock())
 @patch("super_resolution.ml_module.plots.plt.subplots")
-def test_predictions_plot_closes_figure(mock_subplots, mock_savefig, mock_close, tmp_path):
+def test_predictions_plot_closes_figure(mock_subplots, mock_close, tmp_path):
     from super_resolution.ml_module.plots import predictions_plot
 
     mock_fig = MagicMock()
@@ -87,10 +86,10 @@ def test_predictions_plot_closes_figure(mock_subplots, mock_savefig, mock_close,
     mock_close.assert_called_once()
 
 
-@patch("super_resolution.ml_module.plots.plt.close")
+@patch("super_resolution.ml_module.plots.plt.close", new=MagicMock())
 @patch("super_resolution.ml_module.plots.plt.savefig")
 @patch("super_resolution.ml_module.plots.plt.subplots")
-def test_predictions_plot_filename_contains_year_and_month(mock_subplots, mock_savefig, mock_close, tmp_path):
+def test_predictions_plot_filename_contains_year_and_month(mock_subplots, mock_savefig, tmp_path):
     """Saved filename encodes the year and plot month from start_date."""
     from super_resolution.ml_module.plots import predictions_plot
 
@@ -104,7 +103,7 @@ def test_predictions_plot_filename_contains_year_and_month(mock_subplots, mock_s
     with suppress_type_checks():
         predictions_plot(da, month=0, args=args)
 
-    saved_path = mock_savefig.call_args[0][0]
+    saved_path = str(mock_savefig.call_args[0][0])
     # plot_month = 2 + 0 = 2, year = 2021
     assert "2021" in saved_path
     assert "_2_" in saved_path or "2021_2" in saved_path

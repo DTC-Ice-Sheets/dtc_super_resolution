@@ -3,7 +3,7 @@
 from unittest.mock import MagicMock, patch
 
 import numpy as np
-import pytest
+import rioxarray  # noqa: F401
 import xarray as xr
 from typeguard import suppress_type_checks
 
@@ -41,24 +41,23 @@ def _make_era5_dataset(n_times=2, ny=10, nx=12):
     """Create a minimal ERA5-like xarray Dataset with spatial x/y dims."""
     times = np.array(["2021-01-01", "2021-02-01"], dtype="datetime64[D]")[:n_times]
     data = np.random.rand(n_times, ny, nx).astype(np.float32)
-    ds = xr.Dataset(
+    return xr.Dataset(
         {
-            "t2m": (["valid_time", "y", "x"], data),
-            "u10": (["valid_time", "y", "x"], data * 2),
-            "v10": (["valid_time", "y", "x"], data * 3),
+            "t2m": (["time", "y", "x"], data),
+            "u10": (["time", "y", "x"], data * 2),
+            "v10": (["time", "y", "x"], data * 3),
             # SST channel at index 3 — set to zero to simulate "land" tiles
-            "sst": (["valid_time", "y", "x"], np.zeros((n_times, ny, nx), dtype=np.float32)),
+            "sst": (["time", "y", "x"], np.zeros((n_times, ny, nx), dtype=np.float32)),
         },
         coords={
-            "valid_time": times,
+            "time": times,
             "x": np.arange(nx, dtype=float),
             "y": np.arange(ny, dtype=float),
         },
     )
-    return ds
 
 
-def _make_tiles(era5_ny=10, era5_nx=12):
+def _make_tiles():
     """Return a small list of tile dicts compatible with _make_era5_dataset."""
     return [
         {
@@ -98,7 +97,7 @@ def test_generate_era5_patches_all_land_skipped():
 
     from super_resolution.pre_processing_module.preprocessing import generate_era5_patches
 
-    patches, metadata = generate_era5_patches(era5, tiles)
+    _patches, metadata = generate_era5_patches(era5, tiles)
 
     # Both tiles should be retained
     assert len(metadata[0]) == len(tiles)
@@ -113,20 +112,19 @@ def test_generate_era5_patches_sea_tiles_skipped():
 
     from super_resolution.pre_processing_module.preprocessing import generate_era5_patches
 
-    patches, metadata = generate_era5_patches(era5, tiles)
+    _patches, metadata = generate_era5_patches(era5, tiles)
 
     assert len(metadata[0]) == 0
 
 
 @patch("super_resolution.pre_processing_module.preprocessing.generate_era5_patches")
 @patch("super_resolution.pre_processing_module.preprocessing.make_tiles")
-@patch("super_resolution.pre_processing_module.preprocessing.reproject_ERA5_to_RACMO_grid")
-@patch("super_resolution.pre_processing_module.preprocessing.create_target_grid_from_RACMO")
+@patch("super_resolution.pre_processing_module.preprocessing.reproject_era5_to_racmo_grid")
+@patch("super_resolution.pre_processing_module.preprocessing.create_target_grid_from_racmo")
 @patch("super_resolution.pre_processing_module.preprocessing.load_rcm_dataset")
 @patch("super_resolution.pre_processing_module.preprocessing.load_era5_dataset")
 def test_run_preprocessing_calls_pipeline(
-    mock_load_era5, mock_load_rcm, mock_create_grid,
-    mock_reproject, mock_make_tiles, mock_gen_patches
+    mock_load_era5, mock_load_rcm, mock_create_grid, mock_reproject, mock_make_tiles, mock_gen_patches
 ):
     mock_gcm = MagicMock()
     mock_rcm = MagicMock()

@@ -1,7 +1,6 @@
 """Tests for the ml_module datasets module."""
 
 import numpy as np
-import pytest
 import torch
 
 from super_resolution.ml_module.datasets import (
@@ -14,10 +13,10 @@ from super_resolution.ml_module.datasets import (
     unstandardize,
 )
 
-
 # ---------------------------------------------------------------------------
 # standardize
 # ---------------------------------------------------------------------------
+
 
 def test_standardize_zero_mean_unit_std():
     data = np.array([[[1.0, 2.0], [3.0, 4.0]]])  # shape (1, 2, 2)
@@ -51,6 +50,7 @@ def test_standardize_constant_array_no_nan():
 # unstandardize
 # ---------------------------------------------------------------------------
 
+
 def test_unstandardize_inverse_of_precomputed_std():
     data = np.array([0.0, 1.0, -1.0])
     result = unstandardize(data)
@@ -61,6 +61,7 @@ def test_unstandardize_inverse_of_precomputed_std():
 # ---------------------------------------------------------------------------
 # signed_log1p / inverse_signed_log1p
 # ---------------------------------------------------------------------------
+
 
 def test_signed_log1p_positive():
     x = torch.tensor([1.0, 2.0, 3.0])
@@ -85,6 +86,7 @@ def test_inverse_signed_log1p_roundtrip():
 # InferenceDataset
 # ---------------------------------------------------------------------------
 
+
 def _make_patches(n=3, c=8, h=6, w=8):
     """Create synthetic ERA5 patches. Channel 3 (SST) is 0 to simulate land."""
     patches = np.random.rand(n, c, h, w).astype(np.float32)
@@ -93,10 +95,7 @@ def _make_patches(n=3, c=8, h=6, w=8):
 
 
 def _make_metadata(n=3):
-    return [
-        {"time_idx": np.datetime64(f"2021-0{i+1}-01", "D"), "tile_idx": i}
-        for i in range(n)
-    ]
+    return [{"time_idx": np.datetime64(f"2021-0{i + 1}-01", "D"), "tile_idx": i} for i in range(n)]
 
 
 def test_inference_dataset_length():
@@ -111,9 +110,9 @@ def test_inference_dataset_getitem_shapes():
     metadata = _make_metadata(n=2)
     ds = InferenceDataset(patches, metadata, ownstd=True)
 
-    X, Z = ds[0]
+    x, z = ds[0]
     # SST channel (index 3) is dropped → 7 channels remain
-    assert X.shape == (7, 6, 8)
+    assert x.shape == (7, 6, 8)
     # Z = input1d: (C, 1, 1) for mean + std + cos + sin = 2*7 + 4  NO
     # Actually: SpatialMean (C,1,1), SpatialSTD (C,1,1), cosvect (1,1,1), sinvect (1,1,1)
     # concatenated along axis 0 → (C + C + 1 + 1, 1, 1) but original has C=8 then drops 1
@@ -121,9 +120,9 @@ def test_inference_dataset_getitem_shapes():
     # looking at code: input_patch is first deleted at ch 3, then standardized
     # stats vect_std / vect_means computed on the 7-ch patch
     # Z shape: (7+7+1+1, 1, 1) = (16, 1, 1)
-    assert Z.ndim == 3
-    assert Z.shape[1] == 1
-    assert Z.shape[2] == 1
+    assert z.ndim == 3
+    assert z.shape[1] == 1
+    assert z.shape[2] == 1
 
 
 def test_inference_dataset_no_nan_in_output():
@@ -132,53 +131,51 @@ def test_inference_dataset_no_nan_in_output():
     ds = InferenceDataset(patches, metadata, ownstd=True)
 
     for i in range(len(ds)):
-        X, Z = ds[i]
-        assert not np.any(np.isnan(X))
-        assert not np.any(np.isnan(Z))
+        x, z = ds[i]
+        assert not np.any(np.isnan(x))
+        assert not np.any(np.isnan(z))
 
 
 def test_inference_dataset_month_encoding_range():
     """cos/sin month encoding values should be in [-1, 1]."""
     patches = _make_patches(n=12, c=8, h=4, w=4)
-    metadata = [
-        {"time_idx": np.datetime64(f"2021-{str(m+1).zfill(2)}-01", "D"), "tile_idx": m}
-        for m in range(12)
-    ]
+    metadata = [{"time_idx": np.datetime64(f"2021-{str(m + 1).zfill(2)}-01", "D"), "tile_idx": m} for m in range(12)]
     ds = InferenceDataset(patches, metadata, ownstd=True)
 
     for i in range(len(ds)):
-        _, Z = ds[i]
+        _, z = ds[i]
         # last two 'channels' in Z are cos and sin month values
-        assert Z.min() >= -1.1
-        assert Z.max() <= 1.1
+        assert z.min() >= -1.1
+        assert z.max() <= 1.1
 
 
 # ---------------------------------------------------------------------------
 # createMask
 # ---------------------------------------------------------------------------
 
-def test_createMask_all_zeros_is_sea():
-    from super_resolution.ml_module.datasets import createMask
+
+def test_create_mask_all_zeros_is_sea():
+    from super_resolution.ml_module.datasets import create_mask
 
     smb = np.zeros((4, 5))  # all zeros → sea
-    mask = createMask(smb)
+    mask = create_mask(smb)
     assert mask.shape == (4, 5)
     assert (mask == 0).all()
 
 
-def test_createMask_nonzero_is_land():
-    from super_resolution.ml_module.datasets import createMask
+def test_create_mask_nonzero_is_land():
+    from super_resolution.ml_module.datasets import create_mask
 
     smb = np.ones((3, 4))  # all non-zero → land
-    mask = createMask(smb)
+    mask = create_mask(smb)
     assert (mask == 1).all()
 
 
-def test_createMask_mixed():
-    from super_resolution.ml_module.datasets import createMask
+def test_create_mask_mixed():
+    from super_resolution.ml_module.datasets import create_mask
 
     smb = np.array([[1.0, 0.0], [0.0, 2.0]])
-    mask = createMask(smb)
+    mask = create_mask(smb)
     assert mask[0, 0] == 1  # non-zero → land
     assert mask[1, 0] == 0  # zero → sea
     assert mask[0, 1] == 0  # zero → sea

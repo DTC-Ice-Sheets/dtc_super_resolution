@@ -15,4 +15,3 @@ model_attention_unet:
   size: 64
   filter: 64
   target_transform: log
-

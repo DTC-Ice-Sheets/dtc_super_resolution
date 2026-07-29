@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
-from torch import nn
 import torch
-from .RCM_Emulator_parts import *
+from torch import nn
+
+from .rcm_emulator_parts import *
+
 
 class SmaAt_UNet(nn.Module):
     def __init__(
@@ -12,7 +14,7 @@ class SmaAt_UNet(nn.Module):
         kernels_per_layer=2,
         bilinear=False,
         reduction_ratio=16,
-    ):
+    ) -> None:
         super().__init__()
         self.n_channels_x = n_channels_x
         self.n_channels_z = n_channels_z
@@ -45,18 +47,10 @@ class SmaAt_UNet(nn.Module):
         self.cbam6 = CBAM(1024 // factor, reduction_ratio=reduction_ratio)
         self.cbam6z = CBAM(1024, reduction_ratio=reduction_ratio)  # separate CBAM for z input
 
-        self.up1 = UpDS(
-            2048, 1024 // factor, self.bilinear, kernels_per_layer=kernels_per_layer
-        )
-        self.up2 = UpDS(
-            1024, 512 // factor, self.bilinear, kernels_per_layer=kernels_per_layer
-        )
-        self.up3 = UpDS(
-            512, 256 // factor, self.bilinear, kernels_per_layer=kernels_per_layer
-        )
-        self.up4 = UpDS(
-            256, 128 // factor, self.bilinear, kernels_per_layer=kernels_per_layer
-        )
+        self.up1 = UpDS(2048, 1024 // factor, self.bilinear, kernels_per_layer=kernels_per_layer)
+        self.up2 = UpDS(1024, 512 // factor, self.bilinear, kernels_per_layer=kernels_per_layer)
+        self.up3 = UpDS(512, 256 // factor, self.bilinear, kernels_per_layer=kernels_per_layer)
+        self.up4 = UpDS(256, 128 // factor, self.bilinear, kernels_per_layer=kernels_per_layer)
         self.up5 = UpDS(128, 64, self.bilinear, kernels_per_layer=kernels_per_layer)
         self.up6 = UpDS(64, 32, self.bilinear, kernels_per_layer=kernels_per_layer)
 
@@ -70,39 +64,38 @@ class SmaAt_UNet(nn.Module):
     def forward(self, x, z):
         # input  (batch, 7, 32, 32)
         x1 = self.inc(x)  # (batch, 32, 32, 32)
-        x1Att = self.cbam1(x1)  # (batch, 32, 32, 32)
+        x1_att = self.cbam1(x1)  # (batch, 32, 32, 32)
 
         # downsampling
         x2 = self.down1(x1)  # (batch, 64, 16, 16)
-        x2Att = self.cbam2(x2)
+        x2_att = self.cbam2(x2)
         x3 = self.down2(x2)  # (batch, 128, 8, 8)
-        x3Att = self.cbam3(x3)
+        x3_att = self.cbam3(x3)
         x4 = self.down3(x3)  # (batch, 256, 4, 4)
-        x4Att = self.cbam4(x4)
+        x4_att = self.cbam4(x4)
         x5 = self.down4(x4)  # (batch, 512, 2, 2)
-        x5Att = self.cbam5(x5)
+        x5_att = self.cbam5(x5)
         x6 = self.down5(x5)  # (batch, 1024, 1, 1)
-        x6Att = self.cbam6(x6)
+        x6_att = self.cbam6(x6)
 
         # Expand z to match bottleneck spatial size (e.g. 2x2 when size=64)
         z1 = self.linz(z)
         z1 = z1.expand(-1, -1, x6.size(2), x6.size(3))
         # attention:
-        z1Att = self.cbam6z(z1)
+        z1_att = self.cbam6z(z1)
 
         # concatenate both:
-        x8 = torch.cat([x6Att, z1Att], dim=1)
+        x8 = torch.cat([x6_att, z1_att], dim=1)
 
-        x = self.up1(x8, x6Att)
-        x = self.up2(x, x5Att)  # (batch, 512, 2, 2)
-        x = self.up3(x, x4Att)  # (batch, 256, 4, 4)
-        x = self.up4(x, x3Att)  # (batch, 128, 8, 8)
-        x = self.up5(x, x2Att)  # (batch, 64, 16, 16)
-        x = self.up6(x, x1Att)  # (batch, 32, 32, 32)
+        x = self.up1(x8, x6_att)
+        x = self.up2(x, x5_att)  # (batch, 512, 2, 2)
+        x = self.up3(x, x4_att)  # (batch, 256, 4, 4)
+        x = self.up4(x, x3_att)  # (batch, 128, 8, 8)
+        x = self.up5(x, x2_att)  # (batch, 64, 16, 16)
+        x = self.up6(x, x1_att)  # (batch, 32, 32, 32)
 
-        x = self.up7(x)              # (batch, 32, 64, 64)
-        x = self.up8(x, zsize=128)    # (batch, 16, 128, 128)
-        x = self.up9(x, zsize=256)    # (batch, 16, 256, 256)
-        x = self.final(x)              # (batch, 1, 224, 224)
-        x = x.squeeze(1)               # (batch, 224, 224)
-        return x
+        x = self.up7(x)  # (batch, 32, 64, 64)
+        x = self.up8(x, zsize=128)  # (batch, 16, 128, 128)
+        x = self.up9(x, zsize=256)  # (batch, 16, 256, 256)
+        x = self.final(x)  # (batch, 1, 224, 224)
+        return x.squeeze(1)  # (batch, 224, 224)

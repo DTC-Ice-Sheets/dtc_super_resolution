@@ -6,7 +6,6 @@ import numpy as np
 import pytest
 from typeguard import suppress_type_checks
 
-
 MOCK_CONFIG = {
     "model_unet": {
         "model_type": "Baseline",
@@ -25,11 +24,11 @@ MOCK_CONFIG = {
 }
 
 
+@patch("pathlib.Path.open", new=mock_open())
 @patch("super_resolution.ml_module.inference.predict")
 @patch("super_resolution.ml_module.inference.load_model")
-@patch("super_resolution.ml_module.inference.yaml.safe_load", return_value=MOCK_CONFIG)
-@patch("builtins.open", new_callable=mock_open)
-def test_run_inference_calls_load_model(mock_file, mock_yaml, mock_load, mock_predict):
+@patch("super_resolution.ml_module.inference.yaml.safe_load", new=MagicMock(return_value=MOCK_CONFIG))
+def test_run_inference_calls_load_model(mock_load, mock_predict):
     mock_model = MagicMock()
     mock_load.return_value = mock_model
     mock_predict.return_value = np.zeros((2, 3, 10, 10))
@@ -48,26 +47,25 @@ def test_run_inference_calls_load_model(mock_file, mock_yaml, mock_load, mock_pr
     assert isinstance(result, np.ndarray)
 
 
-@patch("super_resolution.ml_module.inference.predict")
-@patch("super_resolution.ml_module.inference.load_model")
-@patch("super_resolution.ml_module.inference.yaml.safe_load", return_value=MOCK_CONFIG)
-@patch("builtins.open", new_callable=mock_open)
-def test_run_inference_invalid_model_raises(mock_file, mock_yaml, mock_load, mock_predict):
+@patch("pathlib.Path.open", new=mock_open())
+@patch("super_resolution.ml_module.inference.predict", new=MagicMock())
+@patch("super_resolution.ml_module.inference.load_model", new=MagicMock())
+@patch("super_resolution.ml_module.inference.yaml.safe_load", new=MagicMock(return_value=MOCK_CONFIG))
+def test_run_inference_invalid_model_raises():
     from super_resolution.ml_module.inference import run_inference
 
     input_patches = [[0.0]]
     metadata = [[{"time_idx": 0}]]
 
-    with suppress_type_checks():
-        with pytest.raises(ValueError, match="not found in the configuration file"):
-            run_inference("nonexistent_model", input_patches, metadata)
+    with suppress_type_checks(), pytest.raises(ValueError, match="not found in the configuration file"):
+        run_inference("nonexistent_model", input_patches, metadata)
 
 
+@patch("pathlib.Path.open", new=mock_open())
 @patch("super_resolution.ml_module.inference.predict")
 @patch("super_resolution.ml_module.inference.load_model")
-@patch("super_resolution.ml_module.inference.yaml.safe_load", return_value=MOCK_CONFIG)
-@patch("builtins.open", new_callable=mock_open)
-def test_run_inference_passes_correct_model_config(mock_file, mock_yaml, mock_load, mock_predict):
+@patch("super_resolution.ml_module.inference.yaml.safe_load", new=MagicMock(return_value=MOCK_CONFIG))
+def test_run_inference_passes_correct_model_config(mock_load, mock_predict):
     mock_model = MagicMock()
     mock_load.return_value = mock_model
     mock_predict.return_value = np.zeros((1, 2, 8, 8))
