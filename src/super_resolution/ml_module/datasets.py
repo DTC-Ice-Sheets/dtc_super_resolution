@@ -9,7 +9,8 @@ RACMO_TRAIN_STD = 29.616882
 RACMO_TRAIN_VARIANCE = 877.1597
 
 
-def standardize(data, mean=None, std=None, ownstd=True):
+def standardize(data: np.ndarray, mean=None, std=None, ownstd=True):
+    """Standardize the data using either its own mean and std or provided mean and std."""
     # TO DO: check shapes when standardizing using precomputed mean and std (for GCM data)
     if ownstd:
         mean = np.nanmean(data, axis=(1, 2), keepdims=True)
@@ -20,7 +21,9 @@ def standardize(data, mean=None, std=None, ownstd=True):
 
 
 class InferenceDataset(Dataset):
-    def __init__(self, era5_patches, patches_metadata, ownstd=True) -> None:
+    def __init__(self, era5_patches: np.ndarray, patches_metadata: list, ownstd: bool = True) -> None:
+        """Initialize the InferenceDataset."""
+        super().__init__()
         self.patches = era5_patches
         self.patches_metadata = patches_metadata
         self.ownstd = ownstd  # whether to compute own std or use precomputed mean/std
@@ -28,9 +31,11 @@ class InferenceDataset(Dataset):
         self.target_train_std = RACMO_TRAIN_STD
 
     def __len__(self) -> int:
+        """Return the number of patches in the dataset."""
         return len(self.patches)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> tuple[np.ndarray, np.ndarray]:
+        """Get the standardized input patch and its corresponding 1D input vector."""
         input_patch = self.patches[idx]
         metadata = self.patches_metadata[idx]
 
@@ -67,21 +72,23 @@ class InferenceDataset(Dataset):
         return input_patch_stdz, input1d
 
 
-def signed_log1p(x, eps=1e-6):
+def signed_log1p(x: torch.Tensor, eps: float = 1e-6) -> torch.Tensor:
     """Apply log1p to magnitude, preserves sign. Safe for negative values."""
     return torch.sign(x) * torch.log1p(torch.abs(x) + eps)
 
 
-def inverse_signed_log1p(x_transformed, eps=1e-6):
+def inverse_signed_log1p(x_transformed: torch.Tensor, eps: float = 1e-6) -> torch.Tensor:
     """Inverse transform to recover original scale."""
     return torch.sign(x_transformed) * (torch.expm1(torch.abs(x_transformed)) - eps)
 
 
-def unstandardize(data, mean=RACMO_TRAIN_MEAN, std=RACMO_TRAIN_STD):
+def unstandardize(data: np.ndarray, mean=RACMO_TRAIN_MEAN, std=RACMO_TRAIN_STD) -> np.ndarray:
+    """Unstandardize the data using provided mean and std."""
     return data * std + mean
 
 
-def standardize(data, mean=None, std=None, ownstd=True):
+def standardize(data: np.ndarray, mean: np.ndarray = None, std: np.ndarray = None, ownstd: bool = True):
+    """Standardize the data using either its own mean and std or provided mean and std."""
     # TO DO: check shapes when standardizing using precomputed mean and std (for GCM data)
     if ownstd:
         mean = np.nanmean(data, axis=(1, 2), keepdims=True)
@@ -92,7 +99,8 @@ def standardize(data, mean=None, std=None, ownstd=True):
 
 
 # create mask
-def create_mask(true_smb):
+def create_mask(true_smb: np.ndarray) -> np.ndarray:
+    """Create a mask for the true SMB data, marking sea pixels as 0 and land pixels as 1."""
     mask = np.empty((true_smb.shape[0], true_smb.shape[1]))
     for y in range(true_smb.shape[1]):
         for x in range(true_smb.shape[0]):

@@ -3,18 +3,19 @@
 import torch
 from torch import nn
 
-from .rcm_emulator_parts import *
+from .rcm_emulator_parts import CBAM, InitialConv, LinearUpsamplingZ, DownDS, UpDS, UpLastConv
 
 
 class SmaAt_UNet(nn.Module):
     def __init__(
         self,
-        n_channels_x,
-        n_channels_z,
-        kernels_per_layer=2,
-        bilinear=False,
-        reduction_ratio=16,
+        n_channels_x: int,
+        n_channels_z: int,
+        kernels_per_layer: int = 2,
+        bilinear: bool = False,
+        reduction_ratio: int = 16,
     ) -> None:
+        """Initialize the SmaAt_UNet."""
         super().__init__()
         self.n_channels_x = n_channels_x
         self.n_channels_z = n_channels_z
@@ -61,7 +62,8 @@ class SmaAt_UNet(nn.Module):
         # final layer: 256x256 -> 224x224, 16ch -> 1ch
         self.final = nn.Conv2d(16, 1, kernel_size=33)
 
-    def forward(self, x, z):
+    def forward(self, x: torch.Tensor, z: torch.Tensor) -> torch.Tensor:
+        """Forward pass for the SmaAt_UNet."""
         # input  (batch, 7, 32, 32)
         x1 = self.inc(x)  # (batch, 32, 32, 32)
         x1_att = self.cbam1(x1)  # (batch, 32, 32, 32)

@@ -1,11 +1,13 @@
 """Full assembly of the parts to form the complete network."""
 
 # Source UNet: https://github.com/milesial/Pytorch-UNet
-from .unet_parts import *
-
+from .unet_parts import DoubleConv, Down, Up, UpLastConv, InitialConv, LinearUpsamplingZ
+import torch
+from torch import nn
 
 class UNetBaseline(nn.Module):
-    def __init__(self, n_channels_x=8, n_channels_z=18, size=64, filter=64, bilinear=False) -> None:
+    def __init__(self, n_channels_x: int = 8, n_channels_z: int = 18, size: int = 64, filter: int = 64, bilinear: bool = False) -> None:
+        """Initialize the UNetBaseline."""
         super().__init__()
         self.n_channels_x = n_channels_x
         self.n_channels_z = n_channels_z
@@ -43,7 +45,8 @@ class UNetBaseline(nn.Module):
         # linear spatial adapter: 256x256 -> 224x224, 16ch -> 1ch
         self.final = nn.Conv2d(16, 1, kernel_size=33)
 
-    def forward(self, x, z):
+    def forward(self, x: torch.Tensor, z: torch.Tensor) -> torch.Tensor:
+        """Forward pass for the UNetBaseline."""
         # input  (batch, 7, 32, 32)
         x1 = self.initialconv(x)  # (batch, 32, 64, 64)
 

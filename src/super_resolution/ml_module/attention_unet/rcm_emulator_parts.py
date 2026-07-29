@@ -11,7 +11,8 @@ import torch.nn.functional as functional
 class DoubleConvDS(nn.Module):
     """(convolution => [BN] => ReLU) * 2."""
 
-    def __init__(self, in_channels, out_channels, mid_channels=None, kernels_per_layer=1) -> None:
+    def __init__(self, in_channels: int, out_channels: int, mid_channels: int = None, kernels_per_layer: int = 1) -> None:
+        """Initialize the DoubleDSConv module."""
         super().__init__()
         if not mid_channels:
             mid_channels = out_channels
@@ -37,6 +38,7 @@ class DoubleConvDS(nn.Module):
         )
 
     def forward(self, x):
+        """Forward pass for the DoubleDSConv module."""
         return self.double_conv(x)
 
 
@@ -45,12 +47,13 @@ class UpLastConv(nn.Module):
 
     def __init__(
         self,
-        in_channels,
-        out_channels,
-        mid_channels,
-        bilinear=True,
-        kernels_per_layer=1,
+        in_channels: int,
+        out_channels: int,
+        mid_channels: int,
+        bilinear: bool = True,
+        kernels_per_layer: int = 1,
     ) -> None:
+        """Initialize the UpLastConv module."""
         super().__init__()
 
         # if bilinear, use the normal convolutions to reduce the number of channels
@@ -69,6 +72,7 @@ class UpLastConv(nn.Module):
             self.conv = DoubleConvDS(mid_channels, out_channels, kernels_per_layer=kernels_per_layer)
 
     def forward(self, x, zsize=64):
+        """Forward pass for the UpLastConv module."""
         x1 = self.up(x)
         # input is CHW
         diff_y = zsize - x1.size()[2]
@@ -81,7 +85,8 @@ class UpLastConv(nn.Module):
 class DownDS(nn.Module):
     """Downscaling with maxpool then double conv."""
 
-    def __init__(self, in_channels, out_channels, kernels_per_layer=1) -> None:
+    def __init__(self, in_channels: int, out_channels: int, kernels_per_layer: int = 1) -> None:
+        """Initialize the DownDS module."""
         super().__init__()
         self.maxpool_conv = nn.Sequential(
             nn.MaxPool2d(2),
@@ -89,13 +94,15 @@ class DownDS(nn.Module):
         )
 
     def forward(self, x):
+        """Forward pass for the DownDS module."""
         return self.maxpool_conv(x)
 
 
 class UpDS(nn.Module):
     """Upscaling then double conv."""
 
-    def __init__(self, in_channels, out_channels, bilinear=True, kernels_per_layer=1) -> None:
+    def __init__(self, in_channels: int, out_channels: int, bilinear: bool = True, kernels_per_layer: int = 1) -> None:
+        """Initialize the UpDS module."""
         super().__init__()
 
         # if bilinear, use the normal convolutions to reduce the number of channels
@@ -112,6 +119,7 @@ class UpDS(nn.Module):
             self.conv = DoubleConvDS(in_channels, out_channels, kernels_per_layer=kernels_per_layer)
 
     def forward(self, x1, x2):
+        """Forward pass for the UpDS module."""
         x1 = self.up(x1)
         # input is CHW
         diff_y = x2.size()[2] - x1.size()[2]
@@ -126,18 +134,23 @@ class UpDS(nn.Module):
 
 
 class OutConv(nn.Module):
-    def __init__(self, in_channels, out_channels) -> None:
+    """Output convolution."""
+
+    def __init__(self, in_channels: int, out_channels: int) -> None:
+        """Initialize the OutConv module."""
         super().__init__()
         self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=1)
 
     def forward(self, x):
+        """Forward pass for the OutConv module."""
         return self.conv(x)
 
 
 class InitialConv(nn.Module):
     """Initial convolution to adapt spatial dimensions."""
 
-    def __init__(self, in_channels, out_channels, size_in, size_out) -> None:
+    def __init__(self, in_channels: int, out_channels: int, size_in: int, size_out: int) -> None:
+        """Initialize the InitialConv module."""
         super().__init__()
         self.n_channels_in = in_channels
         self.n_channels_out = out_channels
@@ -159,6 +172,7 @@ class InitialConv(nn.Module):
             )
 
     def forward(self, x):
+        """Forward pass for the InitialConv module."""
         return self.adapt(x)
 
 
@@ -182,10 +196,12 @@ class InitialConv(nn.Module):
 # Taken from https://discuss.pytorch.org/t/is-there-any-layer-like-tensorflows-space-to-depth-function/3487/14
 class DepthToSpace(nn.Module):
     def __init__(self, block_size) -> None:
+        """Initialize the DepthToSpace module."""
         super().__init__()
         self.bs = block_size
 
     def forward(self, x):
+        """Forward pass for the DepthToSpace module."""
         n, c, h, w = x.size()
         x = x.view(n, self.bs, self.bs, c // (self.bs**2), h, w)  # (n, bs, bs, c//bs^2, h, w)
         x = x.permute(0, 3, 4, 1, 5, 2).contiguous()  # (n, c//bs^2, h, bs, w, bs)
@@ -195,10 +211,12 @@ class DepthToSpace(nn.Module):
 class SpaceToDepth(nn.Module):
     # Expects the following shape: Batch, Channel, Height, Width
     def __init__(self, block_size) -> None:
+        """"Initialize the SpaceToDepth module."""
         super().__init__()
         self.bs = block_size
 
     def forward(self, x):
+        """Forward pass for the SpaceToDepth module."""
         n, c, h, w = x.size()
         x = x.view(n, c, h // self.bs, self.bs, w // self.bs, self.bs)  # (n, c, h//bs, bs, w//bs, bs)
         x = x.permute(0, 3, 5, 1, 2, 4).contiguous()  # (n, bs, bs, c, h//bs, w//bs)
@@ -206,7 +224,8 @@ class SpaceToDepth(nn.Module):
 
 
 class DepthwiseSeparableConv(nn.Module):
-    def __init__(self, in_channels, output_channels, kernel_size, padding=0, kernels_per_layer=1) -> None:
+    def __init__(self, in_channels: int, output_channels: int, kernel_size: int, padding: int = 0, kernels_per_layer: int = 1) -> None:
+        """Initialize the DepthwiseSeparableConv module."""
         super().__init__()
         # In Tensorflow DepthwiseConv2D has depth_multiplier instead of kernels_per_layer
         self.depthwise = nn.Conv2d(
@@ -219,18 +238,21 @@ class DepthwiseSeparableConv(nn.Module):
         self.pointwise = nn.Conv2d(in_channels * kernels_per_layer, output_channels, kernel_size=1)
 
     def forward(self, x):
+        """Forward pass for the DepthwiseSeparableConv module."""
         x = self.depthwise(x)
         return self.pointwise(x)
 
 
 class DoubleDense(nn.Module):
-    def __init__(self, in_channels, hidden_neurons, output_channels) -> None:
+    def __init__(self, in_channels: int, hidden_neurons: int, output_channels: int) -> None:
+        """Initialize the DoubleDense module."""
         super().__init__()
         self.dense1 = nn.Linear(in_channels, out_features=hidden_neurons)
         self.dense2 = nn.Linear(in_features=hidden_neurons, out_features=hidden_neurons // 2)
         self.dense3 = nn.Linear(in_features=hidden_neurons // 2, out_features=output_channels)
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward pass for the DoubleDense module."""
         out = functional.relu(self.dense1(x.view(x.size(0), -1)))
         out = functional.relu(self.dense2(out))
         return self.dense3(out)
@@ -239,7 +261,8 @@ class DoubleDense(nn.Module):
 class DoubleDSConv(nn.Module):
     """(convolution => [BN] => ReLU) * 2."""
 
-    def __init__(self, in_channels, out_channels) -> None:
+    def __init__(self, in_channels: int, out_channels: int) -> None:
+        """Initialize the DoubleDSConv module."""
         super().__init__()
         self.double_ds_conv = nn.Sequential(
             DepthwiseSeparableConv(in_channels, out_channels, kernel_size=3, padding=1),
@@ -250,17 +273,20 @@ class DoubleDSConv(nn.Module):
             nn.ReLU(inplace=True),
         )
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward pass for the DoubleDSConv module."""
         return self.double_ds_conv(x)
 
 
 class Flatten(nn.Module):
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward pass for the Flatten module."""
         return x.view(x.size(0), -1)
 
 
 class ChannelAttention(nn.Module):
-    def __init__(self, input_channels, reduction_ratio=16) -> None:
+    def __init__(self, input_channels: int, reduction_ratio: int = 16) -> None:
+        """Initialize the ChannelAttention module."""
         super().__init__()
         self.input_channels = input_channels
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
@@ -274,7 +300,8 @@ class ChannelAttention(nn.Module):
             nn.Linear(input_channels // reduction_ratio, input_channels),
         )
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward pass for the ChannelAttention module."""
         # Take the input and apply average and max pooling
         avg_values = self.avg_pool(x)
         max_values = self.max_pool(x)
@@ -283,14 +310,16 @@ class ChannelAttention(nn.Module):
 
 
 class SpatialAttention(nn.Module):
-    def __init__(self, kernel_size=7) -> None:
+    def __init__(self, kernel_size: int = 7) -> None:
+        """Initialize the SpatialAttention module."""
         super().__init__()
         assert kernel_size in (3, 7), "kernel size must be 3 or 7"
         padding = 3 if kernel_size == 7 else 1
         self.conv = nn.Conv2d(2, 1, kernel_size=kernel_size, padding=padding, bias=False)
         self.bn = nn.Identity()
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward pass for the SpatialAttention module."""
         avg_out = torch.mean(x, dim=1, keepdim=True)
         max_out, _ = torch.max(x, dim=1, keepdim=True)
         out = torch.cat([avg_out, max_out], dim=1)
@@ -300,12 +329,14 @@ class SpatialAttention(nn.Module):
 
 
 class CBAM(nn.Module):
-    def __init__(self, input_channels, reduction_ratio=16, kernel_size=7) -> None:
+    def __init__(self, input_channels: int, reduction_ratio: int = 16, kernel_size: int = 7) -> None:
+        """Initialize the CBAM module."""
         super().__init__()
         self.channel_att = ChannelAttention(input_channels, reduction_ratio=reduction_ratio)
         self.spatial_att = SpatialAttention(kernel_size=kernel_size)
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward pass for the CBAM module."""
         out = self.channel_att(x)
         return self.spatial_att(out)
 
@@ -313,7 +344,8 @@ class CBAM(nn.Module):
 class LinearUpsamplingZ(nn.Module):
     # Linear upsampling of z to same number of channels as downsampled X
     # so that can concatenate
-    def __init__(self, in_channels=16, out_channels=1024) -> None:
+    def __init__(self, in_channels: int = 16, out_channels: int = 1024) -> None:
+        """Initialize the LinearUpsamplingZ module."""
         super().__init__()
         self.linearUp = nn.Sequential(
             nn.Linear(in_channels, 128),
@@ -322,7 +354,8 @@ class LinearUpsamplingZ(nn.Module):
             nn.Linear(512, 1024),
         )
 
-    def forward(self, z):
+    def forward(self, z: torch.Tensor) -> torch.Tensor:
+        """Forward pass for linear upsampling of z."""
         # transform to remove last dimensions
         z1 = z.view(z.shape[0], -1)  # (batch, 16)
         z5 = self.linearUp(z1.float())  # (batch, 1024)

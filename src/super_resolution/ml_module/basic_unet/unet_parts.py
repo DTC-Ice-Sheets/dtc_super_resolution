@@ -8,7 +8,8 @@ import torch.nn.functional as functional
 class DoubleConv(nn.Module):
     """(convolution => [BN] => ReLU) * 2."""
 
-    def __init__(self, in_channels, out_channels, mid_channels=None) -> None:
+    def __init__(self, in_channels: int, out_channels: int, mid_channels: int = None) -> None:
+        """Initialize the DoubleConv module."""
         super().__init__()
         if not mid_channels:
             mid_channels = out_channels
@@ -21,20 +22,23 @@ class DoubleConv(nn.Module):
             nn.ReLU(inplace=True),
         )
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward pass for the DoubleConv module."""
         return self.double_conv(x)
 
 
 class Down(nn.Module):
     """Downscaling with double conv then maxpool."""
 
-    def __init__(self, in_channels, out_channels) -> None:
+    def __init__(self, in_channels: int, out_channels: int) -> None:
+        """Initialize the Down module."""
         super().__init__()
         self.maxpool_conv = nn.Sequential(nn.MaxPool2d(2), DoubleConv(in_channels, out_channels))
         self.maxpool = nn.MaxPool2d(2)
         self.doubleconv = DoubleConv(in_channels, out_channels)
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+        """Forward pass for the Down module."""
         x1 = self.doubleconv(x)
         x2 = self.maxpool(x1)
         return x2, x1
@@ -43,7 +47,8 @@ class Down(nn.Module):
 class Up(nn.Module):
     """Upscaling then double conv."""
 
-    def __init__(self, in_channels, out_channels, bilinear=True) -> None:
+    def __init__(self, in_channels: int, out_channels: int, bilinear: bool = True) -> None:
+        """Initialize the Up module."""
         super().__init__()
 
         # if bilinear, use the normal convolutions to reduce the number of channels
@@ -54,7 +59,8 @@ class Up(nn.Module):
             self.up = nn.ConvTranspose2d(in_channels, in_channels // 2, kernel_size=3, stride=2)
             self.conv = DoubleConv(in_channels, out_channels)
 
-    def forward(self, x1, x2):
+    def forward(self, x1: torch.Tensor, x2: torch.Tensor) -> torch.Tensor:
+        """Forward pass for the Up module."""
         x1 = self.up(x1)
         # input is CHW
         diff_y = x2.size()[2] - x1.size()[2]
@@ -70,7 +76,8 @@ class Up(nn.Module):
 class UpLastConv(nn.Module):
     """Upscaling then double conv without concatenating with skip connection."""
 
-    def __init__(self, in_channels, out_channels, mid_channels, bilinear=True) -> None:
+    def __init__(self, in_channels: int, out_channels: int, mid_channels: int, bilinear: bool = True) -> None:
+        """Initialize the UpLastConv module."""
         super().__init__()
 
         # if bilinear, use the normal convolutions to reduce the number of channels
@@ -81,7 +88,8 @@ class UpLastConv(nn.Module):
             self.up = nn.ConvTranspose2d(in_channels, in_channels // 2, kernel_size=3, stride=2)
             self.conv = DoubleConv(mid_channels, out_channels)
 
-    def forward(self, x, zsize=64):
+    def forward(self, x: torch.Tensor, zsize: int = 64) -> torch.Tensor:
+        """Forward pass for the UpLastConv module."""
         x1 = self.up(x)
         # input is CHW
         diff_y = zsize - x1.size()[2]
@@ -94,7 +102,8 @@ class UpLastConv(nn.Module):
 class InitialConv(nn.Module):
     """Initial convolution to adapt spatial dimensions."""
 
-    def __init__(self, in_channels, out_channels, size_in, size_out) -> None:
+    def __init__(self, in_channels: int, out_channels: int, size_in: int, size_out: int) -> None:
+        """Initialize the InitialConv module."""
         super().__init__()
         self.n_channels_in = in_channels
         self.n_channels_out = out_channels
@@ -115,7 +124,8 @@ class InitialConv(nn.Module):
                 nn.ReLU(inplace=True),
             )
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward pass for the InitialConv module."""
         return self.adapt(x)
 
 
@@ -123,7 +133,7 @@ class InitialConv(nn.Module):
 #       """
 #       Initial convolution to reduce spatial dimensions
 #       """
-#       def __init__(self, in_channels, out_channels, sizex, size):
+#       def __init__(self, in_channels: int, out_channels: int, sizex: int, size: int) -> None:
 #               super().__init__()
 #               self.diff = sizex-size+1
 #               self.n_channels_in = in_channels
@@ -139,24 +149,30 @@ class InitialConv(nn.Module):
 
 
 class OutConv(nn.Module):
-    def __init__(self, in_channels, out_channels) -> None:
+    def __init__(self, in_channels: int, out_channels: int) -> None:
+        """Initialize the OutConv module."""
         super().__init__()
         self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=1)
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Forward pass for the OutConv module.
+        """
         return self.conv(x)
 
 
 class LinearUpsamplingZ(nn.Module):
     # Linear upsampling of z to same number of channels as downsampled X
     # so that can concatenate
-    def __init__(self, in_channels=16, out_channels=1024) -> None:
+    def __init__(self, in_channels: int = 16, out_channels: int = 1024) -> None:
+        """Initialize the LinearUpsamplingZ module."""
         super().__init__()
         self.linearUp = nn.Sequential(
             nn.Linear(in_channels, 128), nn.Linear(128, 256), nn.Linear(256, 512), nn.Linear(512, 1024)
         )
 
-    def forward(self, z):
+    def forward(self, z: torch.Tensor) -> torch.Tensor:
+        """Forward pass for linear upsampling of z."""
         # transform to remove last dimensions
         z1 = z.view(z.shape[0], -1)  # (batch, 16)
         z5 = self.linearUp(z1.float())  # (batch, 1024)
