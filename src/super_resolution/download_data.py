@@ -3,8 +3,8 @@
 import pathlib
 from datetime import datetime
 
-import data_download_module as ddm
 import dotenv
+from data_download_module.main import download_data as ddm_download_data
 from data_download_module.schemas import DataDownloadRequest
 from shapely.geometry import box
 
@@ -90,7 +90,7 @@ def download_era5_from_ddm(start_date: str, end_date: str, output_dir: str) -> s
         raw_download=False,
     )
 
-    return ddm.main.download_data(data_download_request=era5_request)
+    return ddm_download_data(data_download_request=era5_request)
 
 
 def download_rcm_from_ddm(output_dir: str, start_date: str = "2020-01-01", end_date: str = "2020-02-01") -> str:
@@ -115,7 +115,7 @@ def download_rcm_from_ddm(output_dir: str, start_date: str = "2020-01-01", end_d
     start_date = datetime.strptime(start_date, "%Y-%m-%d")
     end_date = datetime.strptime(end_date, "%Y-%m-%d")
 
-    request = ddm.schemas.DataDownloadRequest(
+    request = DataDownloadRequest(
         dataset_id="RACMO",
         output_parent_path=output_dir,
         start_time=start_date,
@@ -124,7 +124,7 @@ def download_rcm_from_ddm(output_dir: str, start_date: str = "2020-01-01", end_d
         raw_download=False,
     )
 
-    return ddm.main.download_data(data_download_request=request)
+    return ddm_download_data(data_download_request=request)
 
 
 def download_data(start_date: str, end_date: str, output_dir: str) -> dict:

@@ -1,6 +1,6 @@
 """Tests for the plots module."""
 
-from argparse import Namespace
+from datetime import datetime
 from unittest.mock import MagicMock, patch
 
 import numpy as np
@@ -35,10 +35,9 @@ def test_predictions_plot_saves_file(mock_subplots, mock_savefig, tmp_path):
     mock_subplots.return_value = (mock_fig, mock_ax)
 
     da = _make_predictions_da(n_months=5)
-    args = Namespace(output_dir=str(tmp_path), start_date="2021-01-01")
 
     with suppress_type_checks():
-        predictions_plot(da, month=3, args=args)
+        predictions_plot(da, start_date=datetime(2021, 1, 1), savedir=str(tmp_path))
 
     mock_savefig.assert_called_once()
     saved_path = mock_savefig.call_args[0][0]
@@ -56,10 +55,9 @@ def test_predictions_plot_uses_correct_month_name(mock_subplots, tmp_path):
     mock_subplots.return_value = (mock_fig, mock_ax)
 
     da = _make_predictions_da(n_months=5)
-    args = Namespace(output_dir=str(tmp_path), start_date="2021-01-01")
 
     with suppress_type_checks():
-        predictions_plot(da, month=2, args=args)
+        predictions_plot(da, start_date=datetime(2021, 1, 1), savedir=str(tmp_path))
 
     # month 2 from start_date 2021-01: start_month=1, plot_month=3 → March
     # xarray .plot() also calls set_title once; check any call contains "March"
@@ -78,10 +76,9 @@ def test_predictions_plot_closes_figure(mock_subplots, mock_close, tmp_path):
     mock_subplots.return_value = (mock_fig, mock_ax)
 
     da = _make_predictions_da(n_months=3)
-    args = Namespace(output_dir=str(tmp_path), start_date="2021-03-01")
 
     with suppress_type_checks():
-        predictions_plot(da, month=1, args=args)
+        predictions_plot(da, start_date=datetime(2021, 3, 1), savedir=str(tmp_path))
 
     mock_close.assert_called_once()
 
@@ -98,10 +95,9 @@ def test_predictions_plot_filename_contains_year_and_month(mock_subplots, mock_s
     mock_subplots.return_value = (mock_fig, mock_ax)
 
     da = _make_predictions_da(n_months=5)
-    args = Namespace(output_dir=str(tmp_path), start_date="2021-02-01")
 
     with suppress_type_checks():
-        predictions_plot(da, month=0, args=args)
+        predictions_plot(da, start_date=datetime(2021, 2, 1), savedir=str(tmp_path))
 
     saved_path = str(mock_savefig.call_args[0][0])
     # plot_month = 2 + 0 = 2, year = 2021

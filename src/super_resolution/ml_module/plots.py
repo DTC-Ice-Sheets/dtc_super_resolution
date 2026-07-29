@@ -1,6 +1,6 @@
-import argparse
+from datetime import datetime
 from pathlib import Path
-from typing import Any
+
 import cartopy.crs as ccrs
 import xarray as xr
 from matplotlib import pyplot as plt
@@ -21,7 +21,7 @@ MONTHS_DICT = {
 }
 
 
-def predictions_plot(predictions_da: xr.Dataset, month: int = 0, args: argparse.Namespace = None, savedir: str = ".") -> None:
+def predictions_plot(predictions_da: xr.Dataset, start_date: datetime, savedir: str = ".") -> None:
     """
     Plot the model's predictions for the selected month.
 
@@ -29,21 +29,16 @@ def predictions_plot(predictions_da: xr.Dataset, month: int = 0, args: argparse.
     ----------
     predictions_da: xr.Dataset
         The model's predictions as an xarray Dataset.
-    month: int
-        The month for which to plot predictions.
-    args: argparse.Namespace
-        The command-line arguments.
+    start_date: datetime
+        The start date from which to start plotting.
     savedir: str
         The directory where the plot will be saved.
     """
-    if args is not None:
-        savedir = args.output_dir
-        start_month = int(args.start_date.split("-")[1])
-
-    # month = 0  # January
     map_proj = ccrs.SouthPolarStereo(central_longitude=0.0)
 
     tot_months = len(predictions_da.time)
+    start_month = start_date.month
+    start_year = start_date.year
 
     for m in range(tot_months):
         plot_month = start_month + m
@@ -58,7 +53,7 @@ def predictions_plot(predictions_da: xr.Dataset, month: int = 0, args: argparse.
         )
         ax.coastlines("10m")
         ax.gridlines(draw_labels=False)
-        ax.set_title(f"Predicted SMB — {month_name} {args.start_date[:4]}", fontsize=10)
-        plt.savefig(Path(savedir) / f"predicted_smb_month_{args.start_date[:4]}_{m}.png", dpi=300, bbox_inches="tight")
+        ax.set_title(f"Predicted SMB — {month_name} {start_year}", fontsize=10)
+        plt.savefig(Path(savedir) / f"predicted_smb_month_{start_year}_{m}.png", dpi=300, bbox_inches="tight")
         plt.close()
     return

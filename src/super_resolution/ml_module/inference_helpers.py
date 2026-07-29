@@ -46,10 +46,14 @@ def load_model(config: dict) -> nn.Module:
     elif config["model_type"] == "Attention":
         model = SmaAt_UNet(n_channels_x=config["n_channel_x"], n_channels_z=config["n_channel_z"], bilinear=False)
 
-    # load the model weights
-    model_path = pathlib.Path.cwd() / config["weights_path"]
-    # model_path = Path(__file__).resolve().parent / config["weights_path"]
-    model.load_state_dict(torch.load(model_path, weights_only=True))
+    # load the model weights, supporting both remote URLs and local paths
+    weights_path = config["weights_path"]
+    if str(weights_path).startswith("http://") or str(weights_path).startswith("https://"):
+        state_dict = torch.hub.load_state_dict_from_url(weights_path, weights_only=False)
+    else:
+        model_path = pathlib.Path.cwd() / weights_path
+        state_dict = torch.load(model_path, weights_only=True)
+    model.load_state_dict(state_dict)
 
     return model
 
@@ -136,8 +140,11 @@ def run_postprocessing(
         The post-processed predictions.
     """
     # reshape predictions to match the original input shape
-    # (months, tiles, channels, height, width)
+    # (months, tiles, height, width)
     reshaped_predictions = []
+    # ensure months axis is always present (np.squeeze can remove it for single-month runs)
+    if monthly_predictions.ndim == 3:
+        monthly_predictions = monthly_predictions[np.newaxis]
     # populate with predictions
     for i in range(monthly_predictions.shape[0]):
         # full racmo grid

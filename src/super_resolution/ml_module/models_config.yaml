@@ -9,7 +9,7 @@ model_unet:
 
 model_attention_unet:
   model_type: Attention
-  weights_path: "ml_module/model_weights/best_model_attention.pth"  # Update this path to the actual model file
+  weights_path: "http://dtc-query-api-bucket.s3-website.gra.io.cloud.ovh.net/super_resolution/model_weights/model_attention_unet.pth"  # Update this path to the actual model file
   n_channel_x: 7
   n_channel_z: 16
   size: 64

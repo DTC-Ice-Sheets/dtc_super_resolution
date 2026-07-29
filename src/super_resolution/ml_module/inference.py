@@ -32,7 +32,8 @@ def run_inference(model_name: str, input_patches: list, metadata: list) -> dict:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # load the model config
-    with pathlib.Path("./ml_module/models_config.yaml").open("r") as f:
+    config_path = pathlib.Path(__file__).parent / "models_config.yaml"
+    with config_path.open("r") as f:
         config = yaml.safe_load(f)
         try:
             model_config = config[model_name]
