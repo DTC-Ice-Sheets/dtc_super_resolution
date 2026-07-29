@@ -142,14 +142,24 @@ def run_postprocessing(
     # reshape predictions to match the original input shape
     # (months, tiles, height, width)
     reshaped_predictions = []
-    # ensure months axis is always present (np.squeeze can remove it for single-month runs)
-    if monthly_predictions.ndim == 3:
-        monthly_predictions = monthly_predictions[np.newaxis]
+
+    # Build a 2-D Gaussian weight map matching the tile output shape.
+    # Weights peak at the tile centre and decay toward the edges, so that
+    # edge predictions (lower model confidence due to limited receptive field)
+    # contribute less than centre predictions when tiles overlap.
+    tile_h, tile_w = monthly_predictions.shape[2], monthly_predictions.shape[3]
+    cy, cx = (tile_h - 1) / 2.0, (tile_w - 1) / 2.0
+    sigma_y, sigma_x = tile_h / 4.0, tile_w / 4.0
+    yy, xx = np.ogrid[:tile_h, :tile_w]
+    gaussian_weights = np.exp(
+        -((yy - cy) ** 2 / (2 * sigma_y ** 2) + (xx - cx) ** 2 / (2 * sigma_x ** 2))
+    ).astype(np.float32)
+
     # populate with predictions
     for i in range(monthly_predictions.shape[0]):
         # full racmo grid
         rcm_preds_acc = np.zeros(rcm_ds.rio.shape)
-        rcm_preds_n = np.zeros(rcm_ds.rio.shape) + 1e-8
+        rcm_preds_w = np.zeros(rcm_ds.rio.shape)
 
         for j in range(monthly_predictions.shape[1]):
             meta = metadata[i][j]
@@ -158,13 +168,16 @@ def run_postprocessing(
             tile = tiles[tile_id]
 
             ry, rx = tile["racmo_slice_y"], tile["racmo_slice_x"]
-            rcm_preds_acc[ry, rx] += pred
-            rcm_preds_n[ry, rx] += 1
+            h = ry.stop - ry.start
+            w = rx.stop - rx.start
+            # support partial tiles at the domain boundary
+            w_crop = gaussian_weights[:h, :w]
+            rcm_preds_acc[ry, rx] += pred[:h, :w] * w_crop
+            rcm_preds_w[ry, rx] += w_crop
 
         # compute the final predictions
-        rcm_preds = rcm_preds_acc / rcm_preds_n
-        mask = rcm_preds_n == 0.0
-        rcm_preds[mask] = np.nan  # set to NaN where no predictions were made
+        with np.errstate(invalid="ignore"):
+            rcm_preds = np.where(rcm_preds_w > 0, rcm_preds_acc / rcm_preds_w, np.nan)
         reshaped_predictions.append(rcm_preds)
 
     reshaped_predictions = np.array(reshaped_predictions)  # (T, H, W)
