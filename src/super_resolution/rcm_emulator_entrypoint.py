@@ -14,8 +14,6 @@ from super_resolution.pre_processing_module.preprocessing import run_preprocessi
 setup_logging()
 logger = logging.getLogger(__name__)
 
-RACMO_PATH = "/home/ngaillard/super_resolution/src/super_resolution/data/RACMO/RACMO__start_2020-01-01T00:00:00__end_2020-02-01T00:00:00__polygon_area_None__variables_surface_mass_balance_glaciated__mask_False__raw_False__21e0066e.zarr"
-
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run inference on the RCM emulator.")
