@@ -12,19 +12,54 @@ logger = logging.getLogger(__name__)
 
 
 def print_max_min_xy(varx, vary, unit="km") -> None:
-    pass
+    logger.debug(
+        "Max and min values of x: %.2f%s -> %.2f%s and y: %.2f%s -> %.2f%s",
+        varx.min().data / 1e3,
+        unit,
+        varx.max().data / 1e3,
+        unit,
+        vary.min().data / 1e3,
+        unit,
+        vary.max().data / 1e3,
+        unit,
+    )
 
 
 def print_max_min_lat_lon(varlat, varlon, unit="°") -> None:
-    pass
+    logger.debug(
+        "Max and min values of lat: %.2f%s -> %.2f%s and lon: %.2f%s -> %.2f%s",
+        varlat.min().data / 1e3,
+        unit,
+        varlat.max().data / 1e3,
+        unit,
+        varlon.min().data / 1e3,
+        unit,
+        varlon.max().data / 1e3,
+        unit,
+    )
 
 
 def print_shape(var, dim1, dim2, dim3, ds="GCM") -> None:
-    pass
+    logger.debug(
+        "Shape of %s data: %s: %s, %s: %s, %s: %s\n-----------------",
+        ds,
+        dim1,
+        var.shape[0],
+        dim2,
+        var.shape[1],
+        dim3,
+        var.shape[2],
+    )
 
 
 def print_raster(raster) -> None:
-    pass
+    logger.debug(
+        "shape: %s\nresolution: %s\nbounds: %s\nCRS: %s\n",
+        raster.rio.shape,
+        raster.rio.resolution(),
+        raster.rio.bounds(),
+        raster.rio.crs,
+    )
 
 
 def create_target_grid_from_racmo(racmo_ds: xr.Dataset, resx_km: float = 14.0, resy_km: float = 28.0) -> tuple:

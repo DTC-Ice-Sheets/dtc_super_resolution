@@ -1,17 +1,15 @@
 import json
 import logging
 import pathlib
-import xarray as xr
 
 import cartopy.crs as ccrs
 import matplotlib.patches as mpatches
 import numpy as np
 import pandas as pd
+import xarray as xr
 from matplotlib import pyplot as plt
 from tqdm import tqdm
 
-# from super_resolution.monitoring import setup_logging
-# setup_logging()
 logger = logging.getLogger(__name__)
 
 
