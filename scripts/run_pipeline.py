@@ -1,4 +1,5 @@
 import logging
+import os
 import pathlib
 from datetime import datetime
 from typing import Annotated, Literal
@@ -35,8 +36,11 @@ def main(
     This function orchestrates the entire process,
     from data download to inference and saving the final output.
     """
-    if not pathlib.Path(output_dir).exists():
-        pathlib.Path(output_dir).mkdir(parents=True)
+
+    if isinstance(start_date, str):
+        start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    if isinstance(end_date, str):
+        end_date = datetime.strptime(end_date, "%Y-%m-%d")
 
     # 1. LOAD DATA
     logger.info(
@@ -45,11 +49,11 @@ def main(
         end_date,
     )
 
-    data_paths = download_data(start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"), output_dir)
+    data_paths = download_data(start_date, end_date, output_dir)
 
     # 2. PRE-PROCESSING - PREDICTION - POST PROCESSING are done by the RCM emulator module
     logger.info("Running the RCM emulator...")
-    input_patches, metadata, tiles, rcm_ds, gcm_ds = run_preprocessing(data_paths)
+    input_patches, metadata, tiles, rcm_ds, gcm_ds = run_preprocessing(data_paths['era5'], data_paths['racmo'])
 
     # 3. PREDICTION
     logger.info("Running inference on the RCM emulator model...")
