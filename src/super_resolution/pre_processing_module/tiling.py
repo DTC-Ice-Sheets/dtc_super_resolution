@@ -1,3 +1,5 @@
+"""Module for generating RACMO and ERA5 tiles for super-resolution training and inference."""
+
 import json
 import logging
 import pathlib

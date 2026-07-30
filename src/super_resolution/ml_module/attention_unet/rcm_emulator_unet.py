@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+""""SmaAt-UNet model for super-resolution of climate data with attention mechanisms."""
 
 import torch
 from torch import nn
@@ -6,7 +6,9 @@ from torch import nn
 from .rcm_emulator_parts import CBAM, DownDS, InitialConv, LinearUpsamplingZ, UpDS, UpLastConv
 
 
-class SmaAt_UNet(nn.Module):
+class SmaatUnet(nn.Module):
+    """"SmaAt-UNet model for super-resolution of climate data with attention mechanisms."""
+
     def __init__(
         self,
         n_channels_x: int,

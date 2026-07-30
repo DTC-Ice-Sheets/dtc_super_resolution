@@ -1,3 +1,5 @@
+"""Module containing functions to plot the model's predictions."""
+
 from datetime import datetime
 from pathlib import Path
 

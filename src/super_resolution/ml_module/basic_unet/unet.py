@@ -8,13 +8,19 @@ from .unet_parts import DoubleConv, Down, InitialConv, LinearUpsamplingZ, Up, Up
 
 
 class UNetBaseline(nn.Module):
-    def __init__(self, n_channels_x: int = 8, n_channels_z: int = 18, size: int = 64, filter: int = 64, bilinear: bool = False) -> None:
+    """UNet model for super-resolution of climate data."""
+
+    def __init__(self, n_channels_x: int = 8,
+                 n_channels_z: int = 18,
+                 size: int = 64,
+                 n_filter: int = 64,
+                 bilinear: bool = False) -> None:
         """Initialize the UNetBaseline."""
         super().__init__()
         self.n_channels_x = n_channels_x
         self.n_channels_z = n_channels_z
         self.size = size
-        self.filter = filter
+        self.n_filter = n_filter
         self.bilinear = bilinear
 
         # input  (batch, 8, 48, 48)

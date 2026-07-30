@@ -1,5 +1,6 @@
+"""Script to run the full pipeline locally."""
+
 import logging
-import os
 import pathlib
 from datetime import datetime
 from typing import Annotated, Literal
@@ -8,7 +9,6 @@ import cyclopts
 
 from scripts.download_data import download_data
 from scripts.plots import predictions_plot
-from super_resolution import rcm_emulator_entrypoint
 from super_resolution.ml_module.inference import run_inference
 from super_resolution.ml_module.inference_helpers import run_postprocessing
 from super_resolution.monitoring import setup_logging
@@ -36,7 +36,6 @@ def main(
     This function orchestrates the entire process,
     from data download to inference and saving the final output.
     """
-
     if isinstance(start_date, str):
         start_date = datetime.strptime(start_date, "%Y-%m-%d")
     if isinstance(end_date, str):
@@ -53,11 +52,11 @@ def main(
 
     # 2. PRE-PROCESSING - PREDICTION - POST PROCESSING are done by the RCM emulator module
     logger.info("Running the RCM emulator...")
-    input_patches, metadata, tiles, rcm_ds, gcm_ds = run_preprocessing(data_paths['era5'], data_paths['racmo'])
+    input_patches, metadata, tiles, rcm_ds, gcm_ds = run_preprocessing(data_paths["era5"], data_paths["racmo"])
 
     # 3. PREDICTION
     logger.info("Running inference on the RCM emulator model...")
-    monthly_predictions = run_inference(model_name, input_patches, metadata) 
+    monthly_predictions = run_inference(model_name, input_patches, metadata)
 
     # 4. POST PROCESSING
     final_output_da = run_postprocessing(monthly_predictions, metadata, tiles, rcm_ds, gcm_ds)

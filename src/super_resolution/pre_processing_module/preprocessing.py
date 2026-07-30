@@ -59,8 +59,8 @@ def run_preprocessing(gcm_zarr_path: str, rcm_zarr_path: str) -> tuple[np.ndarra
     # Prepare model inputs
     tiling_params = {"tile_size": 16, "context_pad_h": 16, "context_pad_w": 8, "stride_frac": 0.7, "log_": False}
 
-    tiles = make_tiles(era5_xy, rcm_ds, **tiling_params) 
-    
+    tiles = make_tiles(era5_xy, rcm_ds, **tiling_params)
+
     input_patches, metadata = generate_era5_patches(era5_xy, tiles)
 
     return input_patches, metadata, tiles, rcm_ds, era5_xy

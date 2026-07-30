@@ -11,7 +11,7 @@ import xarray as xr
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from super_resolution.ml_module.attention_unet.rcm_emulator_unet import SmaAt_UNet
+from super_resolution.ml_module.attention_unet.rcm_emulator_unet import SmaatUnet
 from super_resolution.ml_module.basic_unet.unet import UNetBaseline
 from super_resolution.ml_module.datasets import InferenceDataset, inverse_signed_log1p
 
@@ -44,7 +44,7 @@ def load_model(config: dict) -> nn.Module:
         )
 
     elif config["model_type"] == "Attention":
-        model = SmaAt_UNet(n_channels_x=config["n_channel_x"], n_channels_z=config["n_channel_z"], bilinear=False)
+        model = SmaatUnet(n_channels_x=config["n_channel_x"], n_channels_z=config["n_channel_z"], bilinear=False)
 
     # load the model weights, supporting both remote URLs and local paths
     weights_path = config["weights_path"]
@@ -107,7 +107,8 @@ def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device:
                 elif target_transform == "normalization":
                     out = out * dataset.target_train_std + dataset.target_train_mean
                 elif target_transform is not None:
-                    logger.warning("Unknown target_transform '%s'. Predictions returned untransformed.", target_transform)
+                    logger.warning("Unknown target_transform '%s'. Predictions returned untransformed.",
+                                   target_transform)
 
                 predictions.append(out.cpu().numpy())
 

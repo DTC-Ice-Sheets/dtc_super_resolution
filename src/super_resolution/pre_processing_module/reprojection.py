@@ -11,7 +11,8 @@ import xarray as xr
 logger = logging.getLogger(__name__)
 
 
-def print_max_min_xy(varx, vary, unit="km") -> None:
+def print_max_min_xy(varx: xr.DataArray, vary: xr.DataArray, unit: str = "km") -> None:
+    """Print the maximum and minimum values of x and y coordinates along with their units."""
     logger.debug(
         "Max and min values of x: %.2f%s -> %.2f%s and y: %.2f%s -> %.2f%s",
         varx.min().data / 1e3,
@@ -25,7 +26,8 @@ def print_max_min_xy(varx, vary, unit="km") -> None:
     )
 
 
-def print_max_min_lat_lon(varlat, varlon, unit="°") -> None:
+def print_max_min_lat_lon(varlat: xr.DataArray, varlon: xr.DataArray, unit: str = "°") -> None:
+    """Print the maximum and minimum values of latitude and longitude."""
     logger.debug(
         "Max and min values of lat: %.2f%s -> %.2f%s and lon: %.2f%s -> %.2f%s",
         varlat.min().data / 1e3,
@@ -39,7 +41,8 @@ def print_max_min_lat_lon(varlat, varlon, unit="°") -> None:
     )
 
 
-def print_shape(var, dim1, dim2, dim3, ds="GCM") -> None:
+def print_shape(var: xr.DataArray, dim1: str, dim2: str, dim3: str, ds: str = "GCM") -> None:
+    """Print the shape of a 3D variable along with its dimensions and dataset name."""
     logger.debug(
         "Shape of %s data: %s: %s, %s: %s, %s: %s\n-----------------",
         ds,
@@ -52,7 +55,8 @@ def print_shape(var, dim1, dim2, dim3, ds="GCM") -> None:
     )
 
 
-def print_raster(raster) -> None:
+def print_raster(raster: xr.Dataset) -> None:
+    """Print the shape, resolution, bounds, and CRS of a raster dataset."""
     logger.debug(
         "shape: %s\nresolution: %s\nbounds: %s\nCRS: %s\n",
         raster.rio.shape,

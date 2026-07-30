@@ -8,6 +8,7 @@ import cyclopts
 # from scripts.download_data import download_data
 from super_resolution.ml_module.inference import run_inference
 from super_resolution.ml_module.inference_helpers import run_postprocessing
+
 # from scripts.plots import predictions_plot
 from super_resolution.monitoring import setup_logging
 from super_resolution.pre_processing_module.preprocessing import run_preprocessing
@@ -34,7 +35,6 @@ def main(
     This function orchestrates the entire process,
     from data download to inference and saving the final output.
     """
-    
     # 2. PRE-PROCESSING
     input_patches, metadata, tiles, rcm_ds, gcm_ds = run_preprocessing(gcm_zarr_path, rcm_zarr_path)
 
@@ -47,8 +47,7 @@ def main(
     # 5. SAVING OUTPUT
     final_output_da.to_zarr(output_zarr_path, mode="w")
 
-    return 
-   
+    return
 
 
 if __name__ == "__main__":

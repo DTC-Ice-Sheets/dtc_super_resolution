@@ -1,3 +1,5 @@
+"""Script to run inference on the RCM emulator model."""
+
 import pathlib
 
 import torch

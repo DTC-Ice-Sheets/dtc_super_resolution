@@ -1,3 +1,5 @@
+"""Dataset and helper functions for inference in the super-resolution model."""
+
 from math import cos, pi, sin
 
 import numpy as np
@@ -9,18 +11,9 @@ RACMO_TRAIN_STD = 29.616882
 RACMO_TRAIN_VARIANCE = 877.1597
 
 
-def standardize(data: np.ndarray, mean=None, std=None, ownstd=True):
-    """Standardize the data using either its own mean and std or provided mean and std."""
-    # TO DO: check shapes when standardizing using precomputed mean and std (for GCM data)
-    if ownstd:
-        mean = np.nanmean(data, axis=(1, 2), keepdims=True)
-        std = np.nanstd(data, axis=(1, 2), keepdims=True)
-    ndata = (data - mean) / (std + 1e-8)
-    # replace NaN from all-NaN channels (e.g. SST over land) with 0
-    return np.nan_to_num(ndata, nan=0.0)
-
-
 class InferenceDataset(Dataset):
+    """Custom Dataset for inference, handling ERA5 patches and their metadata."""
+
     def __init__(self, era5_patches: np.ndarray, patches_metadata: list, ownstd: bool = True) -> None:
         """Initialize the InferenceDataset."""
         super().__init__()
@@ -49,7 +42,9 @@ class InferenceDataset(Dataset):
         #     # select mean and std for the current time (mean and std are precomputed for each variable and time)
         #     gcm_spatial_mean = self.gcm_space_mean.sel(time=f"{year}-{month}-01").to_array().values
         #     gcm_spatial_std = self.gcm_space_std.sel(time=f"{year}-{month}-01").to_array().values
-        #     input_patch_stdz = standardize(input_patch, mean=gcm_spatial_mean, std=gcm_spatial_std, ownstd=self.ownstd)
+        #     input_patch_stdz = standardize(input_patch,
+        #                                       mean=gcm_spatial_mean,
+        #                                       std=gcm_spatial_std, ownstd=self.ownstd)
 
         # get contextual statistics
         vect_std = np.nanstd(input_patch, axis=(1, 2))
@@ -82,12 +77,7 @@ def inverse_signed_log1p(x_transformed: torch.Tensor, eps: float = 1e-6) -> torc
     return torch.sign(x_transformed) * (torch.expm1(torch.abs(x_transformed)) - eps)
 
 
-def unstandardize(data: np.ndarray, mean=RACMO_TRAIN_MEAN, std=RACMO_TRAIN_STD) -> np.ndarray:
-    """Unstandardize the data using provided mean and std."""
-    return data * std + mean
-
-
-def standardize(data: np.ndarray, mean: np.ndarray = None, std: np.ndarray = None, ownstd: bool = True):
+def standardize(data: np.ndarray, mean: np.ndarray = None, std: np.ndarray = None, ownstd: bool = True) -> np.ndarray:
     """Standardize the data using either its own mean and std or provided mean and std."""
     # TO DO: check shapes when standardizing using precomputed mean and std (for GCM data)
     if ownstd:
@@ -98,7 +88,11 @@ def standardize(data: np.ndarray, mean: np.ndarray = None, std: np.ndarray = Non
     return np.nan_to_num(ndata, nan=0.0)
 
 
-# create mask
+def unstandardize(data: np.ndarray, mean: float = RACMO_TRAIN_MEAN, std: float = RACMO_TRAIN_STD) -> np.ndarray:
+    """Unstandardize the data using provided mean and std."""
+    return data * std + mean
+
+
 def create_mask(true_smb: np.ndarray) -> np.ndarray:
     """Create a mask for the true SMB data, marking sea pixels as 0 and land pixels as 1."""
     mask = np.empty((true_smb.shape[0], true_smb.shape[1]))

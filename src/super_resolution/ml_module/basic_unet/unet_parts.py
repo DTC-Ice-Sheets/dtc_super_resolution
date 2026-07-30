@@ -8,7 +8,7 @@ import torch.nn.functional as functional
 class DoubleConv(nn.Module):
     """(convolution => [BN] => ReLU) * 2."""
 
-    def __init__(self, in_channels: int, out_channels: int, mid_channels: int = None) -> None:
+    def __init__(self, in_channels: int, out_channels: int, mid_channels: int = 0) -> None:
         """Initialize the DoubleConv module."""
         super().__init__()
         if not mid_channels:
@@ -149,26 +149,35 @@ class InitialConv(nn.Module):
 
 
 class OutConv(nn.Module):
+    """Final convolution to reduce channels to 1."""
+
     def __init__(self, in_channels: int, out_channels: int) -> None:
         """Initialize the OutConv module."""
         super().__init__()
         self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=1)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """
-        Forward pass for the OutConv module.
-        """
+        """Forward pass for the OutConv module."""
         return self.conv(x)
 
 
 class LinearUpsamplingZ(nn.Module):
+    """Linear upsampling of z to match the number of channels of downsampled x."""
+
     # Linear upsampling of z to same number of channels as downsampled X
     # so that can concatenate
     def __init__(self, in_channels: int = 16, out_channels: int = 1024) -> None:
         """Initialize the LinearUpsamplingZ module."""
         super().__init__()
+
+        if out_channels == 0:
+            out_channels = 1024  # default to 64x upsampling
+
         self.linearUp = nn.Sequential(
-            nn.Linear(in_channels, 128), nn.Linear(128, 256), nn.Linear(256, 512), nn.Linear(512, 1024)
+            nn.Linear(in_channels, 128),
+            nn.Linear(128, 256),
+            nn.Linear(256, 512),
+            nn.Linear(512, out_channels)
         )
 
     def forward(self, z: torch.Tensor) -> torch.Tensor:
