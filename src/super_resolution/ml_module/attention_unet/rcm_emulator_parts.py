@@ -260,7 +260,6 @@ class DoubleDense(nn.Module):
     """(dense => [ReLU]) * 2."""
 
     def __init__(self, in_channels: int, hidden_neurons: int, output_channels: int) -> None:
-        """Initialize the DoubleDense module."""
         super().__init__()
         self.dense1 = nn.Linear(in_channels, out_features=hidden_neurons)
         self.dense2 = nn.Linear(in_features=hidden_neurons, out_features=hidden_neurons // 2)
@@ -277,7 +276,6 @@ class DoubleDSConv(nn.Module):
     """(convolution => [BN] => ReLU) * 2."""
 
     def __init__(self, in_channels: int, out_channels: int) -> None:
-        """Initialize the DoubleDSConv module."""
         super().__init__()
         self.double_ds_conv = nn.Sequential(
             DepthwiseSeparableConv(in_channels, out_channels, kernel_size=3, padding=1),
@@ -305,7 +303,6 @@ class ChannelAttention(nn.Module):
     """Channel attention module."""
 
     def __init__(self, input_channels: int, reduction_ratio: int = 16) -> None:
-        """Initialize the ChannelAttention module."""
         super().__init__()
         self.input_channels = input_channels
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
@@ -332,7 +329,6 @@ class SpatialAttention(nn.Module):
     """Spatial attention module."""
 
     def __init__(self, kernel_size: int = 7) -> None:
-        """Initialize the SpatialAttention module."""
         super().__init__()
         assert kernel_size in (3, 7), "kernel size must be 3 or 7"
         padding = 3 if kernel_size == 7 else 1
@@ -353,7 +349,6 @@ class CBAM(nn.Module):
     """Convolutional Block Attention Module (CBAM)."""
 
     def __init__(self, input_channels: int, reduction_ratio: int = 16, kernel_size: int = 7) -> None:
-        """Initialize the CBAM module."""
         super().__init__()
         self.channel_att = ChannelAttention(input_channels, reduction_ratio=reduction_ratio)
         self.spatial_att = SpatialAttention(kernel_size=kernel_size)
@@ -370,7 +365,6 @@ class LinearUpsamplingZ(nn.Module):
     # Linear upsampling of z to same number of channels as downsampled X
     # so that can concatenate
     def __init__(self, in_channels: int = 16, out_channels: int = 0) -> None:
-        """Initialize the LinearUpsamplingZ module."""
         super().__init__()
 
         if out_channels == 0:

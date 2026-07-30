@@ -15,7 +15,6 @@ class UNetBaseline(nn.Module):
                  size: int = 64,
                  n_filter: int = 64,
                  bilinear: bool = False) -> None:
-        """Initialize the UNetBaseline."""
         super().__init__()
         self.n_channels_x = n_channels_x
         self.n_channels_z = n_channels_z

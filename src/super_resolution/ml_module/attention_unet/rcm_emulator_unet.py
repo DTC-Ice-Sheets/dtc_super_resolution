@@ -17,7 +17,6 @@ class SmaatUnet(nn.Module):
         bilinear: bool = False,
         reduction_ratio: int = 16,
     ) -> None:
-        """Initialize the SmaAt_UNet."""
         super().__init__()
         self.n_channels_x = n_channels_x
         self.n_channels_z = n_channels_z

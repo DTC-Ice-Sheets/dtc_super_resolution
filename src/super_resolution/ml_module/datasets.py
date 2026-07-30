@@ -15,7 +15,6 @@ class InferenceDataset(Dataset):
     """Custom Dataset for inference, handling ERA5 patches and their metadata."""
 
     def __init__(self, era5_patches: np.ndarray, patches_metadata: list, ownstd: bool = True) -> None:
-        """Initialize the InferenceDataset."""
         super().__init__()
         self.patches = era5_patches
         self.patches_metadata = patches_metadata

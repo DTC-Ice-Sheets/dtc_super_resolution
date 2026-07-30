@@ -262,7 +262,7 @@ def save_tiles_to_disk(
                 # Skip tiles with too many NaNs (ocean / no data)
                 nan_frac = np.isnan(racmo_patch).mean()
                 zero_frac = (racmo_patch == 0.0).mean()
-                null_data = nan_frac + zero_frac
+                null_data = (nan_frac + zero_frac).dtype(float)  # fraction of NaN or zero values in the RACMO patch
 
                 if null_data > max_nan_frac:
                     skipped_nan += 1

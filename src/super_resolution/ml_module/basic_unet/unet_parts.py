@@ -9,7 +9,6 @@ class DoubleConv(nn.Module):
     """(convolution => [BN] => ReLU) * 2."""
 
     def __init__(self, in_channels: int, out_channels: int, mid_channels: int = 0) -> None:
-        """Initialize the DoubleConv module."""
         super().__init__()
         if not mid_channels:
             mid_channels = out_channels
@@ -31,7 +30,6 @@ class Down(nn.Module):
     """Downscaling with double conv then maxpool."""
 
     def __init__(self, in_channels: int, out_channels: int) -> None:
-        """Initialize the Down module."""
         super().__init__()
         self.maxpool_conv = nn.Sequential(nn.MaxPool2d(2), DoubleConv(in_channels, out_channels))
         self.maxpool = nn.MaxPool2d(2)
@@ -48,7 +46,6 @@ class Up(nn.Module):
     """Upscaling then double conv."""
 
     def __init__(self, in_channels: int, out_channels: int, bilinear: bool = True) -> None:
-        """Initialize the Up module."""
         super().__init__()
 
         # if bilinear, use the normal convolutions to reduce the number of channels
@@ -77,7 +74,6 @@ class UpLastConv(nn.Module):
     """Upscaling then double conv without concatenating with skip connection."""
 
     def __init__(self, in_channels: int, out_channels: int, mid_channels: int, bilinear: bool = True) -> None:
-        """Initialize the UpLastConv module."""
         super().__init__()
 
         # if bilinear, use the normal convolutions to reduce the number of channels
@@ -103,7 +99,6 @@ class InitialConv(nn.Module):
     """Initial convolution to adapt spatial dimensions."""
 
     def __init__(self, in_channels: int, out_channels: int, size_in: int, size_out: int) -> None:
-        """Initialize the InitialConv module."""
         super().__init__()
         self.n_channels_in = in_channels
         self.n_channels_out = out_channels
@@ -152,7 +147,6 @@ class OutConv(nn.Module):
     """Final convolution to reduce channels to 1."""
 
     def __init__(self, in_channels: int, out_channels: int) -> None:
-        """Initialize the OutConv module."""
         super().__init__()
         self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=1)
 
@@ -167,7 +161,6 @@ class LinearUpsamplingZ(nn.Module):
     # Linear upsampling of z to same number of channels as downsampled X
     # so that can concatenate
     def __init__(self, in_channels: int = 16, out_channels: int = 1024) -> None:
-        """Initialize the LinearUpsamplingZ module."""
         super().__init__()
 
         if out_channels == 0:
