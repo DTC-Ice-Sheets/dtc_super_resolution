@@ -17,15 +17,15 @@ from super_resolution.pre_processing_module.tiling import make_tiles
 logger = logging.getLogger(__name__)
 
 
-def run_preprocessing(gcm_path: str, rcm_path: str) -> tuple[np.ndarray, list, list, xr.Dataset, xr.Dataset]:
+def run_preprocessing(gcm_zarr_path: str, rcm_zarr_path: str) -> tuple[np.ndarray, list, list, xr.Dataset, xr.Dataset]:
     """
     Run the preprocessing pipeline for the RCM emulator.
 
     Parameters
     ----------
-    gcm_path: str
+    gcm_zarr_path: str
         Path to the GCM data.
-    rcm_path: str
+    rcm_zarr_path: str
         Path to the RCM data.
 
     Returns
@@ -44,8 +44,8 @@ def run_preprocessing(gcm_path: str, rcm_path: str) -> tuple[np.ndarray, list, l
                 The ERA5 dataset reprojected to the RCM grid.
     """
     # Load ERA5 and RCM datasets
-    gcm_ds = load_era5_dataset(gcm_path)
-    rcm_ds = load_rcm_dataset(rcm_path)
+    gcm_ds = load_era5_dataset(gcm_zarr_path)
+    rcm_ds = load_rcm_dataset(rcm_zarr_path)
 
     # Create target grid from RACMO
     # define the target coarser resolution, roughly matching ERA5 grid spacing at our target latitude of 75°S,

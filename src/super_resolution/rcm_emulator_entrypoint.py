@@ -20,8 +20,8 @@ app = cyclopts.App(help="Run inference on the RCM emulator.")
 
 @app.default
 def main(
-    gcm_path: Annotated[str, cyclopts.Parameter(help="Path to the GCM data")],
-    rcm_path: Annotated[str, cyclopts.Parameter(help="Path to the RCM data")],
+    gcm_zarr_path: Annotated[str, cyclopts.Parameter(help="Path to the GCM data")],
+    rcm_zarr_path: Annotated[str, cyclopts.Parameter(help="Path to the RCM data")],
     output_zarr_path: Annotated[str, cyclopts.Parameter(help="Directory to store downloaded data")],
     model_name: Annotated[
         Literal["model_unet", "model_attention_unet"],
@@ -36,7 +36,7 @@ def main(
     """
     
     # 2. PRE-PROCESSING
-    input_patches, metadata, tiles, rcm_ds, gcm_ds = run_preprocessing(gcm_path, rcm_path)
+    input_patches, metadata, tiles, rcm_ds, gcm_ds = run_preprocessing(gcm_zarr_path, rcm_zarr_path)
 
     # 3. PREDICTION
     monthly_predictions = run_inference(model_name, input_patches, metadata)
