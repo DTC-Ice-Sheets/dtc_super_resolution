@@ -60,18 +60,18 @@ def test_cbam_output_shape():
 
 
 def test_smaat_unet_instantiation():
-    from super_resolution.ml_module.attention_unet.rcm_emulator_unet import SmaAt_UNet
+    from super_resolution.ml_module.attention_unet.rcm_emulator_unet import SmaatUnet
 
-    model = SmaAt_UNet(n_channels_x=7, n_channels_z=16, bilinear=False)
+    model = SmaatUnet(n_channels_x=7, n_channels_z=16, bilinear=False)
     assert isinstance(model, nn.Module)
     assert model.n_channels_x == 7
     assert model.n_channels_z == 16
 
 
 def test_smaat_unet_has_expected_layers():
-    from super_resolution.ml_module.attention_unet.rcm_emulator_unet import SmaAt_UNet
+    from super_resolution.ml_module.attention_unet.rcm_emulator_unet import SmaatUnet
 
-    model = SmaAt_UNet(n_channels_x=7, n_channels_z=16)
+    model = SmaatUnet(n_channels_x=7, n_channels_z=16)
     assert hasattr(model, "inc")
     assert hasattr(model, "linz")
     assert hasattr(model, "down1")

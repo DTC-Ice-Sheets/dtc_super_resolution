@@ -144,9 +144,10 @@ def test_run_preprocessing_calls_pipeline(
 
     from super_resolution.pre_processing_module.preprocessing import run_preprocessing
 
-    data_paths = {"era5": "/era5.nc", "rcm": "/rcm.zarr"}
+    era5_path = "/era5.nc"
+    racmo_path = "/rcm.zarr"
     with suppress_type_checks():
-        input_patches, metadata, tiles, rcm_ds, gcm_ds = run_preprocessing(data_paths)
+        input_patches, metadata, tiles, rcm_ds, gcm_ds = run_preprocessing(era5_path, racmo_path)
 
     mock_load_era5.assert_called_once_with("/era5.nc")
     mock_load_rcm.assert_called_once_with("/rcm.zarr")

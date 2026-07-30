@@ -98,7 +98,7 @@ def test_up_last_conv_output_shape():
 def test_unet_baseline_instantiation():
     from super_resolution.ml_module.basic_unet.unet import UNetBaseline
 
-    model = UNetBaseline(n_channels_x=7, n_channels_z=16, size=64, filter=64, bilinear=False)
+    model = UNetBaseline(n_channels_x=7, n_channels_z=16, size=64, n_filter=64, bilinear=False)
     assert isinstance(model, nn.Module)
     assert model.n_channels_x == 7
     assert model.n_channels_z == 16
@@ -107,7 +107,7 @@ def test_unet_baseline_instantiation():
 def test_unet_baseline_has_expected_layers():
     from super_resolution.ml_module.basic_unet.unet import UNetBaseline
 
-    model = UNetBaseline(n_channels_x=7, n_channels_z=16, size=64, filter=64)
+    model = UNetBaseline(n_channels_x=7, n_channels_z=16, size=64, n_filter=64, bilinear=False)
     assert hasattr(model, "initialconv")
     assert hasattr(model, "d1")
     assert hasattr(model, "d2")

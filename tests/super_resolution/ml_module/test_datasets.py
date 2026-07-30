@@ -34,7 +34,7 @@ def test_standardize_handles_nan():
 
 def test_standardize_with_provided_mean_std():
     data = np.array([[[1.0, 2.0], [3.0, 4.0]]])
-    result = standardize(data, mean=2.5, std=1.0, ownstd=False)
+    result = standardize(data, mean=np.array([2.5]), std=np.array([1.0]), ownstd=False)
     expected = (data - 2.5) / (1.0 + 1e-8)
     np.testing.assert_allclose(result, expected, atol=1e-6)
 

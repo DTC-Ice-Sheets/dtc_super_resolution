@@ -76,7 +76,9 @@ def inverse_signed_log1p(x_transformed: torch.Tensor, eps: float = 1e-6) -> torc
     return torch.sign(x_transformed) * (torch.expm1(torch.abs(x_transformed)) - eps)
 
 
-def standardize(data: np.ndarray, mean: np.ndarray = None, std: np.ndarray = None, ownstd: bool = True) -> np.ndarray:
+def standardize(
+    data: np.ndarray, mean: np.ndarray | None = None, std: np.ndarray | None = None, ownstd: bool = True
+) -> np.ndarray:
     """Standardize the data using either its own mean and std or provided mean and std."""
     # TO DO: check shapes when standardizing using precomputed mean and std (for GCM data)
     if ownstd:

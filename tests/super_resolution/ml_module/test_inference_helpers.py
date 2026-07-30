@@ -38,7 +38,7 @@ def test_load_model_baseline(mock_unet_cls, mock_torch_load):
 
 
 @patch("super_resolution.ml_module.inference_helpers.torch.load")
-@patch("super_resolution.ml_module.inference_helpers.SmaAt_UNet")
+@patch("super_resolution.ml_module.inference_helpers.SmaatUnet")
 def test_load_model_attention(mock_attn_cls, mock_torch_load):
     mock_model = MagicMock()
     mock_attn_cls.return_value = mock_model
