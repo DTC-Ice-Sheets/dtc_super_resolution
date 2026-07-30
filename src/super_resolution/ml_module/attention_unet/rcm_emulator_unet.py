@@ -3,7 +3,7 @@
 import torch
 from torch import nn
 
-from .rcm_emulator_parts import CBAM, InitialConv, LinearUpsamplingZ, DownDS, UpDS, UpLastConv
+from .rcm_emulator_parts import CBAM, DownDS, InitialConv, LinearUpsamplingZ, UpDS, UpLastConv
 
 
 class SmaAt_UNet(nn.Module):

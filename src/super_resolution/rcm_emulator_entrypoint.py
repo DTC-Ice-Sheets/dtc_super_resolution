@@ -1,16 +1,14 @@
 """Entrypoint for the RCM emulator pipeline."""
 
 import logging
-import pathlib
-from datetime import datetime
 from typing import Annotated, Literal
 
 import cyclopts
 
-from super_resolution.download_data import download_data
+# from scripts.download_data import download_data
 from super_resolution.ml_module.inference import run_inference
 from super_resolution.ml_module.inference_helpers import run_postprocessing
-from super_resolution.ml_module.plots import predictions_plot
+# from scripts.plots import predictions_plot
 from super_resolution.monitoring import setup_logging
 from super_resolution.pre_processing_module.preprocessing import run_preprocessing
 
@@ -22,9 +20,9 @@ app = cyclopts.App(help="Run inference on the RCM emulator.")
 
 @app.default
 def main(
-    start_date: Annotated[datetime, cyclopts.Parameter(help="Start date for data download (YYYY-MM-DD)")],
-    end_date: Annotated[datetime, cyclopts.Parameter(help="End date for data download (YYYY-MM-DD)")],
-    output_dir: Annotated[str, cyclopts.Parameter(help="Directory to store downloaded data")],
+    gcm_path: Annotated[str, cyclopts.Parameter(help="Path to the GCM data")],
+    rcm_path: Annotated[str, cyclopts.Parameter(help="Path to the RCM data")],
+    output_zarr_path: Annotated[str, cyclopts.Parameter(help="Directory to store downloaded data")],
     model_name: Annotated[
         Literal["model_unet", "model_attention_unet"],
         cyclopts.Parameter(help="Name of the model to use for inference"),
@@ -36,43 +34,21 @@ def main(
     This function orchestrates the entire process,
     from data download to inference and saving the final output.
     """
-    if not pathlib.Path(output_dir).exists():
-        pathlib.Path(output_dir).mkdir(parents=True)
-
-    # 1. LOAD DATA
-    logger.info(
-        "Downloading ERA5 and RCM data from Data Download Module for the period %s to %s...",
-        start_date,
-        end_date,
-    )
-
-    data_paths = download_data(start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"), output_dir)
-
+    
     # 2. PRE-PROCESSING
-    logger.info("Pre-processing the downloaded data...")
-    input_patches, metadata, tiles, rcm_ds, gcm_ds = run_preprocessing(data_paths)
+    input_patches, metadata, tiles, rcm_ds, gcm_ds = run_preprocessing(gcm_path, rcm_path)
 
     # 3. PREDICTION
-    logger.info("Running inference on the RCM emulator model...")
     monthly_predictions = run_inference(model_name, input_patches, metadata)
 
     # 4. POST PROCESSING
     final_output_da = run_postprocessing(monthly_predictions, metadata, tiles, rcm_ds, gcm_ds)
 
     # 5. SAVING OUTPUT
-    logger.info("Saving the final output to Zarr format...")
-    outdir = output_dir + "/output/"
-    output_zarr_path = (
-        pathlib.Path(outdir) / f"predicted_smb_{start_date.strftime('%Y-%m-%d')}_{end_date.strftime('%Y-%m-%d')}.zarr"
-    )
     final_output_da.to_zarr(output_zarr_path, mode="w")
 
-    # save plots
-    logger.info("Saving plots of the predictions...")
-
-    predictions_plot(final_output_da, start_date=start_date, savedir=output_dir)
-
-    logger.info("Saved the final output to %s", output_zarr_path)
+    return 
+   
 
 
 if __name__ == "__main__":

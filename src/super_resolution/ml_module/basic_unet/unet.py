@@ -1,9 +1,11 @@
 """Full assembly of the parts to form the complete network."""
 
 # Source UNet: https://github.com/milesial/Pytorch-UNet
-from .unet_parts import DoubleConv, Down, Up, UpLastConv, InitialConv, LinearUpsamplingZ
 import torch
 from torch import nn
+
+from .unet_parts import DoubleConv, Down, InitialConv, LinearUpsamplingZ, Up, UpLastConv
+
 
 class UNetBaseline(nn.Module):
     def __init__(self, n_channels_x: int = 8, n_channels_z: int = 18, size: int = 64, filter: int = 64, bilinear: bool = False) -> None:

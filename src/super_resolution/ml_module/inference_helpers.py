@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 from super_resolution.ml_module.attention_unet.rcm_emulator_unet import SmaAt_UNet
 from super_resolution.ml_module.basic_unet.unet import UNetBaseline
-from super_resolution.ml_module.datasets import InferenceDataset
+from super_resolution.ml_module.datasets import InferenceDataset, inverse_signed_log1p
 
 # from super_resolution.monitoring import setup_logging
 # setup_logging()
@@ -99,14 +99,15 @@ def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device:
             z = z.to(device)
             with torch.no_grad():
                 out = model(x, z)
-                # inverse-transform the predictions
-                # try:
-                #     if config["target_transform"] == "log":
-                #         out = inverse_signed_log1p(out)
-                #     elif config["target_transform"] == "normalization":
-                #         out = out * dataset.target_train_std + dataset.target_train_mean
-                # except AttributeError:
-                #     logger.warning("Inverse transformation of targets not applied. Check if the model's output requires inverse transformation.")
+
+                # inverse-transform the predictions if needed, based on the target_transform specified in the config
+                target_transform = config.get("target_transform")
+                if target_transform == "log":
+                    out = inverse_signed_log1p(out)
+                elif target_transform == "normalization":
+                    out = out * dataset.target_train_std + dataset.target_train_mean
+                elif target_transform is not None:
+                    logger.warning("Unknown target_transform '%s'. Predictions returned untransformed.", target_transform)
 
                 predictions.append(out.cpu().numpy())
 

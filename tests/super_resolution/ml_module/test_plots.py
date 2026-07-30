@@ -28,7 +28,7 @@ def _make_predictions_da(n_months=5):
 @patch("super_resolution.ml_module.plots.plt.savefig")
 @patch("super_resolution.ml_module.plots.plt.subplots")
 def test_predictions_plot_saves_file(mock_subplots, mock_savefig, tmp_path):
-    from super_resolution.ml_module.plots import predictions_plot
+    from scripts.plots import predictions_plot
 
     mock_fig = MagicMock()
     mock_ax = MagicMock()
@@ -48,7 +48,7 @@ def test_predictions_plot_saves_file(mock_subplots, mock_savefig, tmp_path):
 @patch("super_resolution.ml_module.plots.plt.savefig", new=MagicMock())
 @patch("super_resolution.ml_module.plots.plt.subplots")
 def test_predictions_plot_uses_correct_month_name(mock_subplots, tmp_path):
-    from super_resolution.ml_module.plots import predictions_plot
+    from scripts.plots import predictions_plot
 
     mock_fig = MagicMock()
     mock_ax = MagicMock()
@@ -69,7 +69,7 @@ def test_predictions_plot_uses_correct_month_name(mock_subplots, tmp_path):
 @patch("super_resolution.ml_module.plots.plt.savefig", new=MagicMock())
 @patch("super_resolution.ml_module.plots.plt.subplots")
 def test_predictions_plot_closes_figure(mock_subplots, mock_close, tmp_path):
-    from super_resolution.ml_module.plots import predictions_plot
+    from scripts.plots import predictions_plot
 
     mock_fig = MagicMock()
     mock_ax = MagicMock()
@@ -88,7 +88,7 @@ def test_predictions_plot_closes_figure(mock_subplots, mock_close, tmp_path):
 @patch("super_resolution.ml_module.plots.plt.subplots")
 def test_predictions_plot_filename_contains_year_and_month(mock_subplots, mock_savefig, tmp_path):
     """Saved filename encodes the year and plot month from start_date."""
-    from super_resolution.ml_module.plots import predictions_plot
+    from scripts.plots import predictions_plot
 
     mock_fig = MagicMock()
     mock_ax = MagicMock()

@@ -17,14 +17,16 @@ from super_resolution.pre_processing_module.tiling import make_tiles
 logger = logging.getLogger(__name__)
 
 
-def run_preprocessing(data_paths: dict) -> tuple[np.ndarray, list, list, xr.Dataset, xr.Dataset]:
+def run_preprocessing(gcm_path: str, rcm_path: str) -> tuple[np.ndarray, list, list, xr.Dataset, xr.Dataset]:
     """
     Run the preprocessing pipeline for the RCM emulator.
 
     Parameters
     ----------
-    data_paths: dict
-        A dictionary containing paths to the downloaded ERA5 and RCM data.
+    gcm_path: str
+        Path to the GCM data.
+    rcm_path: str
+        Path to the RCM data.
 
     Returns
     -------
@@ -42,8 +44,8 @@ def run_preprocessing(data_paths: dict) -> tuple[np.ndarray, list, list, xr.Data
                 The ERA5 dataset reprojected to the RCM grid.
     """
     # Load ERA5 and RCM datasets
-    gcm_ds = load_era5_dataset(data_paths["era5"])
-    rcm_ds = load_rcm_dataset(data_paths["rcm"])
+    gcm_ds = load_era5_dataset(gcm_path)
+    rcm_ds = load_rcm_dataset(rcm_path)
 
     # Create target grid from RACMO
     # define the target coarser resolution, roughly matching ERA5 grid spacing at our target latitude of 75°S,
@@ -57,11 +59,8 @@ def run_preprocessing(data_paths: dict) -> tuple[np.ndarray, list, list, xr.Data
     # Prepare model inputs
     tiling_params = {"tile_size": 16, "context_pad_h": 16, "context_pad_w": 8, "stride_frac": 0.7, "log_": False}
 
-    tiles = make_tiles(era5_xy, rcm_ds, **tiling_params)  # Assuming tiling_params is defined elsewhere
-
-    # fig = plotTiles(era5_xy, rcm_ds, tiles)
-    # fig.savefig("tiles.png", dpi=300)
-
+    tiles = make_tiles(era5_xy, rcm_ds, **tiling_params) 
+    
     input_patches, metadata = generate_era5_patches(era5_xy, tiles)
 
     return input_patches, metadata, tiles, rcm_ds, era5_xy
@@ -109,7 +108,7 @@ def generate_era5_patches(era5: xr.Dataset, tiles: list) -> tuple[np.ndarray, li
             # skip tiles that contain only sea values (all 0.0)
             sst = era5_patch[3, :, :]  # sea surface temperature
             land_mask = sst == 0.0
-            if land_mask.mean() < 0.5:  # if more than 95% of the tile is sea
+            if land_mask.mean() < 0.1:  # if more than 99% of the tile is sea
                 continue
 
             era5_patches_month.append(era5_patch)
