@@ -58,7 +58,7 @@ def test_app_attention_unet(tmp_path):
         patch("super_resolution.rcm_emulator_entrypoint.run_inference", return_value=MagicMock()) as mock_run_inference,
         patch("super_resolution.rcm_emulator_entrypoint.run_postprocessing", return_value=MagicMock()),
         patch("pathlib.Path.exists", return_value=True),
-        patch.object(sys,"argv",
+        patch.object(sys, "argv",
                     ["prog",
                      "--gcm_zarr_path",
                      "era5.zarr",
@@ -75,8 +75,6 @@ def test_app_attention_unet(tmp_path):
         app(result_action="return_value")
         called_model_name = mock_run_inference.call_args[0][0]
         assert called_model_name == "model_attention_unet"
-
-
 
 
 @patch("super_resolution.rcm_emulator_entrypoint.run_postprocessing")
@@ -117,4 +115,3 @@ def test_main_calls_pipeline_stages(mock_preproc, mock_infer, mock_postproc, tmp
     mock_infer.assert_called_once_with("model_unet", mock_patches, mock_metadata)
     mock_postproc.assert_called_once_with(mock_monthly, mock_metadata, mock_tiles, mock_rcm_ds, mock_gcm_ds)
     mock_final_da.to_zarr.assert_called_once()
-
