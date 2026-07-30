@@ -32,7 +32,6 @@ seaborn = "^0.13.2"
 torch = { version = "2.10.0", source = "pytorch-cpu" }
 tqdm = "^4.68.4"
 zarr = "^3.2.1"
-data-download-module = {git = "https://github.com/dtc-ice-sheets/data_download_module.git"}
 scipy = "^1.18.0"
 
 [tool.poetry.group.dev.dependencies]
@@ -47,6 +46,7 @@ sphinx-rtd-theme = "^3.0.2"
 sphinx-copybutton = "^0.5.2"
 commitizen = "^4.11.6"
 pydoclint = "^0.8.3"
+data-download-module = {git = "https://github.com/dtc-ice-sheets/data_download_module.git"}
 
 [tool.ruff]
 line-length = 120
