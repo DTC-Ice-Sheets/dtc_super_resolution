@@ -218,7 +218,7 @@ def save_tiles_to_disk(
         Each dict contains slices for RACMO and ERA5 tiles.
     output_dir : str
         Path to the output directory.
-    max_nan_frac : float, optional
+    max_nan_frac : float
         Maximum fraction of NaN values allowed in a tile.
     """
     pathlib.Path(output_dir).mkdir(exist_ok=True, parents=True)

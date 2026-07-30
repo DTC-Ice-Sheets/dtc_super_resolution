@@ -15,7 +15,6 @@ class DoubleConvDS(nn.Module):
                  out_channels: int,
                  mid_channels: int = 0,
                  kernels_per_layer: int = 1) -> None:
-        """Initialize the DoubleDSConv module."""
         super().__init__()
         if not mid_channels:
             mid_channels = out_channels
@@ -56,7 +55,6 @@ class UpLastConv(nn.Module):
         bilinear: bool = True,
         kernels_per_layer: int = 1,
     ) -> None:
-        """Initialize the UpLastConv module."""
         super().__init__()
 
         # if bilinear, use the normal convolutions to reduce the number of channels
@@ -89,7 +87,6 @@ class DownDS(nn.Module):
     """Downscaling with maxpool then double conv."""
 
     def __init__(self, in_channels: int, out_channels: int, kernels_per_layer: int = 1) -> None:
-        """Initialize the DownDS module."""
         super().__init__()
         self.maxpool_conv = nn.Sequential(
             nn.MaxPool2d(2),
@@ -105,7 +102,6 @@ class UpDS(nn.Module):
     """Upscaling then double conv."""
 
     def __init__(self, in_channels: int, out_channels: int, bilinear: bool = True, kernels_per_layer: int = 1) -> None:
-        """Initialize the UpDS module."""
         super().__init__()
 
         # if bilinear, use the normal convolutions to reduce the number of channels
@@ -140,7 +136,6 @@ class OutConv(nn.Module):
     """Output convolution."""
 
     def __init__(self, in_channels: int, out_channels: int) -> None:
-        """Initialize the OutConv module."""
         super().__init__()
         self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=1)
 
@@ -153,7 +148,6 @@ class InitialConv(nn.Module):
     """Initial convolution to adapt spatial dimensions."""
 
     def __init__(self, in_channels: int, out_channels: int, size_in: int, size_out: int) -> None:
-        """Initialize the InitialConv module."""
         super().__init__()
         self.n_channels_in = in_channels
         self.n_channels_out = out_channels
@@ -201,7 +195,6 @@ class DepthToSpace(nn.Module):
     """Depth to space operation."""
 
     def __init__(self, block_size: int) -> None:
-        """Initialize the DepthToSpace module."""
         super().__init__()
         self.bs = block_size
 
@@ -218,7 +211,6 @@ class SpaceToDepth(nn.Module):
 
     # Expects the following shape: Batch, Channel, Height, Width
     def __init__(self, block_size: int) -> None:
-        """"Initialize the SpaceToDepth module."""
         super().__init__()
         self.bs = block_size
 
@@ -238,7 +230,6 @@ class DepthwiseSeparableConv(nn.Module):
                  kernel_size: int,
                  padding: int = 0,
                  kernels_per_layer: int = 1) -> None:
-        """Initialize the DepthwiseSeparableConv module."""
         super().__init__()
         # In Tensorflow DepthwiseConv2D has depth_multiplier instead of kernels_per_layer
         self.depthwise = nn.Conv2d(
