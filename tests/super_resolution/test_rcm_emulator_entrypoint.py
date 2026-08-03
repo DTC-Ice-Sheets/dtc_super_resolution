@@ -23,7 +23,7 @@ def test_app_valid_args(tmp_path):
              "--output_zarr_path",
              str(tmp_path),
              "--model-name",
-             "model_unet"]),
+             "model_baseline_unet"]),
     ):
         from super_resolution.rcm_emulator_entrypoint import app
 
@@ -104,7 +104,7 @@ def test_main_calls_pipeline_stages(mock_preproc, mock_infer, mock_postproc, tmp
         "--output_zarr_path",
         str(tmpdir / "out"),
         "--model-name",
-        "model_unet",
+        "model_baseline_unet",
         ],
     ):
         from super_resolution.rcm_emulator_entrypoint import app
@@ -112,6 +112,6 @@ def test_main_calls_pipeline_stages(mock_preproc, mock_infer, mock_postproc, tmp
         app(result_action="return_value")
 
     mock_preproc.assert_called_once()
-    mock_infer.assert_called_once_with("model_unet", mock_patches, mock_metadata)
+    mock_infer.assert_called_once_with("model_baseline_unet", mock_patches, mock_metadata)
     mock_postproc.assert_called_once_with(mock_monthly, mock_metadata, mock_tiles, mock_rcm_ds, mock_gcm_ds)
     mock_final_da.to_zarr.assert_called_once()

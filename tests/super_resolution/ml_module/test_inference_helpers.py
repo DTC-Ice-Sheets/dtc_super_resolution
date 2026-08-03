@@ -26,7 +26,7 @@ def test_load_model_baseline(mock_unet_cls, mock_torch_load):
         "n_channel_x": 8,
         "n_channel_z": 18,
         "size": 64,
-        "n_filter": 64,
+        "filter": 64,
         "weights_path": "model_weights/best_model_attention.pth",
     }
 
