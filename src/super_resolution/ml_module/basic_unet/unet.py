@@ -62,8 +62,8 @@ class UNetBaseline(nn.Module):
         x3, x3_bm = self.d2(x2)  # (batch, 128, 16, 16)
         x4, x4_bm = self.d3(x3)  # (batch, 256, 8, 8)
         x5, x5_bm = self.d4(x4)  # (batch, 512, 4, 4)
-        # x6, x6_bm = self.d5(x5)  # (batch, 1024, 2, 2)
-        x7 = self.last_conv_down(x5)  # (batch, 1024, 2, 2)
+        x6, x6_bm = self.d5(x5)  # (batch, 1024, 2, 2)
+        x7 = self.last_conv_down(x6)  # (batch, 1024, 2, 2)
 
         # Upsample second input to have same shape as last_conv [1024, 1, 1]
         z1 = self.linz(z)
@@ -75,8 +75,8 @@ class UNetBaseline(nn.Module):
         x8 = torch.cat([x7, z1], dim=1)  # (batch, 2048, H, H)
 
         # Upsampling (decoder)
-        x = self.up1(x8, x5_bm)  # (batch, 1024, 4, 4)
-        # x = self.up2(x, x5_bm)   # (batch, 512,  8, 8)
+        x = self.up1(x8, x6_bm)  # (batch, 1024, 4, 4)
+        x = self.up2(x, x5_bm)   # (batch, 512,  8, 8)
         x = self.up3(x, x4_bm)  # (batch, 256, 16, 16)
         x = self.up4(x, x3_bm)  # (batch, 128, 32, 32)
         x = self.up5(x, x2_bm)  # (batch,  64, 64, 64)

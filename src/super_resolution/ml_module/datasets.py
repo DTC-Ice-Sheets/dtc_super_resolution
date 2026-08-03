@@ -32,7 +32,8 @@ class InferenceDataset(Dataset):
         metadata = self.patches_metadata[idx]
 
         # drop channels with all NaN values (e.g. SST over land)
-        input_patch = np.delete(input_patch, 3, axis=0)  # drop SST channel (index 3)
+        input_patch = np.nan_to_num(input_patch, nan=0.0)  # replace NaN with 0
+        # input_patch = np.delete(input_patch, 3, axis=0)  # drop SST channel (index 3)
 
         # standardize input
         if self.ownstd:

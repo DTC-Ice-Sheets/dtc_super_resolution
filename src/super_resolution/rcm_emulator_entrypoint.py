@@ -25,7 +25,7 @@ def main(
     rcm_zarr_path: Annotated[str, cyclopts.Parameter(help="Path to the RCM data")],
     output_zarr_path: Annotated[str, cyclopts.Parameter(help="Directory to store downloaded data")],
     model_name: Annotated[
-        Literal["model_unet", "model_attention_unet"],
+        Literal["model_baseline_unet", "model_attention_unet"],
         cyclopts.Parameter(help="Name of the model to use for inference"),
     ],
 ) -> None:

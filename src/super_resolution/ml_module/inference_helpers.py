@@ -34,12 +34,14 @@ def load_model(config: dict) -> nn.Module:
     nn.Module
         The loaded PyTorch model.
     """
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
     if config["model_type"] == "Baseline":
         model = UNetBaseline(
             n_channels_x=config["n_channel_x"],
             n_channels_z=config["n_channel_z"],
             size=config["size"],
-            filter=config["filter"],
+            n_filter=config["filter"],
             bilinear=False,
         )
 
@@ -49,10 +51,10 @@ def load_model(config: dict) -> nn.Module:
     # load the model weights, supporting both remote URLs and local paths
     weights_path = config["weights_path"]
     if str(weights_path).startswith("http://") or str(weights_path).startswith("https://"):
-        state_dict = torch.hub.load_state_dict_from_url(weights_path, weights_only=False)
+        state_dict = torch.hub.load_state_dict_from_url(weights_path, weights_only=False, map_location=device)
     else:
         model_path = pathlib.Path.cwd() / weights_path
-        state_dict = torch.load(model_path, weights_only=True)
+        state_dict = torch.load(model_path, weights_only=True, map_location=device)
     model.load_state_dict(state_dict)
 
     return model
