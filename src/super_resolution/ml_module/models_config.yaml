@@ -16,11 +16,12 @@ model_attention_unet:
   filter: 64
   target_transform: log
 
-model_attention_unet_7c:
-  model_type: Attention
-  weights_path: "http://dtc-query-api-bucket.s3-website.gra.io.cloud.ovh.net/super_resolution/model_weights/model_attention_unet.pth"  # Update this path to the actual model file
-  n_channel_x: 7
-  n_channel_z: 16
-  size: 64
-  filter: 64
-  target_transform: log
+# old attention model with 7 channels, kept for reference
+# model_attention_unet_7c:
+#   model_type: Attention
+#   weights_path: "http://dtc-query-api-bucket.s3-website.gra.io.cloud.ovh.net/super_resolution/model_weights/model_attention_unet.pth"  # Update this path to the actual model file
+#   n_channel_x: 7
+#   n_channel_z: 16
+#   size: 64
+#   filter: 64
+#   target_transform: log
