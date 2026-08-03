@@ -23,16 +23,16 @@ def test_load_model_baseline(mock_unet_cls, mock_torch_load):
 
     config = {
         "model_type": "Baseline",
-        "n_channel_x": 7,
-        "n_channel_z": 16,
+        "n_channel_x": 8,
+        "n_channel_z": 18,
         "size": 64,
-        "filter": 64,
+        "n_filter": 64,
         "weights_path": "model_weights/best_model_attention.pth",
     }
 
     result = load_model(config)
 
-    mock_unet_cls.assert_called_once_with(n_channels_x=7, n_channels_z=16, size=64, filter=64, bilinear=False)
+    mock_unet_cls.assert_called_once_with(n_channels_x=8, n_channels_z=18, size=64, n_filter=64, bilinear=False)
     mock_model.load_state_dict.assert_called_once()
     assert result is mock_model
 
@@ -48,14 +48,14 @@ def test_load_model_attention(mock_attn_cls, mock_torch_load):
 
     config = {
         "model_type": "Attention",
-        "n_channel_x": 7,
-        "n_channel_z": 16,
+        "n_channel_x": 8,
+        "n_channel_z": 18,
         "weights_path": "model_weights/best_model_attention.pth",
     }
 
     result = load_model(config)
 
-    mock_attn_cls.assert_called_once_with(n_channels_x=7, n_channels_z=16, bilinear=False)
+    mock_attn_cls.assert_called_once_with(n_channels_x=8, n_channels_z=18, bilinear=False)
     assert result is mock_model
 
 

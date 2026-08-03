@@ -111,15 +111,8 @@ def test_inference_dataset_getitem_shapes():
     ds = InferenceDataset(patches, metadata, ownstd=True)
 
     x, z = ds[0]
-    # SST channel (index 3) is dropped → 7 channels remain
-    assert x.shape == (7, 6, 8)
-    # Z = input1d: (C, 1, 1) for mean + std + cos + sin = 2*7 + 4  NO
-    # Actually: SpatialMean (C,1,1), SpatialSTD (C,1,1), cosvect (1,1,1), sinvect (1,1,1)
-    # concatenated along axis 0 → (C + C + 1 + 1, 1, 1) but original has C=8 then drops 1
-    # C=8 → drops SST → C_remaining = 7 ... but stats are computed before drop
-    # looking at code: input_patch is first deleted at ch 3, then standardized
-    # stats vect_std / vect_means computed on the 7-ch patch
-    # Z shape: (7+7+1+1, 1, 1) = (16, 1, 1)
+
+    assert x.shape == (8, 6, 8)
     assert z.ndim == 3
     assert z.shape[1] == 1
     assert z.shape[2] == 1
