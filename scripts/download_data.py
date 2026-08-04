@@ -10,45 +10,6 @@ from shapely.geometry import box
 
 dotenv.load_dotenv()
 
-# provisionally we download from edh, but the right dataset will be served from DDM as well
-# def download_era5_from_edh(start_date: str, end_date: str, output_dir: str) -> str:
-#     """
-#     Download ERA5 data from the Earth Data Hub.
-#     Both dataset cover the time period from 2010-01-01 to 2023-12-31, which was used for training.
-
-#     Args:
-#         start_date (str): The start date for the data download, in format "YYYY-MM-DD".
-#         end_date (str): The end date for the data download, in format "YYYY-MM-DD".
-#         output_dir (str): The directory where the downloaded data will be stored.
-
-#     Returns:
-#         str: The path to the downloaded ERA5 data.
-#     """
-#     print('Downloading ERA5')
-#     era5_ds = xr.open_dataset(
-#         "https://edh:edh_key_IqHSdEIB55PWHT219nGSNqVVEdbPx1MfNevS2wK1oqQ@api.earthdatahub.destine.eu/era5/reanalysis-era5-single-levels-monthly-means-v0.zarr",
-#         chunks={},
-#         engine="zarr",
-#         consolidated=True)
-
-#     # cut to Antartica region
-#     # define antarctica as 90° S to 60° S in latitude and full longitude
-#     era5_ds = era5_ds.sel(latitude=slice(-40, -90), longitude=slice(0, 360))
-
-#     # slice temporally
-#     try:
-#         era5_ds = era5_ds.sel(time=slice(start_date, end_date))
-#     except KeyError:
-#         raise ValueError("No ERA5 data available for the specified date range.")
-
-#     era5_ds = era5_ds.compute()  # materialize into memory here
-
-#     # save to netcdf
-#     name = f"ERA5_monthly_means_{start_date}_{end_date}.nc"
-#     era5path = os.path.join(output_dir, name)
-#     era5_ds.to_netcdf(era5path)
-
-#     return era5path
 
 
 def download_era5_from_ddm(start_date: str, end_date: str, output_dir: str) -> str:
