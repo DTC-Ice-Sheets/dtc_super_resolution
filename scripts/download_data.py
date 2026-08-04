@@ -10,8 +10,6 @@ from shapely.geometry import box
 
 dotenv.load_dotenv()
 
-
-
 def download_era5_from_ddm(start_date: str, end_date: str, output_dir: str) -> str:
     """
     Download ERA5 data from the Data Download Module.
