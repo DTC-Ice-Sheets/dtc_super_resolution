@@ -21,5 +21,6 @@ def setup_logging() -> None:
     formatter = logging.Formatter("[%(asctime)s] %(levelname)s in %(name)s: %(message)s")
     console_handler.setFormatter(formatter)
 
-    # Add the console handler to the root logger
-    logger.addHandler(console_handler)
+    # Add the console handler to the root logger (only if not already added)
+    if not logger.handlers:
+        logger.addHandler(console_handler)
