@@ -7,7 +7,6 @@ import cyclopts
 
 from super_resolution.ml_module.inference import run_inference
 from super_resolution.ml_module.inference_helpers import run_postprocessing
-
 from super_resolution.monitoring import setup_logging
 from super_resolution.pre_processing_module.preprocessing import run_preprocessing
 

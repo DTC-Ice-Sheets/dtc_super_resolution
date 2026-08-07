@@ -71,7 +71,7 @@ def standardize(data: np.ndarray) -> np.ndarray:
     mean = np.nanmean(data, axis=(1, 2), keepdims=True)
     std = np.nanstd(data, axis=(1, 2), keepdims=True)
     ndata = (data - mean) / (std + 1e-8)
-    
+
     return np.nan_to_num(ndata, nan=0.0)
 
 

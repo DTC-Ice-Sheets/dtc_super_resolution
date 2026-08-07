@@ -83,7 +83,9 @@ def validate_era5_dataset(era5: xr.Dataset) -> None:
     expected_era5_vars = ["d2m", "msl", "sp", "sst", "t2m", "tp", "u10", "v10"]
     for v in expected_era5_vars:
         if v not in era5.data_vars:
-            raise ValueError(f"Variable '{v}' not found in ERA5 dataset. Please check the dataset and ensure all required variables are present.")
+            raise ValueError(f"Variable '{v}' not found in ERA5 dataset. \
+                             Expected variables: {expected_era5_vars}. \
+                            Present variables: {list(era5.data_vars)}.")
 
 
 def generate_era5_patches(era5: xr.Dataset, tiles: list) -> tuple[np.ndarray, list]:

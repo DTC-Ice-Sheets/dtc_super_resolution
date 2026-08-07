@@ -48,10 +48,10 @@ def _make_era5_dataset(n_times=2, ny=10, nx=12):
             "v10": (["time", "y", "x"], data * 3),
             # SST channel at index 3 — set to zero to simulate "land" tiles
             "sst": (["time", "y", "x"], np.zeros((n_times, ny, nx), dtype=np.float32)),
-            "d2m": (["time", "y", "x"], data*4),
-            "msl": (["time", "y", "x"], data*5),
-            "sp": (["time", "y", "x"], data*6),
-            "tp": (["time", "y", "x"], data*7),
+            "d2m": (["time", "y", "x"], data * 4),
+            "msl": (["time", "y", "x"], data * 5),
+            "sp": (["time", "y", "x"], data * 6),
+            "tp": (["time", "y", "x"], data * 7),
         },
         coords={
             "time": times,
