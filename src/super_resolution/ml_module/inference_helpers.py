@@ -92,7 +92,7 @@ def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device:
     # (months, tiles, channels, height, width)
     for m in range(input_patches.shape[0]):
         predictions = []
-        dataset = InferenceDataset(input_patches[m], metadata[m], ownstd=True)
+        dataset = InferenceDataset(input_patches[m], metadata[m])
         dataloader = DataLoader(dataset, batch_size=1, shuffle=False)
 
         # predict all the tiles for this month

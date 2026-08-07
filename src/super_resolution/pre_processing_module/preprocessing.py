@@ -66,6 +66,26 @@ def run_preprocessing(gcm_zarr_path: str, rcm_zarr_path: str) -> tuple[np.ndarra
     return input_patches, metadata, tiles, rcm_ds, era5_xy
 
 
+def validate_era5_dataset(era5: xr.Dataset) -> None:
+    """
+    Validate the ERA5 dataset to ensure it contains each of the required layers.
+
+    Parameters
+    ----------
+    era5: xr.Dataset
+        The ERA5 dataset to validate.
+
+    Raises
+    ------
+    ValueError
+        If any of the required variables are missing from the dataset.
+    """
+    expected_era5_vars = ["d2m", "msl", "sp", "sst", "t2m", "tp", "u10", "v10"]
+    for v in expected_era5_vars:
+        if v not in era5.data_vars:
+            raise ValueError(f"Variable '{v}' not found in ERA5 dataset. Please check the dataset and ensure all required variables are present.")
+
+
 def generate_era5_patches(era5: xr.Dataset, tiles: list) -> tuple[np.ndarray, list]:
     """
     Generate ERA5 inputs for the model based on the tiles metadata.
@@ -88,12 +108,11 @@ def generate_era5_patches(era5: xr.Dataset, tiles: list) -> tuple[np.ndarray, li
     metadata = []
 
     era5_vars = [v for v in era5.data_vars if "x" in era5[v].dims and "y" in era5[v].dims]
-    if len(era5_vars) != 8:
-        raise ValueError(f"ERA5 dataset should contain 8 variables, found {len(era5_vars)}: {era5_vars}")
+    validate_era5_dataset(era5)
 
     # time dimension
     era5_time = era5.time.values
-    
+
     # get numpy array (months, channels, height, width)
     era5_arr = np.stack([era5[v].compute().values for v in era5_vars], axis=1)
     era5_arr = np.nan_to_num(era5_arr, nan=0.0)  # replace NaN with 0
