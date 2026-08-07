@@ -14,11 +14,10 @@ RACMO_TRAIN_VARIANCE = 877.1597
 class InferenceDataset(Dataset):
     """Custom Dataset for inference, handling ERA5 patches and their metadata."""
 
-    def __init__(self, era5_patches: np.ndarray, patches_metadata: list, ownstd: bool = True) -> None:
+    def __init__(self, era5_patches: np.ndarray, patches_metadata: list) -> None:
         super().__init__()
         self.patches = era5_patches
         self.patches_metadata = patches_metadata
-        self.ownstd = ownstd  # whether to compute own std or use precomputed mean/std
         self.target_train_mean = RACMO_TRAIN_MEAN
         self.target_train_std = RACMO_TRAIN_STD
 
@@ -33,18 +32,8 @@ class InferenceDataset(Dataset):
 
         # drop channels with all NaN values (e.g. SST over land)
         input_patch = np.nan_to_num(input_patch, nan=0.0)  # replace NaN with 0
-        # input_patch = np.delete(input_patch, 3, axis=0)  # drop SST channel (index 3)
 
-        # standardize input
-        if self.ownstd:
-            input_patch_stdz = standardize(input_patch, ownstd=self.ownstd)
-        # else:
-        #     # select mean and std for the current time (mean and std are precomputed for each variable and time)
-        #     gcm_spatial_mean = self.gcm_space_mean.sel(time=f"{year}-{month}-01").to_array().values
-        #     gcm_spatial_std = self.gcm_space_std.sel(time=f"{year}-{month}-01").to_array().values
-        #     input_patch_stdz = standardize(input_patch,
-        #                                       mean=gcm_spatial_mean,
-        #                                       std=gcm_spatial_std, ownstd=self.ownstd)
+        input_patch_stdz = standardize(input_patch)
 
         # get contextual statistics
         vect_std = np.nanstd(input_patch, axis=(1, 2))
@@ -77,16 +66,12 @@ def inverse_signed_log1p(x_transformed: torch.Tensor, eps: float = 1e-6) -> torc
     return torch.sign(x_transformed) * (torch.expm1(torch.abs(x_transformed)) - eps)
 
 
-def standardize(
-    data: np.ndarray, mean: np.ndarray | None = None, std: np.ndarray | None = None, ownstd: bool = True
-) -> np.ndarray:
+def standardize(data: np.ndarray) -> np.ndarray:
     """Standardize the data using either its own mean and std or provided mean and std."""
-    # TO DO: check shapes when standardizing using precomputed mean and std (for GCM data)
-    if ownstd:
-        mean = np.nanmean(data, axis=(1, 2), keepdims=True)
-        std = np.nanstd(data, axis=(1, 2), keepdims=True)
+    mean = np.nanmean(data, axis=(1, 2), keepdims=True)
+    std = np.nanstd(data, axis=(1, 2), keepdims=True)
     ndata = (data - mean) / (std + 1e-8)
-    # replace NaN from all-NaN channels (e.g. SST over land) with 0
+    
     return np.nan_to_num(ndata, nan=0.0)
 
 

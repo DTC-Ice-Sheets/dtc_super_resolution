@@ -20,7 +20,7 @@ from super_resolution.ml_module.datasets import (
 
 def test_standardize_zero_mean_unit_std():
     data = np.array([[[1.0, 2.0], [3.0, 4.0]]])  # shape (1, 2, 2)
-    result = standardize(data, ownstd=True)
+    result = standardize(data)
     assert result.shape == data.shape
     # After standardization mean should be ~0
     assert abs(result.mean()) < 1e-5
@@ -28,21 +28,14 @@ def test_standardize_zero_mean_unit_std():
 
 def test_standardize_handles_nan():
     data = np.array([[[np.nan, 2.0], [3.0, 4.0]]])
-    result = standardize(data, ownstd=True)
+    result = standardize(data)
     assert not np.any(np.isnan(result))
-
-
-def test_standardize_with_provided_mean_std():
-    data = np.array([[[1.0, 2.0], [3.0, 4.0]]])
-    result = standardize(data, mean=np.array([2.5]), std=np.array([1.0]), ownstd=False)
-    expected = (data - 2.5) / (1.0 + 1e-8)
-    np.testing.assert_allclose(result, expected, atol=1e-6)
 
 
 def test_standardize_constant_array_no_nan():
     """Constant channel: std = 0 → divide by eps, result should be 0 (all same, no NaN)."""
     data = np.ones((1, 4, 4))
-    result = standardize(data, ownstd=True)
+    result = standardize(data)
     assert not np.any(np.isnan(result))
 
 
@@ -50,13 +43,11 @@ def test_standardize_constant_array_no_nan():
 # unstandardize
 # ---------------------------------------------------------------------------
 
-
 def test_unstandardize_inverse_of_precomputed_std():
     data = np.array([0.0, 1.0, -1.0])
     result = unstandardize(data)
     expected = data * RACMO_TRAIN_STD + RACMO_TRAIN_MEAN
     np.testing.assert_allclose(result, expected)
-
 
 # ---------------------------------------------------------------------------
 # signed_log1p / inverse_signed_log1p
@@ -86,7 +77,6 @@ def test_inverse_signed_log1p_roundtrip():
 # InferenceDataset
 # ---------------------------------------------------------------------------
 
-
 def _make_patches(n=3, c=8, h=6, w=8):
     """Create synthetic ERA5 patches. Channel 3 (SST) is 0 to simulate land."""
     patches = np.random.rand(n, c, h, w).astype(np.float32)
@@ -101,14 +91,14 @@ def _make_metadata(n=3):
 def test_inference_dataset_length():
     patches = _make_patches(n=5)
     metadata = _make_metadata(n=5)
-    ds = InferenceDataset(patches, metadata, ownstd=True)
+    ds = InferenceDataset(patches, metadata)
     assert len(ds) == 5
 
 
 def test_inference_dataset_getitem_shapes():
     patches = _make_patches(n=2, c=8, h=6, w=8)
     metadata = _make_metadata(n=2)
-    ds = InferenceDataset(patches, metadata, ownstd=True)
+    ds = InferenceDataset(patches, metadata)
 
     x, z = ds[0]
 
@@ -121,7 +111,7 @@ def test_inference_dataset_getitem_shapes():
 def test_inference_dataset_no_nan_in_output():
     patches = _make_patches(n=3, c=8, h=6, w=8)
     metadata = _make_metadata(n=3)
-    ds = InferenceDataset(patches, metadata, ownstd=True)
+    ds = InferenceDataset(patches, metadata)
 
     for i in range(len(ds)):
         x, z = ds[i]
@@ -133,7 +123,7 @@ def test_inference_dataset_month_encoding_range():
     """cos/sin month encoding values should be in [-1, 1]."""
     patches = _make_patches(n=12, c=8, h=4, w=4)
     metadata = [{"time_idx": np.datetime64(f"2021-{str(m + 1).zfill(2)}-01", "D"), "tile_idx": m} for m in range(12)]
-    ds = InferenceDataset(patches, metadata, ownstd=True)
+    ds = InferenceDataset(patches, metadata)
 
     for i in range(len(ds)):
         _, z = ds[i]
