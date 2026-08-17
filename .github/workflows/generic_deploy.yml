@@ -8,6 +8,11 @@ on:
         description: "The name of the package to build."
         required: true
         type: string
+      container_suffix:
+        description: "Suffix appended to the production container name."
+        type: string
+        # "production" on main, the branch name otherwise
+        default: ${{ github.ref_name == 'main' && 'production' || github.ref_name }}
 
 jobs:
   generate_container_name:
@@ -22,7 +27,7 @@ jobs:
       - uses: actions/checkout@v4
       - id: specify
         run: |
-          echo "image_name=7sy3luly.c1.de1.container-registry.ovh.net/dtc-ice-sheets/${{ inputs.package_name }}_$(echo "$GITHUB_REF_NAME" | awk '{print tolower($0)}')" >> $GITHUB_OUTPUT
+          echo "image_name=7sy3luly.c1.de1.container-registry.ovh.net/dtc-ice-sheets/${{ inputs.package_name }}_${{ inputs.container_suffix }}" | awk '{print tolower($0)}' >> $GITHUB_OUTPUT
     outputs:
       image_name: ${{ steps.specify.outputs.image_name }}
 
@@ -67,6 +72,7 @@ jobs:
 
   deploy_package_and_cleanup:
     needs: generate_container_name
+    if: ${{ github.ref_name == 'main' }}
     # delete docker images that are no longer needed (notionally because we just merged the associated branch into main)
     runs-on: ubuntu-latest
     container:
