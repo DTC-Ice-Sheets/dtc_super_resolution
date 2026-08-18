@@ -517,18 +517,18 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.43.72"
+version = "1.43.56"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">=3.10"
 groups = ["deployment"]
 files = [
-    {file = "boto3-1.43.72-py3-none-any.whl", hash = "sha256:f1bbbad5ed8d8a8c64edb0cd092dc443c95a85623b2ac88b6f6d633717605f00"},
-    {file = "boto3-1.43.72.tar.gz", hash = "sha256:6280ce03cc85e9110fd9fb7e2fbf11eae0b1177cb041a0d69aa88edc9d178cf9"},
+    {file = "boto3-1.43.56-py3-none-any.whl", hash = "sha256:feb699d4ab241ef5c1b80bb58277be2aaad365cd4b672d7817e0bc59ee45131b"},
+    {file = "boto3-1.43.56.tar.gz", hash = "sha256:57c90df9fb026f2e6ae22530861198130203733c5c9ec4e5cca3a4037f5a8db4"},
 ]
 
 [package.dependencies]
-botocore = ">=1.43.72,<1.44.0"
+botocore = ">=1.43.56,<1.44.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.19.0,<0.20.0"
 
@@ -537,14 +537,14 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.43.72"
+version = "1.43.56"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">=3.10"
 groups = ["deployment"]
 files = [
-    {file = "botocore-1.43.72-py3-none-any.whl", hash = "sha256:de5a1bcf8d7602c6cefc15016f15dad82981e339192531f31fa9483e11feea47"},
-    {file = "botocore-1.43.72.tar.gz", hash = "sha256:1b878c69081e8e9d55aa4c0d85683e7b07f0e274a5554662f9507a46641be3d2"},
+    {file = "botocore-1.43.56-py3-none-any.whl", hash = "sha256:aafc741f1b10f6fd63253eaf6ea029680c1ff436d87e1b8969d62aefa0c76976"},
+    {file = "botocore-1.43.56.tar.gz", hash = "sha256:6c01f85f0ff9863076f4c761e74ee3aa96c5ccc1ad09fc1efd62ef8f2d22bf57"},
 ]
 
 [package.dependencies]
@@ -1201,25 +1201,25 @@ tests = ["pytest", "pytest-cov", "pytest-xdist"]
 
 [[package]]
 name = "cyclopts"
-version = "4.5.1"
+version = "4.23.0"
 description = "Intuitive, easy CLIs based on type hints."
 optional = false
 python-versions = ">=3.10"
 groups = ["main", "dev"]
 files = [
-    {file = "cyclopts-4.5.1-py3-none-any.whl", hash = "sha256:0642c93601e554ca6b7b9abd81093847ea4448b2616280f2a0952416574e8c7a"},
-    {file = "cyclopts-4.5.1.tar.gz", hash = "sha256:fadc45304763fd9f5d6033727f176898d17a1778e194436964661a005078a3dd"},
+    {file = "cyclopts-4.23.0-py3-none-any.whl", hash = "sha256:1581758c5b9982c3b2ae7df6d87243e3a6fc3265ea621f96caeb349b6fa43ad2"},
+    {file = "cyclopts-4.23.0.tar.gz", hash = "sha256:2f764bbd90f1888073971c09576f90e594f80353588e10aa615b7d59bc009821"},
 ]
 
 [package.dependencies]
 attrs = ">=23.1.0"
 docstring-parser = ">=0.15,<4.0"
 rich = ">=13.6.0"
-rich-rst = ">=1.3.1,<2.0.0"
+rich-rst = ">=1.3.1,<3.0.0"
 
 [package.extras]
 debug = ["ipdb (>=0.13.9)", "line-profiler (>=3.5.1)"]
-dev = ["coverage[toml] (>=5.1)", "mkdocs (>=1.4.0)", "pre-commit (>=2.16.0)", "pydantic (>=2.11.2,<3.0.0)", "pytest (>=8.2.0)", "pytest-cov (>=3.0.0)", "pytest-mock (>=3.7.0)", "pyyaml (>=6.0.1)", "syrupy (>=4.0.0)", "toml (>=0.10.2,<1.0.0)", "trio (>=0.10.0)"]
+dev = ["coverage[toml] (>=5.1)", "mkdocs (>=1.4.0)", "pexpect (>=4.9.0) ; sys_platform != \"win32\"", "pre-commit (>=2.16.0)", "pydantic (>=2.11.2,<3.0.0)", "pytest (>=8.2.0)", "pytest-cov (>=3.0.0)", "pytest-mock (>=3.7.0)", "pyyaml (>=6.0.1)", "syrupy (>=4.0.0)", "toml (>=0.10.2,<1.0.0)", "trio (>=0.10.0)"]
 docs = ["gitpython (>=3.1.31)", "myst-parser[linkify] (>=3.0.1,<5.0.0)", "sphinx (>=7.4.7,<8.2.0)", "sphinx-autodoc-typehints (>=1.25.2,<4.0.0)", "sphinx-copybutton (>=0.5,<1.0)", "sphinx-rtd-dark-mode (>=1.3.0,<2.0.0)", "sphinx-rtd-theme (>=3.0.0,<4.0.0)"]
 mkdocs = ["markdown (>=3.3)", "mkdocs (>=1.4.0)", "pymdown-extensions (>=10.0)"]
 toml = ["tomli (>=2.0.0) ; python_version < \"3.11\""]
@@ -1805,14 +1805,14 @@ files = [
 
 [[package]]
 name = "fsspec"
-version = "2026.6.0"
+version = "2026.7.0"
 description = "File-system specification"
 optional = false
 python-versions = ">=3.10"
 groups = ["main", "dev"]
 files = [
-    {file = "fsspec-2026.6.0-py3-none-any.whl", hash = "sha256:02e0b71817df9b2169dc30a16832045764def1191b43dcff5bb85bdee212d2a1"},
-    {file = "fsspec-2026.6.0.tar.gz", hash = "sha256:f5bac145310fe30e16e1471bd6840b2d990d609e872251d7e674241822abf01a"},
+    {file = "fsspec-2026.7.0-py3-none-any.whl", hash = "sha256:b57ddbafedfaef7018c1ecab32aa200a9d7ca26b77965f64e48b70061249d279"},
+    {file = "fsspec-2026.7.0.tar.gz", hash = "sha256:c803c40f4cf860b49dea58ee3e1c33cb9c790520e233537e1340049f89b82a88"},
 ]
 
 [package.extras]
@@ -1823,24 +1823,24 @@ dask = ["dask", "distributed"]
 dev = ["pre-commit", "ruff (>=0.5)"]
 doc = ["numpydoc", "sphinx", "sphinx-design", "sphinx-rtd-theme", "yarl"]
 dropbox = ["dropbox", "dropboxdrivefs", "requests"]
-full = ["adlfs", "aiohttp (!=4.0.0a0,!=4.0.0a1)", "dask", "distributed", "dropbox", "dropboxdrivefs", "fusepy", "gcsfs (>2024.2.0)", "libarchive-c", "ocifs", "panel", "paramiko", "pyarrow (>=1)", "pygit2", "requests", "s3fs (>2024.2.0)", "smbprotocol", "tqdm"]
+full = ["adlfs", "aiohttp (!=4.0.0a0,!=4.0.0a1)", "dask", "distributed", "dropbox", "dropboxdrivefs", "fusepy", "gcsfs (>=2026.4.0)", "libarchive-c", "ocifs", "panel", "paramiko", "pyarrow (>=1)", "pygit2", "requests", "s3fs (>=2026.6.0)", "smbprotocol", "tqdm"]
 fuse = ["fusepy"]
-gcs = ["gcsfs (>2024.2.0)"]
+gcs = ["gcsfs (>=2026.4.0)"]
 git = ["pygit2"]
 github = ["requests"]
-gs = ["gcsfs"]
+gs = ["gcsfs (>=2026.4.0)"]
 gui = ["panel"]
 hdfs = ["pyarrow (>=1)"]
 http = ["aiohttp (!=4.0.0a0,!=4.0.0a1)"]
 libarchive = ["libarchive-c"]
 oci = ["ocifs"]
-s3 = ["s3fs (>2024.2.0)"]
+s3 = ["s3fs (>=2026.6.0)"]
 sftp = ["paramiko"]
 smb = ["smbprotocol"]
 ssh = ["paramiko"]
 test = ["aiohttp (!=4.0.0a0,!=4.0.0a1)", "numpy", "pytest", "pytest-asyncio (!=0.22.0)", "pytest-benchmark", "pytest-cov", "pytest-mock", "pytest-recording", "pytest-rerunfailures", "requests"]
 test-downstream = ["aiobotocore (>=2.5.4,<3.0.0)", "dask[dataframe,test]", "moto[server] (>4,<5)", "pytest-timeout", "xarray"]
-test-full = ["adlfs", "aiohttp (!=4.0.0a0,!=4.0.0a1)", "backports-zstd ; python_version < \"3.14\"", "cloudpickle", "dask", "distributed", "dropbox", "dropboxdrivefs", "fastparquet", "fusepy", "gcsfs", "jinja2", "kerchunk", "libarchive-c", "lz4", "notebook", "numpy", "ocifs", "pandas (<3.0.0)", "panel", "paramiko", "pyarrow", "pyarrow (>=1)", "pyftpdlib", "pygit2", "pytest", "pytest-asyncio (!=0.22.0)", "pytest-benchmark", "pytest-cov", "pytest-mock", "pytest-recording", "pytest-rerunfailures", "python-snappy", "requests", "smbprotocol", "tqdm", "urllib3", "zarr (<3.2.0)", "zstandard ; python_version < \"3.14\""]
+test-full = ["adlfs", "aiohttp (!=4.0.0a0,!=4.0.0a1)", "backports-zstd ; python_version < \"3.14\"", "cloudpickle", "dask", "distributed", "dropbox", "dropboxdrivefs", "fastparquet", "fusepy", "gcsfs (>=2026.4.0)", "jinja2", "kerchunk", "libarchive-c", "lz4", "notebook", "numpy", "ocifs", "pandas (<3.0.0)", "panel", "paramiko", "pyarrow (>=1)", "pyftpdlib", "pygit2", "pytest", "pytest-asyncio (!=0.22.0)", "pytest-benchmark", "pytest-cov", "pytest-mock", "pytest-recording", "pytest-rerunfailures", "python-snappy", "requests", "s3fs (>=2026.6.0)", "smbprotocol", "tqdm", "urllib3", "zarr (<3.2.0)", "zstandard ; python_version < \"3.14\""]
 tqdm = ["tqdm"]
 
 [[package]]
@@ -4219,7 +4219,7 @@ description = "Run a subprocess in a pseudo terminal"
 optional = false
 python-versions = "*"
 groups = ["main"]
-markers = "os_name != \"nt\" or sys_platform != \"win32\" and sys_platform != \"emscripten\""
+markers = "sys_platform != \"win32\" and sys_platform != \"emscripten\" or os_name != \"nt\""
 files = [
     {file = "ptyprocess-0.7.0-py2.py3-none-any.whl", hash = "sha256:4b41f3967fce3af57cc7e94b888626c18bf37a083e3651ca8feeb66d492fef35"},
     {file = "ptyprocess-0.7.0.tar.gz", hash = "sha256:5c5d0a3b48ceee0b48485e0c26037c0acd7d29765ca3fbb5cb3831d347423220"},
@@ -4242,55 +4242,55 @@ tests = ["pytest"]
 
 [[package]]
 name = "pyarrow"
-version = "25.0.0"
+version = "25.0.1"
 description = "Python library for Apache Arrow"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pyarrow-25.0.0-cp310-cp310-macosx_12_0_arm64.whl", hash = "sha256:ce0ca222802087b9a8cb031a6468442cb6b67c290a45a601cac64753d34954d3"},
-    {file = "pyarrow-25.0.0-cp310-cp310-macosx_12_0_x86_64.whl", hash = "sha256:7d6da02ffc7a3a9bda3b7ded4cc2a27ff73969ab37153f3afd46bbbc1ba4f0f7"},
-    {file = "pyarrow-25.0.0-cp310-cp310-manylinux_2_28_aarch64.whl", hash = "sha256:dbf9fa5d4bde73b1cc16377dcaaa010f971e6fa7f5083f5d44f34b50bc1d74af"},
-    {file = "pyarrow-25.0.0-cp310-cp310-manylinux_2_28_x86_64.whl", hash = "sha256:b72d943ff4e10fec8d48aedb23322d8f6ea8bc2d698b81db37e73730f69e4862"},
-    {file = "pyarrow-25.0.0-cp310-cp310-musllinux_1_2_aarch64.whl", hash = "sha256:5fb2d837960f1df7f679ff9f1a55065e306347d379e0768cebf14781254d6194"},
-    {file = "pyarrow-25.0.0-cp310-cp310-musllinux_1_2_x86_64.whl", hash = "sha256:add690feafa0953c443cdba9e9e87f5eaa198f1ea2e43a3b146ea83f202262d0"},
-    {file = "pyarrow-25.0.0-cp310-cp310-win_amd64.whl", hash = "sha256:d293e9959b29a24c82d936d04ab2b7fd8b8d334030de2e56a99aba94f008ad7a"},
-    {file = "pyarrow-25.0.0-cp311-cp311-macosx_12_0_arm64.whl", hash = "sha256:2e3b6544e26e393fe2cd530f523e36c1c8d3c345bbbb60cca3fd866be8322517"},
-    {file = "pyarrow-25.0.0-cp311-cp311-macosx_12_0_x86_64.whl", hash = "sha256:b724d127783b4c19f088fcdfc844cbc318809246a30307bcabd5ed02045e890e"},
-    {file = "pyarrow-25.0.0-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:244f98a595f70fa4fd35faa7508c4ae67e14a173397a4b3b49d2b3c360fb0062"},
-    {file = "pyarrow-25.0.0-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:0222f0071d13313962a88d21bf28b80d355ac39d81bfa6ff3fe00eeaf748e4be"},
-    {file = "pyarrow-25.0.0-cp311-cp311-musllinux_1_2_aarch64.whl", hash = "sha256:b58726f118c079f9d4ed7e904975d4f15fd69d0741ba511a4e2dcaa4ef16354f"},
-    {file = "pyarrow-25.0.0-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:38a2c887cb3883e241b70201688db34133b6dfadd04f03c8f9213df53770c18e"},
-    {file = "pyarrow-25.0.0-cp311-cp311-win_amd64.whl", hash = "sha256:161649d60a7a46c613a19fd795763ea8a88c36ba997dd99d9bc66e6794ee36e8"},
-    {file = "pyarrow-25.0.0-cp312-cp312-macosx_12_0_arm64.whl", hash = "sha256:149730a3d1f0fb59d663a0b8aa210adfd9c17c27cd94a0d143e60daea8320d4e"},
-    {file = "pyarrow-25.0.0-cp312-cp312-macosx_12_0_x86_64.whl", hash = "sha256:0721332c30fdd453fdd1fc203b2ac1f4c9db5aea28fa38d41f2574c4b068b9ec"},
-    {file = "pyarrow-25.0.0-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:fa1482b3da10cac2d4db6e26b81da543e237616af2ef6d466018b31ca586496f"},
-    {file = "pyarrow-25.0.0-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:5d1dbf24e151042f2fa3c129563f65d66674128868496fb008c4272b16bdf778"},
-    {file = "pyarrow-25.0.0-cp312-cp312-musllinux_1_2_aarch64.whl", hash = "sha256:20887a762dd61dcc530f93a140840ab1f6aa7836b33270e42d627ab3cf11e537"},
-    {file = "pyarrow-25.0.0-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:58d1ab556b0cea1c93fdb799b24ad58adb2f2a2788dbce782a94f64ae1a5cc9b"},
-    {file = "pyarrow-25.0.0-cp312-cp312-win_amd64.whl", hash = "sha256:3f356afe61186395c861d5cd63dc21ff7d5fa335012a4668d979257df7fea0f5"},
-    {file = "pyarrow-25.0.0-cp313-cp313-macosx_12_0_arm64.whl", hash = "sha256:8831a3ba52fa7cdb78d368d968b1dcd06171e6dff5461e16d90de91d371e47bc"},
-    {file = "pyarrow-25.0.0-cp313-cp313-macosx_12_0_x86_64.whl", hash = "sha256:5f4bacb60f91dd2fca6c52f1b9a0012cd090e0294f1f781dc1881a247a352f8e"},
-    {file = "pyarrow-25.0.0-cp313-cp313-manylinux_2_28_aarch64.whl", hash = "sha256:59516c822d5fd8e544aaa0dfe72f36fed5d4c24ea8390aab1bcd31d7e959c6be"},
-    {file = "pyarrow-25.0.0-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:6f9dbd83e91c239a1f5ee7ce13f108b5f6c0efbe40a4375260d8f08b43ad05e9"},
-    {file = "pyarrow-25.0.0-cp313-cp313-musllinux_1_2_aarch64.whl", hash = "sha256:18dcc8cc50b5e72eae6fcbfc6c8776c21a007176b27a3cdec5c2f5bcf126708d"},
-    {file = "pyarrow-25.0.0-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:4ec1895a87aa834c3b99b7a1e758747eb8bb57f922b32c0e0fa04afb8d6998b1"},
-    {file = "pyarrow-25.0.0-cp313-cp313-win_amd64.whl", hash = "sha256:77c8d1ae46a44b4006e8db1cc977bbcc6ce4873c92f74137d68e45503b97fb18"},
-    {file = "pyarrow-25.0.0-cp314-cp314-macosx_12_0_arm64.whl", hash = "sha256:72132b9a8a0a1840197794d4dea26080069b6b0981c116bc078762dc9691b21b"},
-    {file = "pyarrow-25.0.0-cp314-cp314-macosx_12_0_x86_64.whl", hash = "sha256:e009ef945e498dca2f050ea10d2e9764cb44017254826fc4574fdb8d2530173b"},
-    {file = "pyarrow-25.0.0-cp314-cp314-manylinux_2_28_aarch64.whl", hash = "sha256:f57a39dbcb416345401c2e77a4373669b45fd111a1768e6cf267a7a0607ff0ec"},
-    {file = "pyarrow-25.0.0-cp314-cp314-manylinux_2_28_x86_64.whl", hash = "sha256:447df764beb07c544f0178a5f6b70ef44b9ecf382b3cdfad4c2d7867353c3887"},
-    {file = "pyarrow-25.0.0-cp314-cp314-musllinux_1_2_aarch64.whl", hash = "sha256:ac5dfeee59f9ceb4d45ba76e83b026c38c24334135bb329d8274baa49cec3c62"},
-    {file = "pyarrow-25.0.0-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:f0f100dacf2c0f400601664a79d1a907ced4740514bb2b00917341038e2ce76f"},
-    {file = "pyarrow-25.0.0-cp314-cp314-win_amd64.whl", hash = "sha256:2e093efbecb5317372f819228fa4b4e6157eee48d3f0a7b0303705ebf81a7104"},
-    {file = "pyarrow-25.0.0-cp314-cp314t-macosx_12_0_arm64.whl", hash = "sha256:26be35b80780d2d21f4bae3d568b1666337c3a89722cc1794c956a77017cb24e"},
-    {file = "pyarrow-25.0.0-cp314-cp314t-macosx_12_0_x86_64.whl", hash = "sha256:6f4812bfbf11ca7d8faf59eb8fff8bf4dd25ce3a38b62baa010cc17a0926d1b2"},
-    {file = "pyarrow-25.0.0-cp314-cp314t-manylinux_2_28_aarch64.whl", hash = "sha256:b8af8ceedf0c9c160fd2b63440f2d205b9404db85866c1217bfea601de7cfb50"},
-    {file = "pyarrow-25.0.0-cp314-cp314t-manylinux_2_28_x86_64.whl", hash = "sha256:c70a5fd9a82bd1a702fd482bdc62d38dcb672fb2b449b1d7c0d7d1f4be7b7bfe"},
-    {file = "pyarrow-25.0.0-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:0490a7f8b38ffe11cc26526b50c65d111cb54ddac3717cec781806793f1244dc"},
-    {file = "pyarrow-25.0.0-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:e83916bbcf380866b4e14255850b33323ff678dc9758411d0409cdd2523880b0"},
-    {file = "pyarrow-25.0.0-cp314-cp314t-win_amd64.whl", hash = "sha256:13240f0d3dc5932ccd0bfa90cd76d835680b9d94a7661c635df4b703d40ce849"},
-    {file = "pyarrow-25.0.0.tar.gz", hash = "sha256:d2d697008b5ec06d75952ef260c2e9a8a0f6ccfce24266c04c9c8ade927cb3b4"},
+    {file = "pyarrow-25.0.1-cp310-cp310-macosx_12_0_arm64.whl", hash = "sha256:0b1edbb2f385a6a65e9711b62ba86ac54a7816a3f8d17bb3e8a5929d65fb2485"},
+    {file = "pyarrow-25.0.1-cp310-cp310-macosx_12_0_x86_64.whl", hash = "sha256:a4dd8bf99a8fac133efc0ed6a92f5fddbe2adba0d0f6dd720e39ba9855cea85c"},
+    {file = "pyarrow-25.0.1-cp310-cp310-manylinux_2_28_aarch64.whl", hash = "sha256:bddd0c4f7630c2a3ddf6347c1bdaa79d97bcf6bd445f9e60c816b7d77c85a5ae"},
+    {file = "pyarrow-25.0.1-cp310-cp310-manylinux_2_28_x86_64.whl", hash = "sha256:a4d6d5e9a3d1879a97c08ded0c797579b7965eafd0f0c26c30b45ccc06db939b"},
+    {file = "pyarrow-25.0.1-cp310-cp310-musllinux_1_2_aarch64.whl", hash = "sha256:514ddb60285631af068875550c90eddc181db3e8e63a032b1559be189e82f056"},
+    {file = "pyarrow-25.0.1-cp310-cp310-musllinux_1_2_x86_64.whl", hash = "sha256:cab40b1edfef0262e0e5251aa2c58d75630f24d06dd7794480243acc001a1d7d"},
+    {file = "pyarrow-25.0.1-cp310-cp310-win_amd64.whl", hash = "sha256:60e89d8f13861a1f7f8d950fa54aebb8023b30734d0ac51ffa80beabe2df4bba"},
+    {file = "pyarrow-25.0.1-cp311-cp311-macosx_12_0_arm64.whl", hash = "sha256:51093dd9e10325fbdb3c10a2ae7c4806e5c822d94e74ae4938b26524a3323fee"},
+    {file = "pyarrow-25.0.1-cp311-cp311-macosx_12_0_x86_64.whl", hash = "sha256:eb6203482ff3746a5632303a7279ae0b5a304c46985b49ed1378cb350ea6728d"},
+    {file = "pyarrow-25.0.1-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:880523be3d29efcf83d3998835d206118ccf35e3871dbd2fb60408cf6b007a80"},
+    {file = "pyarrow-25.0.1-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:25f8720bf6387d5dc2ebd2622112de630760419e4b66134405dd24110d15f37e"},
+    {file = "pyarrow-25.0.1-cp311-cp311-musllinux_1_2_aarch64.whl", hash = "sha256:4facd65742a024a4a366328a1d2292062d72d6e023c1b7dda8d4c37544933a25"},
+    {file = "pyarrow-25.0.1-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:aa0559502e1cd6254d6814614085dd9c5a3dd0419362978a936a3f68a9e5c3df"},
+    {file = "pyarrow-25.0.1-cp311-cp311-win_amd64.whl", hash = "sha256:62cd0d785b8aa6675ee355f9fc02252a340f4441257c42674937826fd7594325"},
+    {file = "pyarrow-25.0.1-cp312-cp312-macosx_12_0_arm64.whl", hash = "sha256:df961f2e7ae9cf496459259d798652c70625f6c080650d6952f8c04053c58ee9"},
+    {file = "pyarrow-25.0.1-cp312-cp312-macosx_12_0_x86_64.whl", hash = "sha256:cc4aa407fde9fc660be3939e49ea31f50f3e9fec17c0ec63159f7711edd3efc9"},
+    {file = "pyarrow-25.0.1-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:4340f0ba6c1d2e13f21658de1d7c662ca2545018568d0030a1e9afca159d87e3"},
+    {file = "pyarrow-25.0.1-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:5389cdf79447ed1515c9e31620e6e1e2302249564d603f2ad727d4f6d313e4c3"},
+    {file = "pyarrow-25.0.1-cp312-cp312-musllinux_1_2_aarch64.whl", hash = "sha256:d51592cb7561e87877c506113e7adbf1342ab579e6c21f0ef44b8ba41cb74c80"},
+    {file = "pyarrow-25.0.1-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:6109c94d8b9f3b17a041daca16cacb2f651ad8f1ef70a4232c2c0f37a23da2a8"},
+    {file = "pyarrow-25.0.1-cp312-cp312-win_amd64.whl", hash = "sha256:8858d7bfc22e3f51529aeaa4077225029724623e4595dc9eff8c793935c34140"},
+    {file = "pyarrow-25.0.1-cp313-cp313-macosx_12_0_arm64.whl", hash = "sha256:c7c534ec03c358a76ea3e505e74c1b6aef290af90c444dfd092dbfe23e755b85"},
+    {file = "pyarrow-25.0.1-cp313-cp313-macosx_12_0_x86_64.whl", hash = "sha256:dda9470024204d7bbf2042b47c6e8a0e47a3eeb8e34405882dfaea6577e0c153"},
+    {file = "pyarrow-25.0.1-cp313-cp313-manylinux_2_28_aarch64.whl", hash = "sha256:44a9120ce5bd81936b8ab9a88076e3fd47c2c6838e0e43630fed83626aca81d9"},
+    {file = "pyarrow-25.0.1-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:0befcf816e45a1af33ac775a9970b749e4868a230c7372f0ae5e932bee27039f"},
+    {file = "pyarrow-25.0.1-cp313-cp313-musllinux_1_2_aarch64.whl", hash = "sha256:3f89685964f46e4216103c75483aac0c0692a5f72212d7ca835adba5ede56ce3"},
+    {file = "pyarrow-25.0.1-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:6943e2fe7954d29d84de45d29d34c8dc36ce96570e67d89aa9976e650a4a9138"},
+    {file = "pyarrow-25.0.1-cp313-cp313-win_amd64.whl", hash = "sha256:31e49a7888fcdf3a835da33ae777f6bb9a866334e5a789282fc26dcf426f7f15"},
+    {file = "pyarrow-25.0.1-cp314-cp314-macosx_12_0_arm64.whl", hash = "sha256:bf0b672390cdcb640d7288f96b826d71ff4e9abb254a86c89890baf51a29cee6"},
+    {file = "pyarrow-25.0.1-cp314-cp314-macosx_12_0_x86_64.whl", hash = "sha256:38a9a4b4b9613380e200641891495a56c3d5a98a092db4a870af9975e220471d"},
+    {file = "pyarrow-25.0.1-cp314-cp314-manylinux_2_28_aarch64.whl", hash = "sha256:0b726ad7e7b669be982b0c71c07fe4b037d654354130da79a7902a669e93a66b"},
+    {file = "pyarrow-25.0.1-cp314-cp314-manylinux_2_28_x86_64.whl", hash = "sha256:9171748cdf796972d85a4b60157c279913e242992e350c90c7450182a9838b2a"},
+    {file = "pyarrow-25.0.1-cp314-cp314-musllinux_1_2_aarch64.whl", hash = "sha256:b7a296aac7a71fa0886c08e155ddb6c636a50013f801f6178daafa0f9e726188"},
+    {file = "pyarrow-25.0.1-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:0fe7c8b6c03969b49c8c66182e4a18e3819ab92d07cfab5d8370c531b9369ef0"},
+    {file = "pyarrow-25.0.1-cp314-cp314-win_amd64.whl", hash = "sha256:f729cfdbd36fd99d543b67a914d2de044c84ebe45be8b34902b299b608c15c8f"},
+    {file = "pyarrow-25.0.1-cp314-cp314t-macosx_12_0_arm64.whl", hash = "sha256:59a2de54c0cbd954da861eee4d1d330f8e909c45b53455baef696380f2c55033"},
+    {file = "pyarrow-25.0.1-cp314-cp314t-macosx_12_0_x86_64.whl", hash = "sha256:35935cd5de130aa5cf4dea052a63e6bf2e17006c35c3a468194242b9b2bf5956"},
+    {file = "pyarrow-25.0.1-cp314-cp314t-manylinux_2_28_aarch64.whl", hash = "sha256:f3831aaa25c67a99f99dc8b05873cb9d64560390372e2aa197ce9dd4a3f06a44"},
+    {file = "pyarrow-25.0.1-cp314-cp314t-manylinux_2_28_x86_64.whl", hash = "sha256:6a1fdfc6659b6b19022f2e50627fb5cf7156a66c46bf4299379955cbe742382a"},
+    {file = "pyarrow-25.0.1-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:169d3429d5be7c752125890620f75a60776d38b0035eddae939651640822332e"},
+    {file = "pyarrow-25.0.1-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:119297a6dc197e45d9c6d4415f7814a67ffa36c180d26f68c154c58067ae782d"},
+    {file = "pyarrow-25.0.1-cp314-cp314t-win_amd64.whl", hash = "sha256:4288f27577352d608ca08553b0865e4a9b3aa14820c5d95b53337218d609835b"},
+    {file = "pyarrow-25.0.1.tar.gz", hash = "sha256:9150a83248bfed9813ea3c3af74c3856c1984d444aa28e58bf7733b9750ddf6a"},
 ]
 
 [[package]]
@@ -4724,29 +4724,30 @@ python-dateutil = ">=2.7.0"
 
 [[package]]
 name = "pystac-ext-classification"
-version = "2.0.0"
+version = "2.0.1"
 description = "Classification extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_classification-2.0.0-py3-none-any.whl", hash = "sha256:fe8c94fd83b2402cb314f608e835d45d70397614928d6cbb29b12d4728586abd"},
-    {file = "pystac_ext_classification-2.0.0.tar.gz", hash = "sha256:b744d42eb74fa5038cf00896f3cf4fbb85b79cf208454b7401bd8219e491eb94"},
+    {file = "pystac_ext_classification-2.0.1-py3-none-any.whl", hash = "sha256:966939c42314487d40ba37824eb5c4575cffc841fdda3f8da6f61be1fde39f17"},
+    {file = "pystac_ext_classification-2.0.1.tar.gz", hash = "sha256:be271440ef6f676e0d48e3238100e29c4f6a1a92626a1353c4728c4f8ea0fabe"},
 ]
 
 [package.dependencies]
 pystac-core = "*"
+pystac-ext-raster = "*"
 
 [[package]]
 name = "pystac-ext-datacube"
-version = "2.2.0"
+version = "2.2.1"
 description = "Datacube extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_datacube-2.2.0-py3-none-any.whl", hash = "sha256:823538db9751b6e7312a06ec9b6a74f98561830664f45ed43908bea73f624f16"},
-    {file = "pystac_ext_datacube-2.2.0.tar.gz", hash = "sha256:a64643cb826c3f2f169c7497b5e5ba218f0a1ababbbd3bad04c57f99df3a67c7"},
+    {file = "pystac_ext_datacube-2.2.1-py3-none-any.whl", hash = "sha256:e88876860aa96b002786139547faa6acc760424f90051141322668c91e78c56d"},
+    {file = "pystac_ext_datacube-2.2.1.tar.gz", hash = "sha256:80f7ecbc82dee5d713f2c6ad4f87cd01a7559c1f77fc9e51d2ff9bd06c4db5ae"},
 ]
 
 [package.dependencies]
@@ -4754,29 +4755,31 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-eo"
-version = "1.1.0"
+version = "1.1.1"
 description = "Electro-Optical extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_eo-1.1.0-py3-none-any.whl", hash = "sha256:ca367465d37bc65d9a4c0cd54c4a04a45deb9904d55ae2c1f37d11734cc38ca0"},
-    {file = "pystac_ext_eo-1.1.0.tar.gz", hash = "sha256:c599b1f4a470eceefb745b26f4dabea05661e843d26c8c59f0d7343b6ac9ab35"},
+    {file = "pystac_ext_eo-1.1.1-py3-none-any.whl", hash = "sha256:053e3a5fa7e6bd6cb4e1a97f0aaab944bfff554e2d6264c5f81d9b1593d7582c"},
+    {file = "pystac_ext_eo-1.1.1.tar.gz", hash = "sha256:83a94d974cf57aa4b21b1039b8fd527f0a5e07d9f3534aa3fa5752f59c694301"},
 ]
 
 [package.dependencies]
 pystac-core = "*"
+pystac-ext-projection = "*"
+pystac-ext-view = "*"
 
 [[package]]
 name = "pystac-ext-file"
-version = "2.1.0"
+version = "2.1.1"
 description = "File extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_file-2.1.0-py3-none-any.whl", hash = "sha256:90b91c82155f763143de2daf1aec37dd0e7f98da7f39f6636a4ede590be9f322"},
-    {file = "pystac_ext_file-2.1.0.tar.gz", hash = "sha256:93964df13550d0b016770774a6608728928f3a2c8d92ae03dc2f11bd76dbc6f0"},
+    {file = "pystac_ext_file-2.1.1-py3-none-any.whl", hash = "sha256:bee49e1768d585050c1fb278c328cd61808d4615cb69d4a24fa75eb387774753"},
+    {file = "pystac_ext_file-2.1.1.tar.gz", hash = "sha256:b2b72eedc7c77dd3ff4efe2ff57956046cd1e66ab28d53df0b693e56c37d1c96"},
 ]
 
 [package.dependencies]
@@ -4784,14 +4787,14 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-grid"
-version = "1.1.0"
+version = "1.1.1"
 description = "Grid extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_grid-1.1.0-py3-none-any.whl", hash = "sha256:6c8c804a07b4c1fc9dc4058a16d4ec18d7715883a183555c826d312830018db1"},
-    {file = "pystac_ext_grid-1.1.0.tar.gz", hash = "sha256:0b8855ff3ddb278bf6f2caf01bb857da50cf23bc322d0722f93b206b7f3673f6"},
+    {file = "pystac_ext_grid-1.1.1-py3-none-any.whl", hash = "sha256:eaf1bb7439946c2dc82e2b54d75d795e29a4fb10276bc37c973fbd352d9f03ed"},
+    {file = "pystac_ext_grid-1.1.1.tar.gz", hash = "sha256:00070bc4fd26aadc6b21a1f24250e33c1719773fff14487bd0c08b0b89f06438"},
 ]
 
 [package.dependencies]
@@ -4799,14 +4802,14 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-item-assets"
-version = "1.0.0"
+version = "1.0.1"
 description = "Item Assets extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_item_assets-1.0.0-py3-none-any.whl", hash = "sha256:4dd61fcaeb861f1bd0c77299d9e3332865bfded44e061206fc0bb9fd8ce8d156"},
-    {file = "pystac_ext_item_assets-1.0.0.tar.gz", hash = "sha256:63b063ae3b0c9508ad84aa06c85513fb2ca09f505ee2aed1a8a1f0c3a906d070"},
+    {file = "pystac_ext_item_assets-1.0.1-py3-none-any.whl", hash = "sha256:be8c014edc6eeacd6793880706826bedb38218fda652b019c00ee17c9ea2dfed"},
+    {file = "pystac_ext_item_assets-1.0.1.tar.gz", hash = "sha256:0a69d0c19e56ff481bbc5bf652639a99f084e30a1307a29b45aeedaf9a1611aa"},
 ]
 
 [package.dependencies]
@@ -4814,14 +4817,14 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-label"
-version = "1.0.1"
+version = "1.0.2"
 description = "Label extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_label-1.0.1-py3-none-any.whl", hash = "sha256:9b089b290ce953916cd087a86d108262cf74ca39d0f00e27af6eeaf1ab2be167"},
-    {file = "pystac_ext_label-1.0.1.tar.gz", hash = "sha256:34e52bbc79d46a5a0f76833ce0f656de65b425a41ca362e705be68430196abc7"},
+    {file = "pystac_ext_label-1.0.2-py3-none-any.whl", hash = "sha256:36acaaf1f452693f02dd11602374a87855939bc39e6d979990f33a7f305d05ff"},
+    {file = "pystac_ext_label-1.0.2.tar.gz", hash = "sha256:92c195ba9049b1ba7ee23e1a2b53a00dc6060f2438fc51d398eebdf7d3c6a8ba"},
 ]
 
 [package.dependencies]
@@ -4829,14 +4832,14 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-mgrs"
-version = "1.0.0"
+version = "1.0.1"
 description = "MGRS extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_mgrs-1.0.0-py3-none-any.whl", hash = "sha256:4efe67b4dac4fb7c3057985a056e59275371c535d84c82d0a55f110f9144f9f0"},
-    {file = "pystac_ext_mgrs-1.0.0.tar.gz", hash = "sha256:31d79b288f2523640138aff1b12acd2b67d7a40b1822909a04700fb048861d11"},
+    {file = "pystac_ext_mgrs-1.0.1-py3-none-any.whl", hash = "sha256:75ded1355764b26aa1031e812089befba1191906904e05350ae2a578f34485c8"},
+    {file = "pystac_ext_mgrs-1.0.1.tar.gz", hash = "sha256:ac96294b5b81a4df655e9162809c09c97cf1af21c1b4f146d9cd398caad39f44"},
 ]
 
 [package.dependencies]
@@ -4844,29 +4847,31 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-mlm"
-version = "1.4.0"
+version = "1.4.1"
 description = "Machine Learning Model extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_mlm-1.4.0-py3-none-any.whl", hash = "sha256:69dac825477b7dd458ad5392aa72188377b267f267b6b28a60e883daed0ef252"},
-    {file = "pystac_ext_mlm-1.4.0.tar.gz", hash = "sha256:fdaf464e729071348b3921e908dbe3c2e1cce5d65153ee19995e2e7315e9edf9"},
+    {file = "pystac_ext_mlm-1.4.1-py3-none-any.whl", hash = "sha256:64f74a485ce167093a699e60be1358562817d5c98d55f9e990021a9763600269"},
+    {file = "pystac_ext_mlm-1.4.1.tar.gz", hash = "sha256:f27ee69816e6d076eec5bef1f9fc7778850d332afeccc598f787bf53c9439019"},
 ]
 
 [package.dependencies]
 pystac-core = "*"
+pystac-ext-classification = "*"
+pystac-ext-raster = "*"
 
 [[package]]
 name = "pystac-ext-pointcloud"
-version = "1.0.0"
+version = "1.0.1"
 description = "Point Cloud extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_pointcloud-1.0.0-py3-none-any.whl", hash = "sha256:3bc688b3da93dc0dbf91b357026eb7648ec3e49a3008003859648b80dfb55732"},
-    {file = "pystac_ext_pointcloud-1.0.0.tar.gz", hash = "sha256:92a4bc88fe6eb15ad27c75358b1dbf5bf40ded26df4cd6b8bfc16a4c9a838764"},
+    {file = "pystac_ext_pointcloud-1.0.1-py3-none-any.whl", hash = "sha256:e32ee5e794b3dccc3ab1f2c3f8e11422da4dce882061123f66e9ddaa6ae6f009"},
+    {file = "pystac_ext_pointcloud-1.0.1.tar.gz", hash = "sha256:995b9ab0d84d22a2495add7a709f97b5cd9685c180d6da9af29c87383919aa15"},
 ]
 
 [package.dependencies]
@@ -4874,14 +4879,14 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-projection"
-version = "2.0.0"
+version = "2.0.1"
 description = "Projection extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_projection-2.0.0-py3-none-any.whl", hash = "sha256:892e9852a1a81cf1be1b79e3ad52e9b11f780143d3a75d67cde3e4fd31ec83e4"},
-    {file = "pystac_ext_projection-2.0.0.tar.gz", hash = "sha256:72517587636c3d0f325cf11dfa75e0431570c6a13305bf53d0f95b2548deec1f"},
+    {file = "pystac_ext_projection-2.0.1-py3-none-any.whl", hash = "sha256:2c81997ee09a3332fa2b2bf635f2343034d8f87e612d4ecc2bea072aa5733acc"},
+    {file = "pystac_ext_projection-2.0.1.tar.gz", hash = "sha256:191bc730689ffeda7bdc94c5719f75ed951033f0b5e7a035a0af27213f33e085"},
 ]
 
 [package.dependencies]
@@ -4889,14 +4894,14 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-raster"
-version = "1.1.0"
+version = "1.1.1"
 description = "Raster extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_raster-1.1.0-py3-none-any.whl", hash = "sha256:07c312ae956d70ccdb1da7af67fc92793c2546ca8e26ca384013ebf5c674b410"},
-    {file = "pystac_ext_raster-1.1.0.tar.gz", hash = "sha256:19dd7c993defe450fa90b3fd690f30a6191b701fc704f1626748bdb57d9da1ed"},
+    {file = "pystac_ext_raster-1.1.1-py3-none-any.whl", hash = "sha256:69a634c98df2537a487155348d766de5038f545c560f45752844bd763fec2801"},
+    {file = "pystac_ext_raster-1.1.1.tar.gz", hash = "sha256:1249d34332cfd05634a31eb6f9d63d977cef4320d68876054bdbc1319ffc8b8a"},
 ]
 
 [package.dependencies]
@@ -4919,14 +4924,14 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-sar"
-version = "1.0.0"
+version = "1.0.1"
 description = "SAR extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_sar-1.0.0-py3-none-any.whl", hash = "sha256:4b73d97e4c1cdba1c1d6cc1d69181fed31eefb0ec164500b636d6a8d8bca271c"},
-    {file = "pystac_ext_sar-1.0.0.tar.gz", hash = "sha256:0d49130fc55152f039f22ac843df35e1c5b2a1a667a4ee91d4a9c5b3ecd379ca"},
+    {file = "pystac_ext_sar-1.0.1-py3-none-any.whl", hash = "sha256:58bb69f503250e5b3f77a60a0b5947d4d67440c36f25ebb34698698ded4a0e26"},
+    {file = "pystac_ext_sar-1.0.1.tar.gz", hash = "sha256:3a1a24a7429d74570a3fb93c534095c18fb42e1b3c8e1c4cdb594091eb23ee0c"},
 ]
 
 [package.dependencies]
@@ -4934,14 +4939,14 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-sat"
-version = "1.0.0"
+version = "1.0.1"
 description = "Satellite extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_sat-1.0.0-py3-none-any.whl", hash = "sha256:ee951eee24b47c576863bbf5890957b7094a6a2bb0ef8fc967a4d327dff571fd"},
-    {file = "pystac_ext_sat-1.0.0.tar.gz", hash = "sha256:2163b31d3044f9c2965abd9cb4144482813068ff9f99107a240eed06cf78bace"},
+    {file = "pystac_ext_sat-1.0.1-py3-none-any.whl", hash = "sha256:6f8e1381289f07d1994a65ae14f728f71ea39273efce063e506705c480f3e775"},
+    {file = "pystac_ext_sat-1.0.1.tar.gz", hash = "sha256:aa7bce65192335d08b45b21f76cf66380626209c90b8ea5d817de82392c898e8"},
 ]
 
 [package.dependencies]
@@ -4949,14 +4954,14 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-scientific"
-version = "1.0.0"
+version = "1.0.1"
 description = "Scientific extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_scientific-1.0.0-py3-none-any.whl", hash = "sha256:1f78efcd34a4b4344c70d80ddcde70785815e738455e3c1d35b5e843ca671207"},
-    {file = "pystac_ext_scientific-1.0.0.tar.gz", hash = "sha256:b55128b7b2281c28dcfc3c00c008fe4391c84b47a7572c4770766f1e96eec5b5"},
+    {file = "pystac_ext_scientific-1.0.1-py3-none-any.whl", hash = "sha256:26b6c1b626db6218efd14e7e963d9873c48f68085c5f29693f0e5902a849bc90"},
+    {file = "pystac_ext_scientific-1.0.1.tar.gz", hash = "sha256:8437804a8cd096c7ed766b11a05cddcdf1cb8994766d34e610eaec3fe1918001"},
 ]
 
 [package.dependencies]
@@ -4964,14 +4969,14 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-storage"
-version = "2.0.0"
+version = "2.0.1"
 description = "Storage extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_storage-2.0.0-py3-none-any.whl", hash = "sha256:8f1d809a8f5efebe051450fcfce3ae13ef4c7ad9133b43b2a1f4df69e74645c2"},
-    {file = "pystac_ext_storage-2.0.0.tar.gz", hash = "sha256:58b28988e49a188cc8ee09e8bc88440aec9985f0d3ccd295b6209215896e4250"},
+    {file = "pystac_ext_storage-2.0.1-py3-none-any.whl", hash = "sha256:3341b858e77bd317fde3aa147e974dfa82488a1a4c08e876058f28ec5b57c058"},
+    {file = "pystac_ext_storage-2.0.1.tar.gz", hash = "sha256:11e020767dcff6b4b8d7880d26d0f366368af922c825445a165b70c9fd302492"},
 ]
 
 [package.dependencies]
@@ -4979,14 +4984,14 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-table"
-version = "1.2.0"
+version = "1.2.1"
 description = "Table extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_table-1.2.0-py3-none-any.whl", hash = "sha256:461e8475eaee81190c36db818150e0b24d14d46b021f063a928ff6a0ee77a971"},
-    {file = "pystac_ext_table-1.2.0.tar.gz", hash = "sha256:c7035db662272a84f1149e7d694c8409f85093cc056cdc655c06e9b9f5cefe37"},
+    {file = "pystac_ext_table-1.2.1-py3-none-any.whl", hash = "sha256:60dd80deefb0b2f94ec8cf696c9cbfc8b6a530e769d0bbe50a055caa3de07e77"},
+    {file = "pystac_ext_table-1.2.1.tar.gz", hash = "sha256:585bc36338b261dffa1a1b23e7d148e8788ed8a1e9bc71baabe8a566ba6271c3"},
 ]
 
 [package.dependencies]
@@ -4994,14 +4999,14 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-timestamps"
-version = "1.1.0"
+version = "1.1.1"
 description = "Timestamps extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_timestamps-1.1.0-py3-none-any.whl", hash = "sha256:17990ad4827bfd0798010d247fa2f3d770f78d80180579cbe63d8267fb3e8d39"},
-    {file = "pystac_ext_timestamps-1.1.0.tar.gz", hash = "sha256:d78250e3ddc61b825348444ad05c8cff8c2aa1cd3d18155b880783ee880520d3"},
+    {file = "pystac_ext_timestamps-1.1.1-py3-none-any.whl", hash = "sha256:f68e368edea169dc102241b24784d54600c8e9bc4d3571f6e3288ad29199be67"},
+    {file = "pystac_ext_timestamps-1.1.1.tar.gz", hash = "sha256:6c57bbaec88ddef129f479452ca7863c3d16dba12ecd7b700a7f9fb3eb6e5673"},
 ]
 
 [package.dependencies]
@@ -5009,14 +5014,14 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-version"
-version = "1.2.0"
+version = "1.2.1"
 description = "Version extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_version-1.2.0-py3-none-any.whl", hash = "sha256:95ba628abe934098356654f2bd57423475d1cb59e2f49c44dd7e2ef5392efefd"},
-    {file = "pystac_ext_version-1.2.0.tar.gz", hash = "sha256:aac23024e76cd64c9bec46a8b49f884f2e8c89cc3d0fe317f5f58dfaa56d1aa0"},
+    {file = "pystac_ext_version-1.2.1-py3-none-any.whl", hash = "sha256:895e66f72f31b34e63f1b3d39def05bb7e3be6906cff951d4b4da4c617bfcb41"},
+    {file = "pystac_ext_version-1.2.1.tar.gz", hash = "sha256:7ae63cab8440ee7e2da19e2024ecd55a7affb022ba9384eefe5bd98ce85f21da"},
 ]
 
 [package.dependencies]
@@ -5024,14 +5029,14 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-view"
-version = "1.0.0"
+version = "1.0.1"
 description = "View extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_view-1.0.0-py3-none-any.whl", hash = "sha256:3000615569d1826093a6b231778e7ddb1afb106dd516e8029a0083bfcd166d7d"},
-    {file = "pystac_ext_view-1.0.0.tar.gz", hash = "sha256:cb677dcd49f9a62824087d150f01eea97fc24c577971edb60374c9e48e517311"},
+    {file = "pystac_ext_view-1.0.1-py3-none-any.whl", hash = "sha256:7d8dab8f638589c2b17496e17770c98759f8c20e36ebaab931af43cf25b5c504"},
+    {file = "pystac_ext_view-1.0.1.tar.gz", hash = "sha256:11b5ea7ebcd717a86ef256abe4270ab6c1ab701683d3b4fc0d104ea194d759e2"},
 ]
 
 [package.dependencies]
@@ -5039,14 +5044,14 @@ pystac-core = "*"
 
 [[package]]
 name = "pystac-ext-xarray-assets"
-version = "1.0.0"
+version = "1.0.1"
 description = "Xarray Assets extension for PySTAC"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pystac_ext_xarray_assets-1.0.0-py3-none-any.whl", hash = "sha256:a31e90e7e9bc5ae191e7449df28c39857c818e8c1cf2c09a2eceaa7c6e13241c"},
-    {file = "pystac_ext_xarray_assets-1.0.0.tar.gz", hash = "sha256:da4f4877c018d531b6b5c45f20bc64842f14587ae86bac8d2acf110804c773d1"},
+    {file = "pystac_ext_xarray_assets-1.0.1-py3-none-any.whl", hash = "sha256:114631f3585aa18d73fa9cae8e256d8937d455af4d9fb4e84f5d0981d2ec3bc4"},
+    {file = "pystac_ext_xarray_assets-1.0.1.tar.gz", hash = "sha256:7d75e79a2b8702d1f572eecdf8af6b29a1013789f6de5e688a5a3c9c14254de6"},
 ]
 
 [package.dependencies]
