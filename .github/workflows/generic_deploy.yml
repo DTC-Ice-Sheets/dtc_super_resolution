@@ -68,7 +68,6 @@ jobs:
       - name: Clean up secrets
         run: |
           rm -f .gh_token.txt
-          rm -f .env
 
   deploy_package_and_cleanup:
     needs: generate_container_name
