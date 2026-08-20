@@ -72,7 +72,8 @@ jobs:
       - name: Build and push this package's test image
         if: ${{ steps.check_if_image_exists.outputs.image_exists == 'false'}}
         run: |
-          export GITHUB_TOKEN=${{ secrets.GH_ADMIN_PAT }}
+          export DOCKER_BUILDKIT=1
+          export GITHUB_TOKEN="${{ secrets.GH_ADMIN_PAT }}"
           docker build \
             --cache-from ${{ steps.name_container.outputs.image_name }} \
             --secret id=github_token,env=GITHUB_TOKEN \

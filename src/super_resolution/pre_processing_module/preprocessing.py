@@ -94,14 +94,14 @@ def validate_era5_dataset(era5: xr.Dataset) -> None:
             )
 
     # Check that the dataset supports all required dimensions with non-zero sizes
-    len_era5_x = len(era5.x)
-    len_era5_y = len(era5.y)
-    len_era5_time = len(era5.time)
-    if any([len_era5_x <= 0, len_era5_y <= 0, len_era5_time <= 0]):
+    len_era5_x = era5.sizes.get("x", 0)
+    len_era5_y = era5.sizes.get("y", 0)
+    len_era5_time = era5.sizes.get("time", 0)
+    if len_era5_x <= 0 or len_era5_y <= 0 or len_era5_time <= 0:
         raise ValueError(
-            f"ERA5 dataset must have x, y & time dimensions greater than 0, "
-            f"found: x={len_era5_x}, y={len_era5_y}, time={len_era5_time}."
-            " please increase the area of your search polygon or timespan accordingly."
+            "ERA5 dataset must have non-empty 'x', 'y', and 'time' dimensions; "
+            f"found sizes: x={len_era5_x}, y={len_era5_y}, time={len_era5_time}. "
+            "Please increase the area of your search polygon or extend the timespan accordingly."
         )
 
 
