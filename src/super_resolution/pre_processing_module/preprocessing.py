@@ -16,6 +16,8 @@ from super_resolution.pre_processing_module.tiling import make_tiles
 # setup_logging()
 logger = logging.getLogger(__name__)
 
+EXPECTED_ERA5_VARIABLES = ["d2m", "msl", "sp", "sst", "t2m", "tp", "u10", "v10"]
+
 
 def run_preprocessing(gcm_zarr_path: str, rcm_zarr_path: str) -> tuple[np.ndarray, list, list, xr.Dataset, xr.Dataset]:
     """
@@ -46,6 +48,9 @@ def run_preprocessing(gcm_zarr_path: str, rcm_zarr_path: str) -> tuple[np.ndarra
     # Load ERA5 and RCM datasets
     gcm_ds = load_era5_dataset(gcm_zarr_path)
     rcm_ds = load_rcm_dataset(rcm_zarr_path)
+
+    # validate ERA5 dataset
+    validate_era5_dataset(gcm_ds)
 
     # Create target grid from RACMO
     # define the target coarser resolution, roughly matching ERA5 grid spacing at our target latitude of 75°S,
@@ -80,13 +85,12 @@ def validate_era5_dataset(era5: xr.Dataset) -> None:
     ValueError
         If any of the required variables are missing from the dataset.
     """
-    expected_era5_vars = ["d2m", "msl", "sp", "sst", "t2m", "tp", "u10", "v10"]
-    for v in expected_era5_vars:
+    for v in EXPECTED_ERA5_VARIABLES:
         if v not in era5.data_vars:
             raise ValueError(
-                f"Variable '{v}' not found in ERA5 dataset. \
-                             Expected variables: {expected_era5_vars}. \
-                            Present variables: {list(era5.data_vars)}."
+                f"Variable '{v}' not found in ERA5 dataset. "
+                f"Expected variables: {EXPECTED_ERA5_VARIABLES}. "
+                f"Present variables: {list(era5.data_vars)}."
             )
 
     # Check that the dataset supports all required dimensions with non-zero sizes
@@ -122,14 +126,11 @@ def generate_era5_patches(era5: xr.Dataset, tiles: list) -> tuple[np.ndarray, li
     era5_patches = []
     metadata = []
 
-    era5_vars = [v for v in era5.data_vars if "x" in era5[v].dims and "y" in era5[v].dims]
-    validate_era5_dataset(era5)
-
     # time dimension
     era5_time = era5.time.values
 
     # get numpy array (months, channels, height, width)
-    era5_arr = np.stack([era5[v].compute().values for v in era5_vars], axis=1)
+    era5_arr = np.stack([era5[v].compute().values for v in EXPECTED_ERA5_VARIABLES], axis=1)
     era5_arr = np.nan_to_num(era5_arr, nan=0.0)  # replace NaN with 0
 
     # for each month in era5

@@ -130,7 +130,7 @@ def test_generate_era5_patches_sea_tiles_skipped():
 def test_run_preprocessing_calls_pipeline(
     mock_load_era5, mock_load_rcm, mock_create_grid, mock_reproject, mock_make_tiles, mock_gen_patches
 ):
-    mock_gcm = MagicMock()
+    mock_gcm = _make_era5_dataset(n_times=1, ny=10, nx=12)
     mock_rcm = MagicMock()
     mock_gridx = MagicMock()
     mock_gridy = MagicMock()
