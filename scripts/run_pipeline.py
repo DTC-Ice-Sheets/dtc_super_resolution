@@ -6,9 +6,9 @@ from datetime import datetime
 from typing import Annotated, Literal
 
 import cyclopts
+from download_data import download_data
+from plots import predictions_plot
 
-from scripts.download_data import download_data
-from scripts.plots import predictions_plot
 from super_resolution.ml_module.inference import run_inference
 from super_resolution.ml_module.inference_helpers import run_postprocessing
 from super_resolution.monitoring import setup_logging
@@ -26,7 +26,7 @@ def main(
     end_date: Annotated[datetime, cyclopts.Parameter(help="End date for data download (YYYY-MM-DD)")],
     output_dir: Annotated[str, cyclopts.Parameter(help="Directory to store downloaded data")],
     model_name: Annotated[
-        Literal["model_unet", "model_attention_unet"],
+        Literal["model_baseline_unet", "model_attention_unet"],
         cyclopts.Parameter(help="Name of the model to use for inference"),
     ],
 ) -> None:

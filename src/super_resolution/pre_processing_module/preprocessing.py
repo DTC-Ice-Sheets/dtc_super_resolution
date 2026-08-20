@@ -83,9 +83,22 @@ def validate_era5_dataset(era5: xr.Dataset) -> None:
     expected_era5_vars = ["d2m", "msl", "sp", "sst", "t2m", "tp", "u10", "v10"]
     for v in expected_era5_vars:
         if v not in era5.data_vars:
-            raise ValueError(f"Variable '{v}' not found in ERA5 dataset. \
+            raise ValueError(
+                f"Variable '{v}' not found in ERA5 dataset. \
                              Expected variables: {expected_era5_vars}. \
-                            Present variables: {list(era5.data_vars)}.")
+                            Present variables: {list(era5.data_vars)}."
+            )
+
+    # Check that the dataset supports all required dimensions with non-zero sizes
+    len_era5_x = len(era5.x)
+    len_era5_y = len(era5.y)
+    len_era5_time = len(era5.time)
+    if any([len_era5_x <= 0, len_era5_y <= 0, len_era5_time <= 0]):
+        raise ValueError(
+            f"ERA5 dataset must have x, y & time dimensions greater than 0, "
+            f"found: x={len_era5_x}, y={len_era5_y}, time={len_era5_time}."
+            " please increase the area of your search polygon or timespan accordingly."
+        )
 
 
 def generate_era5_patches(era5: xr.Dataset, tiles: list) -> tuple[np.ndarray, list]:
