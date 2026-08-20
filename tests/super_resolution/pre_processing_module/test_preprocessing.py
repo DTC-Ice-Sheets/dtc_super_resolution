@@ -3,9 +3,12 @@
 from unittest.mock import MagicMock, patch
 
 import numpy as np
+import pytest
 import rioxarray  # noqa: F401
 import xarray as xr
 from typeguard import suppress_type_checks
+
+from super_resolution.pre_processing_module.preprocessing import validate_era5_dataset
 
 
 @patch("super_resolution.pre_processing_module.preprocessing.xr.open_dataset")
@@ -77,6 +80,31 @@ def _make_tiles():
             "racmo_slice_x": slice(8, 20),
         },
     ]
+
+
+def test_validate_era5_dataset_valid_passes():
+    era5 = _make_era5_dataset(n_times=1, ny=10, nx=12)
+    validate_era5_dataset(era5)
+
+
+def test_validate_era5_dataset_missing_layer_raises():
+    era5 = _make_era5_dataset(n_times=1, ny=10, nx=12).drop_vars("sst")
+    with pytest.raises(ValueError, match="Variable 'sst' not found in ERA5 dataset"):
+        validate_era5_dataset(era5)
+
+
+@pytest.mark.parametrize(
+    ("x_size", "y_size", "time_size"),
+    [
+        (0, 10, 1),  # no x data
+        (10, 0, 1),  # no y data
+        (10, 10, 0),  # no time data
+    ],
+)
+def test_validate_era5_dataset_empty_required_dimension_raises(x_size, y_size, time_size):
+    era5 = _make_era5_dataset(n_times=time_size, ny=y_size, nx=x_size)
+    with pytest.raises(ValueError, match="must have non-empty 'x', 'y', and 'time' dimensions"):
+        validate_era5_dataset(era5)
 
 
 def test_generate_era5_patches_shape():
