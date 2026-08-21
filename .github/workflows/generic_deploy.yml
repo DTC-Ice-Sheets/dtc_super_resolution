@@ -179,6 +179,8 @@ jobs:
       - name: Build documentation
         run: |
           cd docs/
+          apt-get update
+          apt-get install -y build-essential
           poetry run make html
 
       - name: Deploy documentation to GitHub Pages
