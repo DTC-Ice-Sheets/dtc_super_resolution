@@ -21,7 +21,7 @@ def _make_racmo_ds(nx=20, ny=15):
 
 
 def test_create_target_grid_from_racmo_within_bounds():
-    from super_resolution.pre_processing_module.reprojection import create_target_grid_from_racmo
+    from super_resolution.rcm_emulator.pre_processing_module.reprojection import create_target_grid_from_racmo
 
     racmo_ds = _make_racmo_ds(nx=40, ny=30)
     gridx, gridy = create_target_grid_from_racmo(racmo_ds, resx_km=14.0, resy_km=28.0)
@@ -36,7 +36,7 @@ def test_create_target_grid_from_racmo_within_bounds():
 
 
 def test_create_target_grid_from_racmo_coarser_resolution():
-    from super_resolution.pre_processing_module.reprojection import create_target_grid_from_racmo
+    from super_resolution.rcm_emulator.pre_processing_module.reprojection import create_target_grid_from_racmo
 
     racmo_ds = _make_racmo_ds(nx=60, ny=40)
     gridx, gridy = create_target_grid_from_racmo(racmo_ds, resx_km=14.0, resy_km=28.0)
@@ -47,7 +47,7 @@ def test_create_target_grid_from_racmo_coarser_resolution():
 
 
 def test_create_target_grid_returns_different_resolutions():
-    from super_resolution.pre_processing_module.reprojection import create_target_grid_from_racmo
+    from super_resolution.rcm_emulator.pre_processing_module.reprojection import create_target_grid_from_racmo
 
     racmo_ds = _make_racmo_ds(nx=60, ny=60)
     gridx_fine, _ = create_target_grid_from_racmo(racmo_ds, resx_km=2.0, resy_km=2.0)
@@ -58,7 +58,7 @@ def test_create_target_grid_returns_different_resolutions():
 
 @patch("super_resolution.pre_processing_module.reprojection.pyproj.Transformer.from_crs")
 def test_reproject_era5_to_racmo_grid_calls_transformer(mock_from_crs):
-    from super_resolution.pre_processing_module.reprojection import reproject_era5_to_racmo_grid
+    from super_resolution.rcm_emulator.pre_processing_module.reprojection import reproject_era5_to_racmo_grid
 
     # ERA5 uses 0-360 longitude; avoid 0 and 360 together (they normalize to same value)
     lats = np.linspace(-90, -60, 6)
@@ -93,7 +93,7 @@ def test_reproject_era5_to_racmo_grid_calls_transformer(mock_from_crs):
 
 def test_reproject_era5_to_racmo_grid_output_shape():
     """Integration test: reproject a tiny ERA5 grid onto a small polar grid."""
-    from super_resolution.pre_processing_module.reprojection import reproject_era5_to_racmo_grid
+    from super_resolution.rcm_emulator.pre_processing_module.reprojection import reproject_era5_to_racmo_grid
 
     # ERA5 uses 0-360 longitude; avoid 0 and 360 together (they normalize to same value)
     lats = np.linspace(-90, -60, 15)

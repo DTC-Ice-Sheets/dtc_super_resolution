@@ -19,7 +19,7 @@ def test_load_model_baseline(mock_unet_cls, mock_torch_load):
     mock_unet_cls.return_value = mock_model
     mock_torch_load.return_value = {}
 
-    from super_resolution.ml_module.inference_helpers import load_model
+    from super_resolution.rcm_emulator.ml_module.inference_helpers import load_model
 
     config = {
         "model_type": "Baseline",
@@ -44,7 +44,7 @@ def test_load_model_attention(mock_attn_cls, mock_torch_load):
     mock_attn_cls.return_value = mock_model
     mock_torch_load.return_value = {}
 
-    from super_resolution.ml_module.inference_helpers import load_model
+    from super_resolution.rcm_emulator.ml_module.inference_helpers import load_model
 
     config = {
         "model_type": "Attention",
@@ -78,7 +78,7 @@ def _make_metadata(n_months=2, n_tiles=3):
 
 
 def test_predict_returns_array():
-    from super_resolution.ml_module.inference_helpers import predict
+    from super_resolution.rcm_emulator.ml_module.inference_helpers import predict
 
     mock_model = MagicMock()
     # Output shape: (1, 1, H, W) — mimicking model output for one tile
@@ -99,7 +99,7 @@ def test_predict_returns_array():
 
 
 def test_predict_uses_cpu_when_no_device():
-    from super_resolution.ml_module.inference_helpers import predict
+    from super_resolution.rcm_emulator.ml_module.inference_helpers import predict
 
     mock_model = MagicMock()
     mock_model.return_value = torch.zeros(1, 1, 4, 4)
@@ -122,7 +122,7 @@ def test_predict_uses_cpu_when_no_device():
 
 
 def test_run_postprocessing_output_shape():
-    from super_resolution.ml_module.inference_helpers import run_postprocessing
+    from super_resolution.rcm_emulator.ml_module.inference_helpers import run_postprocessing
 
     h, w = 20, 30
     n_months = 2
@@ -158,7 +158,7 @@ def test_run_postprocessing_output_shape():
 
 
 def test_run_postprocessing_averages_overlapping_tiles():
-    from super_resolution.ml_module.inference_helpers import run_postprocessing
+    from super_resolution.rcm_emulator.ml_module.inference_helpers import run_postprocessing
 
     h, w = 10, 10
     # Two tiles that perfectly overlap the same region

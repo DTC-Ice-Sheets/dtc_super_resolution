@@ -41,7 +41,7 @@ def _make_era5_grid(nx, ny, res_x=14000.0, res_y=28000.0):
 def test_make_tiles_log_branch(mock_gen, caplog):
     import logging
 
-    from super_resolution.pre_processing_module.tiling import make_tiles
+    from super_resolution.rcm_emulator.pre_processing_module.tiling import make_tiles
 
     mock_gen.return_value = [{"tile": 1}]
 
@@ -60,7 +60,7 @@ def test_make_tiles_log_branch(mock_gen, caplog):
 
 
 def test_slice_to_dict():
-    from super_resolution.pre_processing_module.tiling import slice_to_dict
+    from super_resolution.rcm_emulator.pre_processing_module.tiling import slice_to_dict
 
     s = slice(2, 10, None)
     result = slice_to_dict(s)
@@ -68,7 +68,7 @@ def test_slice_to_dict():
 
 
 def test_dict_to_slice():
-    from super_resolution.pre_processing_module.tiling import dict_to_slice
+    from super_resolution.rcm_emulator.pre_processing_module.tiling import dict_to_slice
 
     d = {"start": 3, "stop": 15, "step": None}
     result = dict_to_slice(d)
@@ -76,7 +76,7 @@ def test_dict_to_slice():
 
 
 def test_slice_roundtrip():
-    from super_resolution.pre_processing_module.tiling import dict_to_slice, slice_to_dict
+    from super_resolution.rcm_emulator.pre_processing_module.tiling import dict_to_slice, slice_to_dict
 
     original = slice(5, 20, None)
     assert dict_to_slice(slice_to_dict(original)) == original
@@ -105,7 +105,7 @@ def _sample_tiles():
 
 
 def test_save_tiles_metadata_creates_json(tmp_path):
-    from super_resolution.pre_processing_module.tiling import save_tiles_metadata
+    from super_resolution.rcm_emulator.pre_processing_module.tiling import save_tiles_metadata
 
     tiles = _sample_tiles()
     fpath = str(tmp_path / "tiles.json")
@@ -118,7 +118,7 @@ def test_save_tiles_metadata_creates_json(tmp_path):
 
 
 def test_load_tiles_metadata_roundtrip(tmp_path):
-    from super_resolution.pre_processing_module.tiling import (
+    from super_resolution.rcm_emulator.pre_processing_module.tiling import (
         load_tiles_metadata,
         save_tiles_metadata,
     )
@@ -140,7 +140,7 @@ def test_load_tiles_metadata_roundtrip(tmp_path):
 
 
 def test_clip_data_to_intersection():
-    from super_resolution.pre_processing_module.tiling import clip_data_to_intersection
+    from super_resolution.rcm_emulator.pre_processing_module.tiling import clip_data_to_intersection
 
     racmo = _make_grid_dataset(nx=20, ny=20, res_m=2000.0)
     era5 = _make_era5_grid(nx=20, ny=15, res_x=2000.0, res_y=2000.0)
@@ -159,7 +159,7 @@ def test_clip_data_to_intersection():
 
 @patch("super_resolution.pre_processing_module.tiling.xr.open_zarr")
 def test_save_tiles_to_disk_creates_files(mock_open_zarr, tmp_path):
-    from super_resolution.pre_processing_module.tiling import save_tiles_to_disk
+    from super_resolution.rcm_emulator.pre_processing_module.tiling import save_tiles_to_disk
 
     ny, nx = 40, 40
     h_era5, w_era5 = 10, 10
