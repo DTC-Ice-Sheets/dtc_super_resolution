@@ -5,7 +5,7 @@ import pathlib
 import torch
 import yaml
 
-from super_resolution.ml_module.inference_helpers import load_model, predict
+from super_resolution.rcm_emulator.ml_module.inference_helpers import load_model, predict
 
 
 def run_inference(model_name: str, input_patches: list, metadata: list) -> dict:

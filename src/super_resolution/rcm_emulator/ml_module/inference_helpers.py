@@ -11,9 +11,9 @@ import xarray as xr
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from super_resolution.ml_module.attention_unet.rcm_emulator_unet import SmaatUnet
-from super_resolution.ml_module.basic_unet.unet import UNetBaseline
-from super_resolution.ml_module.datasets import InferenceDataset, inverse_signed_log1p
+from super_resolution.rcm_emulator.ml_module.attention_unet.rcm_emulator_unet import SmaatUnet
+from super_resolution.rcm_emulator.ml_module.basic_unet.unet import UNetBaseline
+from super_resolution.rcm_emulator.ml_module.datasets import InferenceDataset, inverse_signed_log1p
 
 # from super_resolution.monitoring import setup_logging
 # setup_logging()
