@@ -1,6 +1,7 @@
 """Preprocessing pipeline for the RCM emulator."""
 
 # from super_resolution.monitoring import setup_logging
+from importlib.metadata import metadata
 import logging
 
 import numpy as np
@@ -11,7 +12,7 @@ from super_resolution.rcm_emulator.pre_processing_module.reprojection import (
     create_target_grid_from_racmo,
     reproject_era5_to_racmo_grid,
 )
-from super_resolution.rcm_emulator.pre_processing_module.tiling import make_tiles
+from super_resolution.rcm_emulator.pre_processing_module.tiling import make_tiles, build_loc_tiles
 
 # setup_logging()
 logger = logging.getLogger(__name__)
@@ -64,6 +65,53 @@ def run_preprocessing(gcm_zarr_path: str, rcm_zarr_path: str) -> tuple[np.ndarra
     input_patches, metadata = generate_era5_patches(era5_xy, tiles)
 
     return input_patches, metadata, tiles, rcm_ds, era5_xy
+
+def run_preprocessing_loc(gcm_zarr_path: str, rcm_zarr_path: str, location: tuple[float, float]) -> tuple[np.ndarray, list, dict, xr.Dataset, xr.Dataset]:
+    """
+    Run the preprocessing pipeline for the RCM emulator.
+
+    Parameters
+    ----------
+    gcm_zarr_path: str
+        Path to the GCM data.
+    rcm_zarr_path: str
+        Path to the RCM data.
+
+    Returns
+    -------
+    tuple[np.ndarray, list, dict, xr.Dataset, xr.Dataset]
+        A tuple containing:
+            input_patches: np.ndarray
+                A numpy array containing the preprocessed ERA5 patches ready for model input.
+            patch_metadata: list
+                A list (one entry per month) of single-item lists of dictionaries containing
+                per-patch metadata (e.g. "time_idx"), as expected by the prediction pipeline.
+            tile_meta: dict
+                Metadata about the single tile location (slices, center coords, etc.),
+                as expected by the location-based postprocessing step.
+            rcm_ds: xarray.Dataset
+                The RCM dataset.
+            era5_xy: xarray.Dataset
+                The ERA5 dataset reprojected to the RCM grid.
+    """
+    # Load ERA5 and RCM datasets
+    gcm_ds = load_era5_dataset(gcm_zarr_path)
+    rcm_ds = load_rcm_dataset(rcm_zarr_path)
+
+    # Create target grid from RACMO
+    # define the target coarser resolution, roughly matching ERA5 grid spacing at our target latitude of 75°S,
+    resx_km = 14
+    resy_km = 28
+    gridx, gridy = create_target_grid_from_racmo(rcm_ds, resx_km=resx_km, resy_km=resy_km)
+
+    # Reproject ERA5 to RACMO grid
+    era5_xy = reproject_era5_to_racmo_grid(gcm_ds, gridx, gridy)
+    
+    input_patches, target_pathces, tile_meta = build_loc_tiles(location[1], location[0], era5_xy, rcm_ds) 
+    # predict() expects metadata[month] to be a list of per-tile dicts with a "time_idx" key
+    patch_metadata = [[{"time_idx": t, "tile_idx": 0}] for t in era5_xy.time.values]
+
+    return input_patches, patch_metadata, tile_meta, rcm_ds, era5_xy, target_pathces
 
 
 def validate_era5_dataset(era5: xr.Dataset) -> None:
