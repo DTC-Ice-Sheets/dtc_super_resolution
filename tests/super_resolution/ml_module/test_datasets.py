@@ -43,11 +43,13 @@ def test_standardize_constant_array_no_nan():
 # unstandardize
 # ---------------------------------------------------------------------------
 
+
 def test_unstandardize_inverse_of_precomputed_std():
     data = np.array([0.0, 1.0, -1.0])
     result = unstandardize(data)
     expected = data * RACMO_TRAIN_STD + RACMO_TRAIN_MEAN
     np.testing.assert_allclose(result, expected)
+
 
 # ---------------------------------------------------------------------------
 # signed_log1p / inverse_signed_log1p
@@ -76,6 +78,7 @@ def test_inverse_signed_log1p_roundtrip():
 # ---------------------------------------------------------------------------
 # InferenceDataset
 # ---------------------------------------------------------------------------
+
 
 def _make_patches(n=3, c=8, h=6, w=8):
     """Create synthetic ERA5 patches. Channel 3 (SST) is 0 to simulate land."""

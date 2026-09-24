@@ -110,8 +110,9 @@ def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device:
                 elif target_transform == "normalization":
                     out = out * dataset.target_train_std + dataset.target_train_mean
                 elif target_transform is not None:
-                    logger.warning("Unknown target_transform '%s'. Predictions returned untransformed.",
-                                   target_transform)
+                    logger.warning(
+                        "Unknown target_transform '%s'. Predictions returned untransformed.", target_transform
+                    )
 
                 predictions.append(out.cpu().numpy())
 
@@ -156,9 +157,9 @@ def run_postprocessing(
     cy, cx = (tile_h - 1) / 2.0, (tile_w - 1) / 2.0
     sigma_y, sigma_x = tile_h / 4.0, tile_w / 4.0
     yy, xx = np.ogrid[:tile_h, :tile_w]
-    gaussian_weights = np.exp(
-        -((yy - cy) ** 2 / (2 * sigma_y ** 2) + (xx - cx) ** 2 / (2 * sigma_x ** 2))
-    ).astype(np.float32)
+    gaussian_weights = np.exp(-((yy - cy) ** 2 / (2 * sigma_y**2) + (xx - cx) ** 2 / (2 * sigma_x**2))).astype(
+        np.float32
+    )
 
     # populate with predictions
     for i in range(monthly_predictions.shape[0]):
@@ -196,7 +197,12 @@ def run_postprocessing(
 
 
 def run_postprocessing_loc(
-    predictions: np.ndarray, tile_meta: list, rcm_ds: xr.Dataset, era5_xy: xr.Dataset, input_patches: np.ndarray, target_patches: np.ndarray
+    predictions: np.ndarray,
+    tile_meta: list,
+    rcm_ds: xr.Dataset,
+    era5_xy: xr.Dataset,
+    input_patches: np.ndarray,
+    target_patches: np.ndarray,
 ) -> np.ndarray:
     """
     Post-process the model's predictions to match the original input shape for a specific location.
@@ -211,6 +217,10 @@ def run_postprocessing_loc(
         The RCM dataset.
     era5_xy: xr.Dataset
         The ERA5 dataset reprojected to the RCM grid.
+    input_patches: np.ndarray
+        The input patches extracted from the ERA5 dataset.
+    target_patches: np.ndarray
+        The target patches extracted from the RCM dataset.
 
     Returns
     -------
@@ -263,20 +273,24 @@ def run_postprocessing_loc(
     era5_y_vals = era5_xy.y.values
     ex_coords = era5_x_vals[rx_era5]
     ey_coords = era5_y_vals[ry_era5]
-    context_pad_h = 16    # extra ERA5 pixels on top/bottom 
-    context_pad_w = 8     # extra ERA5 pixels on left/right
-    ex_coords_cropped = ex_coords[context_pad_w: len(ex_coords) - context_pad_w]
-    ey_coords_cropped = ey_coords[context_pad_h: len(ey_coords) - context_pad_h]
+    context_pad_h = 16  # extra ERA5 pixels on top/bottom
+    context_pad_w = 8  # extra ERA5 pixels on left/right
+    ex_coords_cropped = ex_coords[context_pad_w : len(ex_coords) - context_pad_w]
+    ey_coords_cropped = ey_coords[context_pad_h : len(ey_coords) - context_pad_h]
 
     # drop the single-tile dimension: (T, 1, C, H, W) -> (T, C, H, W), (T, 1, H, W) -> (T, H, W)
     input_patches = np.squeeze(input_patches, axis=1)
     target_patches = np.squeeze(target_patches, axis=1)
 
-    x_cropped = input_patches[:, :, context_pad_h:input_patches.shape[2] - context_pad_h,
-              context_pad_w:input_patches.shape[3] - context_pad_w]
+    x_cropped = input_patches[
+        :,
+        :,
+        context_pad_h : input_patches.shape[2] - context_pad_h,
+        context_pad_w : input_patches.shape[3] - context_pad_w,
+    ]
 
     # Create dataset
-    out_ds = xr.Dataset(
+    return xr.Dataset(
         data_vars={
             "predictions": (("time", "y", "x"), predictions.astype(np.float32)),
             "target_patches": (("time_r", "y", "x"), target_patches.astype(np.float32)),
@@ -287,11 +301,9 @@ def run_postprocessing_loc(
             "time_r": rcm_ds.time.values,
             "y": ry_coords,
             "x": rx_coords,
-            "y_era5":ey_coords_cropped,
-            "x_era5":ex_coords_cropped,
-            "channels": ["d2m", "msl", "sp", "sst", "t2m", "tp", "u10", "v10"]
+            "y_era5": ey_coords_cropped,
+            "x_era5": ex_coords_cropped,
+            "channels": ["d2m", "msl", "sp", "sst", "t2m", "tp", "u10", "v10"],
         },
         attrs=tile_meta_serializable,
     )
-
-    return out_ds

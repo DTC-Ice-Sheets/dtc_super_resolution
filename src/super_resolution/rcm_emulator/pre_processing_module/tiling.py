@@ -10,8 +10,8 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 from matplotlib import pyplot as plt
-from tqdm import tqdm
 from pyproj import Transformer
+from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 
@@ -220,7 +220,7 @@ def save_tiles_to_disk(
     output_dir : str
         Path to the output directory.
     max_nan_frac : float
-        Maximum fraction of NaN values allowed in a tile.
+        Maximum fraction of NaN to_numpy() allowed in a tile.
     """
     pathlib.Path(output_dir).mkdir(exist_ok=True, parents=True)
 
@@ -263,7 +263,7 @@ def save_tiles_to_disk(
                 # Skip tiles with too many NaNs (ocean / no data)
                 nan_frac = np.isnan(racmo_patch).mean()
                 zero_frac = (racmo_patch == 0.0).mean()
-                null_data = nan_frac + zero_frac  # fraction of NaN or zero values in the RACMO patch
+                null_data = nan_frac + zero_frac  # fraction of NaN or zero to_numpy() in the RACMO patch
 
                 if null_data > max_nan_frac:
                     skipped_nan += 1
@@ -483,7 +483,6 @@ def load_tiles_metadata(filename: str) -> list[dict]:
     return tiles
 
 
-
 def build_loc_tiles(
     lon: float,
     lat: float,
@@ -491,15 +490,16 @@ def build_loc_tiles(
     racmo_ds: xr.Dataset,
     era5_tile_px: int = 48,
     racmo_tile_px: int = 224,
-):
+) -> tuple[np.ndarray, np.ndarray, dict]:
     """
-    Build one ERA5 input tile and one RACMO target tile centered on a
-    user-selected lon/lat (EPSG:4326) point.
+    Build one ERA5 input tile and one RACMO target tile centered on a user-selected lon/lat (EPSG:4326) location.
 
     Parameters
     ----------
-    lon, lat : float
-        Location selected on the map, in EPSG:4326.
+    lon : float
+        Longitude of the location selected on the map, in EPSG:4326.
+    lat : float
+        Latitude of the location selected on the map, in EPSG:4326.
     era5_ds : xr.Dataset
         ERA5 dataset already reprojected onto the EPSG:3031 grid
         (dims: time, variable-per-DataArray, y, x).
@@ -510,8 +510,6 @@ def build_loc_tiles(
         Height/width (in ERA5 pixels) of the input tile. Default 48.
     racmo_tile_px : int
         Height/width (in RACMO pixels) of the target tile. Default 224.
-    time_dim_era5 / time_dim_racmo : str
-        Name of the time dimension in each dataset.
 
     Returns
     -------
@@ -522,15 +520,14 @@ def build_loc_tiles(
     tile_meta : dict
         Info about the tile location (slices, center coords, etc.)
     """
-
     # ── 1. Reproject the clicked point from EPSG:4326 to EPSG:3031 ──────────
     transformer = Transformer.from_crs("epsg:4326", "epsg:3031", always_xy=True)
     x0, y0 = transformer.transform(lon, lat)
 
     # ── 2. Locate nearest pixel index in each grid ───────────────────────────
-    def nearest_center_slice(da_or_ds, x0, y0, tile_px):
-        x_vals = da_or_ds["x"].values
-        y_vals = da_or_ds["y"].values
+    def nearest_center_slice(da_or_ds: xr.Dataset, x0: float, y0: float, tile_px: int) -> tuple[slice, slice]:
+        x_vals = da_or_ds["x"].to_numpy()
+        y_vals = da_or_ds["y"].to_numpy()
 
         ix = int(np.abs(x_vals - x0).argmin())
         iy = int(np.abs(y_vals - y0).argmin())
@@ -563,7 +560,7 @@ def build_loc_tiles(
     era5_vars = ["d2m", "msl", "sp", "sst", "t2m", "tp", "u10", "v10"]
     for var in era5_vars:
         da = era5_ds[var].isel(y=era5_y_slice, x=era5_x_slice)
-        era5_arrays.append(da.values)  # shape: [T, H, W]
+        era5_arrays.append(da.to_numpy())  # shape: [T, H, W]
 
     # stack -> [C, T, H, W] -> transpose -> [T, C, H, W]
     input_stack = np.stack(era5_arrays, axis=0)
@@ -575,7 +572,7 @@ def build_loc_tiles(
     # ── 4. Extract RACMO target tile ────────────────────────────────────────
     target_var = "surface_mass_balance_glaciated"
     target_da = racmo_ds[target_var].isel(y=racmo_y_slice, x=racmo_x_slice)
-    target_stack = target_da.values  # [T, H, W]
+    target_stack = target_da.to_numpy()  # [T, H, W]
     target_tile = target_stack[:, np.newaxis, :, :]  # [T, 1, H, W]
 
     tile_meta = {

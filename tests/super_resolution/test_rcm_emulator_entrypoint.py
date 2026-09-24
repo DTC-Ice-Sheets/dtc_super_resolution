@@ -7,23 +7,29 @@ import pytest
 
 
 def test_app_valid_args(tmp_path):
-    with (patch("super_resolution.rcm_emulator_entrypoint.run_preprocessing",
-                return_value=(MagicMock(), MagicMock(), MagicMock(), MagicMock(), MagicMock())),
+    with (
+        patch(
+            "super_resolution.rcm_emulator_entrypoint.run_preprocessing",
+            return_value=(MagicMock(), MagicMock(), MagicMock(), MagicMock(), MagicMock()),
+        ),
         patch("super_resolution.rcm_emulator_entrypoint.run_inference", return_value=MagicMock()),
         patch("super_resolution.rcm_emulator_entrypoint.run_postprocessing", return_value=MagicMock()),
         patch("pathlib.Path.exists", return_value=True),
         patch.object(
             sys,
             "argv",
-            ["prog",
-             "--gcm_zarr_path",
-             "era5.zarr",
-             "--rcm_zarr_path",
-             "rcm.zarr",
-             "--output_zarr_path",
-             str(tmp_path),
-             "--model-name",
-             "model_baseline_unet"]),
+            [
+                "prog",
+                "--gcm_zarr_path",
+                "era5.zarr",
+                "--rcm_zarr_path",
+                "rcm.zarr",
+                "--output_zarr_path",
+                str(tmp_path),
+                "--model-name",
+                "model_baseline_unet",
+            ],
+        ),
     ):
         from super_resolution.rcm_emulator_entrypoint import app
 
@@ -43,7 +49,8 @@ def test_app_invalid_model_choice(tmp_path):
             "--output_zarr_path",
             str(tmp_path),
             "--model-name",
-            "invalid_model"],
+            "invalid_model",
+        ],
     ):
         from super_resolution.rcm_emulator_entrypoint import app
 
@@ -53,21 +60,28 @@ def test_app_invalid_model_choice(tmp_path):
 
 
 def test_app_attention_unet(tmp_path):
-    with (patch("super_resolution.rcm_emulator_entrypoint.run_preprocessing",
-                return_value=(MagicMock(), MagicMock(), MagicMock(), MagicMock(), MagicMock())),
+    with (
+        patch(
+            "super_resolution.rcm_emulator_entrypoint.run_preprocessing",
+            return_value=(MagicMock(), MagicMock(), MagicMock(), MagicMock(), MagicMock()),
+        ),
         patch("super_resolution.rcm_emulator_entrypoint.run_inference", return_value=MagicMock()) as mock_run_inference,
         patch("super_resolution.rcm_emulator_entrypoint.run_postprocessing", return_value=MagicMock()),
         patch("pathlib.Path.exists", return_value=True),
-        patch.object(sys, "argv",
-                    ["prog",
-                     "--gcm_zarr_path",
-                     "era5.zarr",
-                     "--rcm_zarr_path",
-                     "rcm.zarr",
-                     "--output_zarr_path",
-                     str(tmp_path),
-                     "--model-name",
-                     "model_attention_unet"],
+        patch.object(
+            sys,
+            "argv",
+            [
+                "prog",
+                "--gcm_zarr_path",
+                "era5.zarr",
+                "--rcm_zarr_path",
+                "rcm.zarr",
+                "--output_zarr_path",
+                str(tmp_path),
+                "--model-name",
+                "model_attention_unet",
+            ],
         ),
     ):
         from super_resolution.rcm_emulator_entrypoint import app
@@ -96,15 +110,16 @@ def test_main_calls_pipeline_stages(mock_preproc, mock_infer, mock_postproc, tmp
     with patch.object(
         sys,
         "argv",
-        ["prog",
-        "--gcm_zarr_path",
-        "era5.zarr",
-        "--rcm_zarr_path",
-        "rcm.zarr",
-        "--output_zarr_path",
-        str(tmpdir / "out"),
-        "--model-name",
-        "model_baseline_unet",
+        [
+            "prog",
+            "--gcm_zarr_path",
+            "era5.zarr",
+            "--rcm_zarr_path",
+            "rcm.zarr",
+            "--output_zarr_path",
+            str(tmpdir / "out"),
+            "--model-name",
+            "model_baseline_unet",
         ],
     ):
         from super_resolution.rcm_emulator_entrypoint import app

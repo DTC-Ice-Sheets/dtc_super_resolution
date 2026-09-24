@@ -1,7 +1,7 @@
 """Functions to download data from the Data Download Module."""
 
 import pathlib
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 import dotenv
 from data_download_module.main import download_data as ddm_download_data
@@ -11,7 +11,7 @@ from shapely.geometry import box
 dotenv.load_dotenv()
 
 
-def download_era5_from_ddm(output_dir: str, start_date: str, end_date: str or None = None) -> str: # type: ignore
+def download_era5_from_ddm(output_dir: str, start_date: str, end_date: str | None = None) -> str:  # type: ignore
     """
     Download ERA5 data from the Data Download Module.
 
@@ -19,12 +19,12 @@ def download_era5_from_ddm(output_dir: str, start_date: str, end_date: str or No
 
     Parameters
     ----------
-    start_date: str
-        The start date for the data download, in format "YYYY-MM-DD".
-    end_date: str
-        The end date for the data download, in format "YYYY-MM-DD".
     output_dir: str
         The directory where the downloaded data will be stored.
+    start_date: str
+        The start date for the data download, in format "YYYY-MM-DD".
+    end_date: str | None
+        The end date for the data download, in format "YYYY-MM-DD".
 
     Returns
     -------
@@ -78,7 +78,7 @@ def download_rcm_from_ddm(output_dir: str, start_date: str = "2020-01-01", end_d
     """
     output_dir = str(pathlib.Path(output_dir) / "RACMO/")
     if isinstance(start_date, str):
-         start_date = start_date.strftime("%Y-%m-%d")
+        start_date = start_date.strftime("%Y-%m-%d")
     if isinstance(end_date, str):
         end_date = end_date.strftime("%Y-%m-%d")
 

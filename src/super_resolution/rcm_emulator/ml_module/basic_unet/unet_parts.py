@@ -167,10 +167,7 @@ class LinearUpsamplingZ(nn.Module):
             out_channels = 1024  # default to 64x upsampling
 
         self.linearUp = nn.Sequential(
-            nn.Linear(in_channels, 128),
-            nn.Linear(128, 256),
-            nn.Linear(256, 512),
-            nn.Linear(512, out_channels)
+            nn.Linear(in_channels, 128), nn.Linear(128, 256), nn.Linear(256, 512), nn.Linear(512, out_channels)
         )
 
     def forward(self, z: torch.Tensor) -> torch.Tensor:
