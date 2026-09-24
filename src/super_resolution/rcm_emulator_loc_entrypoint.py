@@ -20,7 +20,7 @@ app = cyclopts.App(help="Run inference on the RCM emulator.")
 def main(
     gcm_zarr_path: Annotated[str, cyclopts.Parameter(help="Path to the GCM data")],
     rcm_zarr_path: Annotated[str, cyclopts.Parameter(help="Path to the RCM data")],
-    location: Annotated[tuple, cyclopts.Parameter(help="Location coordinates (lat, lon)")],
+    location: Annotated[tuple[float, float], cyclopts.Parameter(help="Location coordinates (lat, lon)")],
     output_zarr_path: Annotated[str, cyclopts.Parameter(help="Directory to store downloaded data")],
     model_name: Annotated[
         Literal["model_baseline_unet", "model_attention_unet"],
