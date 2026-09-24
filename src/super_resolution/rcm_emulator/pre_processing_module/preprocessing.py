@@ -1,7 +1,6 @@
 """Preprocessing pipeline for the RCM emulator."""
 
 # from super_resolution.monitoring import setup_logging
-from importlib.metadata import metadata
 import logging
 
 import numpy as np
@@ -12,10 +11,12 @@ from super_resolution.rcm_emulator.pre_processing_module.reprojection import (
     create_target_grid_from_racmo,
     reproject_era5_to_racmo_grid,
 )
-from super_resolution.rcm_emulator.pre_processing_module.tiling import make_tiles, build_loc_tiles
+from super_resolution.rcm_emulator.pre_processing_module.tiling import build_loc_tiles, make_tiles
 
 # setup_logging()
 logger = logging.getLogger(__name__)
+
+EXPECTED_ERA5_VARIABLES = ["d2m", "msl", "sp", "sst", "t2m", "tp", "u10", "v10"]
 
 
 def run_preprocessing(gcm_zarr_path: str, rcm_zarr_path: str) -> tuple[np.ndarray, list, list, xr.Dataset, xr.Dataset]:
@@ -48,6 +49,9 @@ def run_preprocessing(gcm_zarr_path: str, rcm_zarr_path: str) -> tuple[np.ndarra
     gcm_ds = load_era5_dataset(gcm_zarr_path)
     rcm_ds = load_rcm_dataset(rcm_zarr_path)
 
+    # validate ERA5 dataset
+    validate_era5_dataset(gcm_ds)
+
     # Create target grid from RACMO
     # define the target coarser resolution, roughly matching ERA5 grid spacing at our target latitude of 75°S,
     resx_km = 14
@@ -66,7 +70,10 @@ def run_preprocessing(gcm_zarr_path: str, rcm_zarr_path: str) -> tuple[np.ndarra
 
     return input_patches, metadata, tiles, rcm_ds, era5_xy
 
-def run_preprocessing_loc(gcm_zarr_path: str, rcm_zarr_path: str, location: tuple[float, float]) -> tuple[np.ndarray, list, dict, xr.Dataset, xr.Dataset]:
+
+def run_preprocessing_loc(
+    gcm_zarr_path: str, rcm_zarr_path: str, location: tuple[float, float]
+) -> tuple[np.ndarray, list, dict, xr.Dataset, xr.Dataset]:
     """
     Run the preprocessing pipeline for the RCM emulator.
 
@@ -76,6 +83,8 @@ def run_preprocessing_loc(gcm_zarr_path: str, rcm_zarr_path: str, location: tupl
         Path to the GCM data.
     rcm_zarr_path: str
         Path to the RCM data.
+    location: tuple[float, float]
+        The latitude and longitude of the location for which to run the preprocessing.
 
     Returns
     -------
@@ -106,8 +115,8 @@ def run_preprocessing_loc(gcm_zarr_path: str, rcm_zarr_path: str, location: tupl
 
     # Reproject ERA5 to RACMO grid
     era5_xy = reproject_era5_to_racmo_grid(gcm_ds, gridx, gridy)
-    
-    input_patches, target_pathces, tile_meta = build_loc_tiles(location[1], location[0], era5_xy, rcm_ds) 
+
+    input_patches, target_pathces, tile_meta = build_loc_tiles(location[1], location[0], era5_xy, rcm_ds)
     # predict() expects metadata[month] to be a list of per-tile dicts with a "time_idx" key
     patch_metadata = [[{"time_idx": t, "tile_idx": 0}] for t in era5_xy.time.values]
 
@@ -128,12 +137,24 @@ def validate_era5_dataset(era5: xr.Dataset) -> None:
     ValueError
         If any of the required variables are missing from the dataset.
     """
-    expected_era5_vars = ["d2m", "msl", "sp", "sst", "t2m", "tp", "u10", "v10"]
-    for v in expected_era5_vars:
+    for v in EXPECTED_ERA5_VARIABLES:
         if v not in era5.data_vars:
-            raise ValueError(f"Variable '{v}' not found in ERA5 dataset. \
-                             Expected variables: {expected_era5_vars}. \
-                            Present variables: {list(era5.data_vars)}.")
+            raise ValueError(
+                f"Variable '{v}' not found in ERA5 dataset. "
+                f"Expected variables: {EXPECTED_ERA5_VARIABLES}. "
+                f"Present variables: {list(era5.data_vars)}."
+            )
+
+    # Check that the dataset supports all required dimensions with non-zero sizes
+    len_era5_x = era5.sizes.get("x", 0)
+    len_era5_y = era5.sizes.get("y", 0)
+    len_era5_time = era5.sizes.get("time", 0)
+    if len_era5_x <= 0 or len_era5_y <= 0 or len_era5_time <= 0:
+        raise ValueError(
+            "ERA5 dataset must have non-empty 'x', 'y', and 'time' dimensions; "
+            f"found sizes: x={len_era5_x}, y={len_era5_y}, time={len_era5_time}. "
+            "Please increase the area of your search polygon or extend the timespan accordingly."
+        )
 
 
 def generate_era5_patches(era5: xr.Dataset, tiles: list) -> tuple[np.ndarray, list]:
@@ -157,14 +178,11 @@ def generate_era5_patches(era5: xr.Dataset, tiles: list) -> tuple[np.ndarray, li
     era5_patches = []
     metadata = []
 
-    era5_vars = [v for v in era5.data_vars if "x" in era5[v].dims and "y" in era5[v].dims]
-    validate_era5_dataset(era5)
-
     # time dimension
     era5_time = era5.time.values
 
     # get numpy array (months, channels, height, width)
-    era5_arr = np.stack([era5[v].compute().values for v in era5_vars], axis=1)
+    era5_arr = np.stack([era5[v].compute().values for v in EXPECTED_ERA5_VARIABLES], axis=1)
     era5_arr = np.nan_to_num(era5_arr, nan=0.0)  # replace NaN with 0
 
     # for each month in era5

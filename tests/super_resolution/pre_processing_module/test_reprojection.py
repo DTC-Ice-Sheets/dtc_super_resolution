@@ -56,7 +56,7 @@ def test_create_target_grid_returns_different_resolutions():
     assert len(gridx_fine) >= len(gridx_coarse)
 
 
-@patch("super_resolution.pre_processing_module.reprojection.pyproj.Transformer.from_crs")
+@patch("super_resolution.rcm_emulator.pre_processing_module.reprojection.pyproj.Transformer.from_crs")
 def test_reproject_era5_to_racmo_grid_calls_transformer(mock_from_crs):
     from super_resolution.rcm_emulator.pre_processing_module.reprojection import reproject_era5_to_racmo_grid
 

@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "super_resolution"
-version = "0.0.22"
+version = "0.0.24"
 description = "Leverage super-resolution modeling techniques to enhance the monitoring and prediction of surface climate conditions over Greenland and Antarctica"
 authors = ["Katholike Universiteit Leuven"]
 license = "MIT"
@@ -47,6 +47,9 @@ sphinx-copybutton = "^0.5.2"
 commitizen = "^4.11.6"
 pydoclint = "^0.8.3"
 data-download-module = {git = "https://github.com/dtc-ice-sheets/data_download_module.git"}
+
+[tool.poetry.group.deployment.dependencies]
+dtc-wrapper = { git = "https://github.com/DTC-Ice-Sheets/dtc_wrapper.git", tag = "0.0.35"}
 
 [tool.ruff]
 line-length = 120
@@ -103,6 +106,11 @@ ignore = [
     "D102", # Ignore missing docstring warnings for classes in test files
     "D101", # Ignore missing docstring warnings in test files
     "ANN",  # Ignore missing type annotations for functions in test files (commonly not required for small test functions)
+]
+"**.ipynb" = [
+    "T201", # Allow print statements in Jupyter notebooks, as they are commonly used for debugging and output display
+    "E402", # Allow 'import' statements not being at the top of the file (common in notebooks for clarity)
+    "S101", # Allow the use of 'assert' statements in notebooks (common practice in exploratory coding)
 ]
 
 [tool.ruff.lint.pydocstyle]

@@ -12,8 +12,8 @@ from typeguard import suppress_type_checks
 # ---------------------------------------------------------------------------
 
 
-@patch("super_resolution.ml_module.inference_helpers.torch.load")
-@patch("super_resolution.ml_module.inference_helpers.UNetBaseline")
+@patch("super_resolution.rcm_emulator.ml_module.inference_helpers.torch.load")
+@patch("super_resolution.rcm_emulator.ml_module.inference_helpers.UNetBaseline")
 def test_load_model_baseline(mock_unet_cls, mock_torch_load):
     mock_model = MagicMock()
     mock_unet_cls.return_value = mock_model
@@ -37,8 +37,8 @@ def test_load_model_baseline(mock_unet_cls, mock_torch_load):
     assert result is mock_model
 
 
-@patch("super_resolution.ml_module.inference_helpers.torch.load")
-@patch("super_resolution.ml_module.inference_helpers.SmaatUnet")
+@patch("super_resolution.rcm_emulator.ml_module.inference_helpers.torch.load")
+@patch("super_resolution.rcm_emulator.ml_module.inference_helpers.SmaatUnet")
 def test_load_model_attention(mock_attn_cls, mock_torch_load):
     mock_model = MagicMock()
     mock_attn_cls.return_value = mock_model

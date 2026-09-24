@@ -37,7 +37,7 @@ def _make_era5_grid(nx, ny, res_x=14000.0, res_y=28000.0):
 # ---------------------------------------------------------------------------
 
 
-@patch("super_resolution.pre_processing_module.tiling.generate_tile_indices")
+@patch("super_resolution.rcm_emulator.pre_processing_module.tiling.generate_tile_indices")
 def test_make_tiles_log_branch(mock_gen, caplog):
     import logging
 
@@ -157,7 +157,7 @@ def test_clip_data_to_intersection():
 # ---------------------------------------------------------------------------
 
 
-@patch("super_resolution.pre_processing_module.tiling.xr.open_zarr")
+@patch("super_resolution.rcm_emulator.pre_processing_module.tiling.xr.open_zarr")
 def test_save_tiles_to_disk_creates_files(mock_open_zarr, tmp_path):
     from super_resolution.rcm_emulator.pre_processing_module.tiling import save_tiles_to_disk
 
