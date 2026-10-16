@@ -107,6 +107,11 @@ ignore = [
     "D101", # Ignore missing docstring warnings in test files
     "ANN",  # Ignore missing type annotations for functions in test files (commonly not required for small test functions)
 ]
+"**.ipynb" = [
+    "T201", # Allow print statements in Jupyter notebooks, as they are commonly used for debugging and output display
+    "E402", # Allow 'import' statements not being at the top of the file (common in notebooks for clarity)
+    "S101", # Allow the use of 'assert' statements in notebooks (common practice in exploratory coding)
+]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy" # Accepts: "google", "numpy", or "pep257"

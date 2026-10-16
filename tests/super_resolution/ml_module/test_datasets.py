@@ -3,7 +3,7 @@
 import numpy as np
 import torch
 
-from super_resolution.ml_module.datasets import (
+from super_resolution.rcm_emulator.ml_module.datasets import (
     RACMO_TRAIN_MEAN,
     RACMO_TRAIN_STD,
     InferenceDataset,
@@ -43,11 +43,13 @@ def test_standardize_constant_array_no_nan():
 # unstandardize
 # ---------------------------------------------------------------------------
 
+
 def test_unstandardize_inverse_of_precomputed_std():
     data = np.array([0.0, 1.0, -1.0])
     result = unstandardize(data)
     expected = data * RACMO_TRAIN_STD + RACMO_TRAIN_MEAN
     np.testing.assert_allclose(result, expected)
+
 
 # ---------------------------------------------------------------------------
 # signed_log1p / inverse_signed_log1p
@@ -76,6 +78,7 @@ def test_inverse_signed_log1p_roundtrip():
 # ---------------------------------------------------------------------------
 # InferenceDataset
 # ---------------------------------------------------------------------------
+
 
 def _make_patches(n=3, c=8, h=6, w=8):
     """Create synthetic ERA5 patches. Channel 3 (SST) is 0 to simulate land."""
@@ -138,7 +141,7 @@ def test_inference_dataset_month_encoding_range():
 
 
 def test_create_mask_all_zeros_is_sea():
-    from super_resolution.ml_module.datasets import create_mask
+    from super_resolution.rcm_emulator.ml_module.datasets import create_mask
 
     smb = np.zeros((4, 5))  # all zeros → sea
     mask = create_mask(smb)
@@ -147,7 +150,7 @@ def test_create_mask_all_zeros_is_sea():
 
 
 def test_create_mask_nonzero_is_land():
-    from super_resolution.ml_module.datasets import create_mask
+    from super_resolution.rcm_emulator.ml_module.datasets import create_mask
 
     smb = np.ones((3, 4))  # all non-zero → land
     mask = create_mask(smb)
@@ -155,7 +158,7 @@ def test_create_mask_nonzero_is_land():
 
 
 def test_create_mask_mixed():
-    from super_resolution.ml_module.datasets import create_mask
+    from super_resolution.rcm_emulator.ml_module.datasets import create_mask
 
     smb = np.array([[1.0, 0.0], [0.0, 2.0]])
     mask = create_mask(smb)

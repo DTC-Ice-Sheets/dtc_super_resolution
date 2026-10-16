@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 from matplotlib import pyplot as plt
+from pyproj import Transformer
 from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
@@ -219,7 +220,7 @@ def save_tiles_to_disk(
     output_dir : str
         Path to the output directory.
     max_nan_frac : float
-        Maximum fraction of NaN values allowed in a tile.
+        Maximum fraction of NaN to_numpy() allowed in a tile.
     """
     pathlib.Path(output_dir).mkdir(exist_ok=True, parents=True)
 
@@ -262,7 +263,7 @@ def save_tiles_to_disk(
                 # Skip tiles with too many NaNs (ocean / no data)
                 nan_frac = np.isnan(racmo_patch).mean()
                 zero_frac = (racmo_patch == 0.0).mean()
-                null_data = nan_frac + zero_frac  # fraction of NaN or zero values in the RACMO patch
+                null_data = nan_frac + zero_frac  # fraction of NaN or zero to_numpy() in the RACMO patch
 
                 if null_data > max_nan_frac:
                     skipped_nan += 1
@@ -480,3 +481,109 @@ def load_tiles_metadata(filename: str) -> list[dict]:
         )
 
     return tiles
+
+
+def build_loc_tiles(
+    lon: float,
+    lat: float,
+    era5_ds: xr.Dataset,
+    racmo_ds: xr.Dataset,
+    era5_tile_px: int = 48,
+    racmo_tile_px: int = 224,
+) -> tuple[np.ndarray, np.ndarray, dict]:
+    """
+    Build one ERA5 input tile and one RACMO target tile centered on a user-selected lon/lat (EPSG:4326) location.
+
+    Parameters
+    ----------
+    lon : float
+        Longitude of the location selected on the map, in EPSG:4326.
+    lat : float
+        Latitude of the location selected on the map, in EPSG:4326.
+    era5_ds : xr.Dataset
+        ERA5 dataset already reprojected onto the EPSG:3031 grid
+        (dims: time, variable-per-DataArray, y, x).
+    racmo_ds : xr.Dataset
+        RACMO dataset on its native EPSG:3031 grid
+        (must contain 'surface_mass_balance_glaciated' or similar).
+    era5_tile_px : int
+        Height/width (in ERA5 pixels) of the input tile. Default 48.
+    racmo_tile_px : int
+        Height/width (in RACMO pixels) of the target tile. Default 224.
+
+    Returns
+    -------
+    input_tile : np.ndarray
+        Shape [T, 1, len(era5_vars), era5_tile_px, era5_tile_px]
+    target_tile : np.ndarray
+        Shape [T, 1, racmo_tile_px, racmo_tile_px]
+    tile_meta : dict
+        Info about the tile location (slices, center coords, etc.)
+    """
+    # ── 1. Reproject the clicked point from EPSG:4326 to EPSG:3031 ──────────
+    transformer = Transformer.from_crs("epsg:4326", "epsg:3031", always_xy=True)
+    x0, y0 = transformer.transform(lon, lat)
+
+    # ── 2. Locate nearest pixel index in each grid ───────────────────────────
+    def nearest_center_slice(da_or_ds: xr.Dataset, x0: float, y0: float, tile_px: int) -> tuple[slice, slice]:
+        x_vals = da_or_ds["x"].to_numpy()
+        y_vals = da_or_ds["y"].to_numpy()
+
+        ix = int(np.abs(x_vals - x0).argmin())
+        iy = int(np.abs(y_vals - y0).argmin())
+
+        half = tile_px // 2
+        ix_start, ix_end = ix - half, ix - half + tile_px
+        iy_start, iy_end = iy - half, iy - half + tile_px
+
+        # clip to grid bounds, shifting the window if needed
+        nx, ny = len(x_vals), len(y_vals)
+        if ix_start < 0:
+            ix_start, ix_end = 0, tile_px
+        if ix_end > nx:
+            ix_end, ix_start = nx, nx - tile_px
+        if iy_start < 0:
+            iy_start, iy_end = 0, tile_px
+        if iy_end > ny:
+            iy_end, iy_start = ny, ny - tile_px
+
+        if ix_end - ix_start != tile_px or iy_end - iy_start != tile_px:
+            raise ValueError("Requested tile size exceeds grid extent at this location.")
+
+        return slice(iy_start, iy_end), slice(ix_start, ix_end)
+
+    era5_y_slice, era5_x_slice = nearest_center_slice(era5_ds, x0, y0, era5_tile_px)
+    racmo_y_slice, racmo_x_slice = nearest_center_slice(racmo_ds, x0, y0, racmo_tile_px)
+
+    # ── 3. Extract ERA5 input tile: stack variables as channels ────────────
+    era5_arrays = []
+    era5_vars = ["d2m", "msl", "sp", "sst", "t2m", "tp", "u10", "v10"]
+    for var in era5_vars:
+        da = era5_ds[var].isel(y=era5_y_slice, x=era5_x_slice)
+        era5_arrays.append(da.to_numpy())  # shape: [T, H, W]
+
+    # stack -> [C, T, H, W] -> transpose -> [T, C, H, W]
+    input_stack = np.stack(era5_arrays, axis=0)
+    input_stack = np.transpose(input_stack, (1, 0, 2, 3))  # [T, C, H, W]
+
+    # insert the "tile" dimension (1 tile) -> [T, 1, C, H, W]
+    input_tile = input_stack[:, np.newaxis, :, :, :]
+
+    # ── 4. Extract RACMO target tile ────────────────────────────────────────
+    target_var = "surface_mass_balance_glaciated"
+    target_da = racmo_ds[target_var].isel(y=racmo_y_slice, x=racmo_x_slice)
+    target_stack = target_da.to_numpy()  # [T, H, W]
+    target_tile = target_stack[:, np.newaxis, :, :]  # [T, 1, H, W]
+
+    tile_meta = {
+        "lon": lon,
+        "lat": lat,
+        "x_3031": x0,
+        "y_3031": y0,
+        "era5_y_slice": era5_y_slice,
+        "era5_x_slice": era5_x_slice,
+        "racmo_y_slice": racmo_y_slice,
+        "racmo_x_slice": racmo_x_slice,
+    }
+
+    return input_tile, target_tile, tile_meta

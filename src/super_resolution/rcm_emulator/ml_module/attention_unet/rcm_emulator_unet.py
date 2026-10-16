@@ -1,4 +1,4 @@
-""""SmaAt-UNet model for super-resolution of climate data with attention mechanisms."""
+"""SmaAt-UNet model for super-resolution of climate data with attention mechanisms."""
 
 import torch
 from torch import nn
@@ -7,7 +7,7 @@ from .rcm_emulator_parts import CBAM, DownDS, InitialConv, LinearUpsamplingZ, Up
 
 
 class SmaatUnet(nn.Module):
-    """"SmaAt-UNet model for super-resolution of climate data with attention mechanisms."""
+    """SmaAt-UNet model for super-resolution of climate data with attention mechanisms."""
 
     def __init__(
         self,

@@ -11,9 +11,9 @@ import xarray as xr
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from super_resolution.ml_module.attention_unet.rcm_emulator_unet import SmaatUnet
-from super_resolution.ml_module.basic_unet.unet import UNetBaseline
-from super_resolution.ml_module.datasets import InferenceDataset, inverse_signed_log1p
+from super_resolution.rcm_emulator.ml_module.attention_unet.rcm_emulator_unet import SmaatUnet
+from super_resolution.rcm_emulator.ml_module.basic_unet.unet import UNetBaseline
+from super_resolution.rcm_emulator.ml_module.datasets import InferenceDataset, inverse_signed_log1p
 
 # from super_resolution.monitoring import setup_logging
 # setup_logging()
@@ -90,6 +90,7 @@ def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device:
     monthly_predictions = []
     # first dimension of input_patches is the number of months
     # (months, tiles, channels, height, width)
+
     for m in range(input_patches.shape[0]):
         predictions = []
         dataset = InferenceDataset(input_patches[m], metadata[m])
@@ -109,8 +110,9 @@ def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device:
                 elif target_transform == "normalization":
                     out = out * dataset.target_train_std + dataset.target_train_mean
                 elif target_transform is not None:
-                    logger.warning("Unknown target_transform '%s'. Predictions returned untransformed.",
-                                   target_transform)
+                    logger.warning(
+                        "Unknown target_transform '%s'. Predictions returned untransformed.", target_transform
+                    )
 
                 predictions.append(out.cpu().numpy())
 
@@ -155,9 +157,9 @@ def run_postprocessing(
     cy, cx = (tile_h - 1) / 2.0, (tile_w - 1) / 2.0
     sigma_y, sigma_x = tile_h / 4.0, tile_w / 4.0
     yy, xx = np.ogrid[:tile_h, :tile_w]
-    gaussian_weights = np.exp(
-        -((yy - cy) ** 2 / (2 * sigma_y ** 2) + (xx - cx) ** 2 / (2 * sigma_x ** 2))
-    ).astype(np.float32)
+    gaussian_weights = np.exp(-((yy - cy) ** 2 / (2 * sigma_y**2) + (xx - cx) ** 2 / (2 * sigma_x**2))).astype(
+        np.float32
+    )
 
     # populate with predictions
     for i in range(monthly_predictions.shape[0]):
@@ -192,3 +194,116 @@ def run_postprocessing(
         coords={"time": era5_xy.time.values, "y": rcm_ds.y.values, "x": rcm_ds.x.values},
         name="surface_mass_balance_glaciated",
     ).rio.write_crs("epsg:3031")
+
+
+def run_postprocessing_loc(
+    predictions: np.ndarray,
+    tile_meta: list,
+    rcm_ds: xr.Dataset,
+    era5_xy: xr.Dataset,
+    input_patches: np.ndarray,
+    target_patches: np.ndarray,
+) -> np.ndarray:
+    """
+    Post-process the model's predictions to match the original input shape for a specific location.
+
+    Parameters
+    ----------
+    predictions: np.ndarray
+        The model's predictions.
+    tile_meta: list
+        A list of dictionaries containing metadata for each input patch.
+    rcm_ds: xr.Dataset
+        The RCM dataset.
+    era5_xy: xr.Dataset
+        The ERA5 dataset reprojected to the RCM grid.
+    input_patches: np.ndarray
+        The input patches extracted from the ERA5 dataset.
+    target_patches: np.ndarray
+        The target patches extracted from the RCM dataset.
+
+    Returns
+    -------
+    np.ndarray
+        The post-processed predictions for the specific location.
+    """
+    # Build a serializable copy of tile_meta (convert slice objects to dicts)
+    tile_meta_serializable = {
+        "lon": float(tile_meta["lon"]),
+        "lat": float(tile_meta["lat"]),
+        "x_3031": float(tile_meta["x_3031"]),
+        "y_3031": float(tile_meta["y_3031"]),
+        "era5_y_slice": {
+            "start": int(tile_meta["era5_y_slice"].start),
+            "stop": int(tile_meta["era5_y_slice"].stop),
+            "step": tile_meta["era5_y_slice"].step,
+        },
+        "era5_x_slice": {
+            "start": int(tile_meta["era5_x_slice"].start),
+            "stop": int(tile_meta["era5_x_slice"].stop),
+            "step": tile_meta["era5_x_slice"].step,
+        },
+        "racmo_y_slice": {
+            "start": int(tile_meta["racmo_y_slice"].start),
+            "stop": int(tile_meta["racmo_y_slice"].stop),
+            "step": tile_meta["racmo_y_slice"].step,
+        },
+        "racmo_x_slice": {
+            "start": int(tile_meta["racmo_x_slice"].start),
+            "stop": int(tile_meta["racmo_x_slice"].stop),
+            "step": tile_meta["racmo_x_slice"].step,
+        },
+    }
+
+    # racmo grid
+    ry = tile_meta["racmo_y_slice"]
+    rx = tile_meta["racmo_x_slice"]
+
+    racmo_x_vals = rcm_ds.x.values
+    racmo_y_vals = rcm_ds.y.values
+
+    # 1-D coordinate arrays for the patches
+    rx_coords = racmo_x_vals[rx]
+    ry_coords = racmo_y_vals[ry]
+
+    # era5 grid
+    ry_era5 = tile_meta["era5_y_slice"]
+    rx_era5 = tile_meta["era5_x_slice"]
+    era5_x_vals = era5_xy.x.values
+    era5_y_vals = era5_xy.y.values
+    ex_coords = era5_x_vals[rx_era5]
+    ey_coords = era5_y_vals[ry_era5]
+    context_pad_h = 16  # extra ERA5 pixels on top/bottom
+    context_pad_w = 8  # extra ERA5 pixels on left/right
+    ex_coords_cropped = ex_coords[context_pad_w : len(ex_coords) - context_pad_w]
+    ey_coords_cropped = ey_coords[context_pad_h : len(ey_coords) - context_pad_h]
+
+    # drop the single-tile dimension: (T, 1, C, H, W) -> (T, C, H, W), (T, 1, H, W) -> (T, H, W)
+    input_patches = np.squeeze(input_patches, axis=1)
+    target_patches = np.squeeze(target_patches, axis=1)
+
+    x_cropped = input_patches[
+        :,
+        :,
+        context_pad_h : input_patches.shape[2] - context_pad_h,
+        context_pad_w : input_patches.shape[3] - context_pad_w,
+    ]
+
+    # Create dataset
+    return xr.Dataset(
+        data_vars={
+            "predictions": (("time", "y", "x"), predictions.astype(np.float32)),
+            "target_patches": (("time_r", "y", "x"), target_patches.astype(np.float32)),
+            "x_cropped": (("time", "channels", "y_era5", "x_era5"), x_cropped.astype(np.float32)),
+        },
+        coords={
+            "time": era5_xy.time.values,
+            "time_r": rcm_ds.time.values,
+            "y": ry_coords,
+            "x": rx_coords,
+            "y_era5": ey_coords_cropped,
+            "x_era5": ex_coords_cropped,
+            "channels": ["d2m", "msl", "sp", "sst", "t2m", "tp", "u10", "v10"],
+        },
+        attrs=tile_meta_serializable,
+    )

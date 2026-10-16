@@ -33,3 +33,5 @@ build/
 # local data
 scripts/local_data/*
 
+# pycache
+__pycache__

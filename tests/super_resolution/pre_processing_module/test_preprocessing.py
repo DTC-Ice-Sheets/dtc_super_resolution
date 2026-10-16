@@ -8,15 +8,15 @@ import rioxarray  # noqa: F401
 import xarray as xr
 from typeguard import suppress_type_checks
 
-from super_resolution.pre_processing_module.preprocessing import validate_era5_dataset
+from super_resolution.rcm_emulator.pre_processing_module.preprocessing import validate_era5_dataset
 
 
-@patch("super_resolution.pre_processing_module.preprocessing.xr.open_dataset")
+@patch("super_resolution.rcm_emulator.pre_processing_module.preprocessing.xr.open_dataset")
 def test_load_era5_dataset(mock_open):
     mock_ds = MagicMock(spec=xr.Dataset)
     mock_open.return_value = mock_ds
 
-    from super_resolution.pre_processing_module.preprocessing import load_era5_dataset
+    from super_resolution.rcm_emulator.pre_processing_module.preprocessing import load_era5_dataset
 
     result = load_era5_dataset("/some/path.nc")
 
@@ -24,14 +24,14 @@ def test_load_era5_dataset(mock_open):
     assert result is mock_ds
 
 
-@patch("super_resolution.pre_processing_module.preprocessing.xr.open_zarr")
+@patch("super_resolution.rcm_emulator.pre_processing_module.preprocessing.xr.open_zarr")
 def test_load_rcm_dataset(mock_open_zarr):
     mock_ds = MagicMock(spec=xr.Dataset)
     mock_ds.rio = MagicMock()
     mock_ds.rio.write_crs.return_value = mock_ds
     mock_open_zarr.return_value = mock_ds
 
-    from super_resolution.pre_processing_module.preprocessing import load_rcm_dataset
+    from super_resolution.rcm_emulator.pre_processing_module.preprocessing import load_rcm_dataset
 
     result = load_rcm_dataset("/some/rcm.zarr")
 
@@ -111,7 +111,7 @@ def test_generate_era5_patches_shape():
     era5 = _make_era5_dataset(n_times=2, ny=10, nx=12)
     tiles = _make_tiles()
 
-    from super_resolution.pre_processing_module.preprocessing import generate_era5_patches
+    from super_resolution.rcm_emulator.pre_processing_module.preprocessing import generate_era5_patches
 
     patches, metadata = generate_era5_patches(era5, tiles)
 
@@ -127,7 +127,7 @@ def test_generate_era5_patches_all_land_skipped():
     era5["sst"].values[:] = 0.0
     tiles = _make_tiles()
 
-    from super_resolution.pre_processing_module.preprocessing import generate_era5_patches
+    from super_resolution.rcm_emulator.pre_processing_module.preprocessing import generate_era5_patches
 
     _patches, metadata = generate_era5_patches(era5, tiles)
 
@@ -142,19 +142,19 @@ def test_generate_era5_patches_sea_tiles_skipped():
     era5["sst"].values[:] = 5.0
     tiles = _make_tiles()
 
-    from super_resolution.pre_processing_module.preprocessing import generate_era5_patches
+    from super_resolution.rcm_emulator.pre_processing_module.preprocessing import generate_era5_patches
 
     _patches, metadata = generate_era5_patches(era5, tiles)
 
     assert len(metadata[0]) == 0
 
 
-@patch("super_resolution.pre_processing_module.preprocessing.generate_era5_patches")
-@patch("super_resolution.pre_processing_module.preprocessing.make_tiles")
-@patch("super_resolution.pre_processing_module.preprocessing.reproject_era5_to_racmo_grid")
-@patch("super_resolution.pre_processing_module.preprocessing.create_target_grid_from_racmo")
-@patch("super_resolution.pre_processing_module.preprocessing.load_rcm_dataset")
-@patch("super_resolution.pre_processing_module.preprocessing.load_era5_dataset")
+@patch("super_resolution.rcm_emulator.pre_processing_module.preprocessing.generate_era5_patches")
+@patch("super_resolution.rcm_emulator.pre_processing_module.preprocessing.make_tiles")
+@patch("super_resolution.rcm_emulator.pre_processing_module.preprocessing.reproject_era5_to_racmo_grid")
+@patch("super_resolution.rcm_emulator.pre_processing_module.preprocessing.create_target_grid_from_racmo")
+@patch("super_resolution.rcm_emulator.pre_processing_module.preprocessing.load_rcm_dataset")
+@patch("super_resolution.rcm_emulator.pre_processing_module.preprocessing.load_era5_dataset")
 def test_run_preprocessing_calls_pipeline(
     mock_load_era5, mock_load_rcm, mock_create_grid, mock_reproject, mock_make_tiles, mock_gen_patches
 ):
@@ -174,7 +174,7 @@ def test_run_preprocessing_calls_pipeline(
     mock_make_tiles.return_value = mock_tiles
     mock_gen_patches.return_value = (mock_patches, mock_metadata)
 
-    from super_resolution.pre_processing_module.preprocessing import run_preprocessing
+    from super_resolution.rcm_emulator.pre_processing_module.preprocessing import run_preprocessing
 
     era5_path = "/era5.nc"
     racmo_path = "/rcm.zarr"

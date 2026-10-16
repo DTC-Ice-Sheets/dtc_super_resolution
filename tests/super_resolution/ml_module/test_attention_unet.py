@@ -9,7 +9,7 @@ import torch.nn as nn
 
 
 def test_double_conv_ds_output_shape():
-    from super_resolution.ml_module.attention_unet.rcm_emulator_parts import DoubleConvDS
+    from super_resolution.rcm_emulator.ml_module.attention_unet.rcm_emulator_parts import DoubleConvDS
 
     conv = DoubleConvDS(in_channels=32, out_channels=64, kernels_per_layer=2)
     x = torch.zeros(1, 32, 16, 16)
@@ -18,7 +18,7 @@ def test_double_conv_ds_output_shape():
 
 
 def test_down_ds_output_shape():
-    from super_resolution.ml_module.attention_unet.rcm_emulator_parts import DownDS
+    from super_resolution.rcm_emulator.ml_module.attention_unet.rcm_emulator_parts import DownDS
 
     down = DownDS(in_channels=32, out_channels=64)
     x = torch.zeros(1, 32, 16, 16)
@@ -27,7 +27,7 @@ def test_down_ds_output_shape():
 
 
 def test_up_last_conv_attn_output_shape():
-    from super_resolution.ml_module.attention_unet.rcm_emulator_parts import UpLastConv
+    from super_resolution.rcm_emulator.ml_module.attention_unet.rcm_emulator_parts import UpLastConv
 
     up = UpLastConv(in_channels=32, out_channels=16, mid_channels=16, bilinear=False)
     x = torch.zeros(1, 32, 32, 32)
@@ -37,7 +37,7 @@ def test_up_last_conv_attn_output_shape():
 
 
 def test_linear_upsampling_z_attn():
-    from super_resolution.ml_module.attention_unet.rcm_emulator_parts import LinearUpsamplingZ
+    from super_resolution.rcm_emulator.ml_module.attention_unet.rcm_emulator_parts import LinearUpsamplingZ
 
     linz = LinearUpsamplingZ(in_channels=16, out_channels=1024)
     z = torch.zeros(2, 16, 1, 1)
@@ -46,7 +46,7 @@ def test_linear_upsampling_z_attn():
 
 
 def test_cbam_output_shape():
-    from super_resolution.ml_module.attention_unet.rcm_emulator_parts import CBAM
+    from super_resolution.rcm_emulator.ml_module.attention_unet.rcm_emulator_parts import CBAM
 
     cbam = CBAM(input_channels=32, reduction_ratio=8)
     x = torch.rand(1, 32, 16, 16)
@@ -60,7 +60,7 @@ def test_cbam_output_shape():
 
 
 def test_smaat_unet_instantiation():
-    from super_resolution.ml_module.attention_unet.rcm_emulator_unet import SmaatUnet
+    from super_resolution.rcm_emulator.ml_module.attention_unet.rcm_emulator_unet import SmaatUnet
 
     model = SmaatUnet(n_channels_x=7, n_channels_z=16, bilinear=False)
     assert isinstance(model, nn.Module)
@@ -69,7 +69,7 @@ def test_smaat_unet_instantiation():
 
 
 def test_smaat_unet_has_expected_layers():
-    from super_resolution.ml_module.attention_unet.rcm_emulator_unet import SmaatUnet
+    from super_resolution.rcm_emulator.ml_module.attention_unet.rcm_emulator_unet import SmaatUnet
 
     model = SmaatUnet(n_channels_x=7, n_channels_z=16)
     assert hasattr(model, "inc")

@@ -2,7 +2,7 @@
 
 from unittest.mock import MagicMock
 
-from super_resolution.pre_processing_module.tiling import generate_tile_indices
+from super_resolution.rcm_emulator.pre_processing_module.tiling import generate_tile_indices
 
 
 def make_fake_grid(h, w):

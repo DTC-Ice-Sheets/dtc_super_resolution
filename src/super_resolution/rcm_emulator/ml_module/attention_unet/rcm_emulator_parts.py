@@ -11,10 +11,7 @@ import torch.nn.functional as functional
 class DoubleConvDS(nn.Module):
     """(convolution => [BN] => ReLU) * 2."""
 
-    def __init__(self, in_channels: int,
-                 out_channels: int,
-                 mid_channels: int = 0,
-                 kernels_per_layer: int = 1) -> None:
+    def __init__(self, in_channels: int, out_channels: int, mid_channels: int = 0, kernels_per_layer: int = 1) -> None:
         super().__init__()
         if not mid_channels:
             mid_channels = out_channels
@@ -225,11 +222,9 @@ class SpaceToDepth(nn.Module):
 class DepthwiseSeparableConv(nn.Module):
     """Depthwise separable convolution."""
 
-    def __init__(self, in_channels: int,
-                 output_channels: int,
-                 kernel_size: int,
-                 padding: int = 0,
-                 kernels_per_layer: int = 1) -> None:
+    def __init__(
+        self, in_channels: int, output_channels: int, kernel_size: int, padding: int = 0, kernels_per_layer: int = 1
+    ) -> None:
         super().__init__()
         # In Tensorflow DepthwiseConv2D has depth_multiplier instead of kernels_per_layer
         self.depthwise = nn.Conv2d(

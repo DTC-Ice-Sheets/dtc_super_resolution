@@ -33,6 +33,7 @@ class InferenceDataset(Dataset):
         # drop channels with all NaN values (e.g. SST over land)
         input_patch = np.nan_to_num(input_patch, nan=0.0)  # replace NaN with 0
 
+        # standardize the input
         input_patch_stdz = standardize(input_patch)
 
         # get contextual statistics
