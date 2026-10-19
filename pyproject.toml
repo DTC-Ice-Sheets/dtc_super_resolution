@@ -49,7 +49,7 @@ pydoclint = "^0.8.3"
 data-download-module = {git = "https://github.com/dtc-ice-sheets/data_download_module.git"}
 
 [tool.poetry.group.deployment.dependencies]
-dtc-wrapper = { git = "https://github.com/DTC-Ice-Sheets/dtc_wrapper.git", tag = "0.0.35"}
+dtc-wrapper = { git = "https://github.com/DTC-Ice-Sheets/dtc_wrapper.git", tag = "0.0.42"}
 
 [tool.ruff]
 line-length = 120
