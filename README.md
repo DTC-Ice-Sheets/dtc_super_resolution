@@ -116,7 +116,7 @@ To build the Sphinx documentation locally, run:
     poetry run sphinx-build -M html docs/source docs/build
 
 
-## Versioning and releases
+## Versioning and releases:
 
 Versioning follows a simple model featuring three integers known as the major version, minor version and build number.
 For example, in package version "v3.5.7", the major version is 3, the minor version is 5 and the build number is 7.
