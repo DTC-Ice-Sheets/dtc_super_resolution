@@ -54,7 +54,7 @@ class InferenceDataset(Dataset):
         # compose 1D input vector with spatial mean, spatial std, and month encoding
         input1d = np.concatenate((spatial_mean, spatial_std, cosvect, sinvect), axis=0)
 
-        return torch.tensor(input2d_patch_stdz, dtype=torch.float32), torch.tensor(input1d, dtype=torch.float32)
+        return input2d_patch_stdz.astype(np.float32), input1d.astype(np.float32)
 
 
 def signed_log1p(x: torch.Tensor, eps: float = 1e-6) -> torch.Tensor:
