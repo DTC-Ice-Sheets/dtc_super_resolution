@@ -3,7 +3,6 @@
 from math import cos, pi, sin
 
 import numpy as np
-import torch
 from torch.utils.data import Dataset
 
 RACMO_TRAIN_MEAN = 14.94593
