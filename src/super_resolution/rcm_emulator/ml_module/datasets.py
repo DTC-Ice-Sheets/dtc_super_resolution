@@ -57,16 +57,6 @@ class InferenceDataset(Dataset):
         return input2d_patch_stdz.astype(np.float32), input1d.astype(np.float32)
 
 
-def signed_log1p(x: torch.Tensor, eps: float = 1e-6) -> torch.Tensor:
-    """Apply log1p to magnitude, preserves sign. Safe for negative values."""
-    return torch.sign(x) * torch.log1p(torch.abs(x) + eps)
-
-
-def inverse_signed_log1p(x_transformed: torch.Tensor, eps: float = 1e-6) -> torch.Tensor:
-    """Inverse transform to recover original scale."""
-    return torch.sign(x_transformed) * (torch.expm1(torch.abs(x_transformed)) - eps)
-
-
 def standardize(data: np.ndarray) -> np.ndarray:
     """Standardize the data using either its own mean and std or provided mean and std."""
     mean = np.nanmean(data, axis=(1, 2), keepdims=True)

@@ -50,31 +50,6 @@ def test_unstandardize_inverse_of_precomputed_std():
     expected = data * RACMO_TRAIN_STD + RACMO_TRAIN_MEAN
     np.testing.assert_allclose(result, expected)
 
-
-# ---------------------------------------------------------------------------
-# signed_log1p / inverse_signed_log1p
-# ---------------------------------------------------------------------------
-
-
-def test_signed_log1p_positive():
-    x = torch.tensor([1.0, 2.0, 3.0])
-    result = signed_log1p(x)
-    assert (result > 0).all()
-
-
-def test_signed_log1p_negative():
-    x = torch.tensor([-1.0, -2.0])
-    result = signed_log1p(x)
-    assert (result < 0).all()
-
-
-def test_inverse_signed_log1p_roundtrip():
-    x = torch.tensor([0.5, -0.5, 2.0, -3.0])
-    transformed = signed_log1p(x)
-    recovered = inverse_signed_log1p(transformed)
-    torch.testing.assert_close(recovered, x, atol=1e-4, rtol=1e-4)
-
-
 # ---------------------------------------------------------------------------
 # InferenceDataset
 # ---------------------------------------------------------------------------
