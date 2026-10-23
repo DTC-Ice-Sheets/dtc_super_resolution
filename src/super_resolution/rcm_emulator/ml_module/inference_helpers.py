@@ -103,17 +103,6 @@ def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device:
             with torch.no_grad():
                 out = model(x, z)
 
-                # inverse-transform the predictions if needed, based on the target_transform specified in the config
-                target_transform = config.get("target_transform")
-                if target_transform == "log":
-                    out = inverse_signed_log1p(out)
-                elif target_transform == "normalization":
-                    out = out * dataset.target_train_std + dataset.target_train_mean
-                elif target_transform is not None:
-                    logger.warning(
-                        "Unknown target_transform '%s'. Predictions returned untransformed.", target_transform
-                    )
-
                 predictions.append(out.cpu().numpy())
         # for full antartica tiles = 139, for 1 location, tiles = 1
         monthly_predictions.append(predictions)  # (months, tiles, height, width)

@@ -5,7 +5,6 @@ model_baseline_unet:
   n_channel_z: 18                     # 2 * channels_x + 2
   size: 64
   filter: 64
-  target_transform:      # can be "normalization" or "log" depending on the model training
 
 model_attention_unet:
   model_type: Attention
@@ -14,4 +13,4 @@ model_attention_unet:
   n_channel_z: 18
   size: 64
   filter: 64
-  target_transform: 
+
