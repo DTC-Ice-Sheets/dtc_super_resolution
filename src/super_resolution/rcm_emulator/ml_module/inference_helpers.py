@@ -74,12 +74,9 @@ def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device:
         A list of dictionaries containing metadata for each input patch.
     device: torch.device
         The device to run the inference on (CPU or GPU).
-    config: dict
-        A dictionary containing the model configuration, including the model type and weights path.
 
     Returns
     -------
-    dict
         A dictionary containing the model's predictions.
     """
     if device is None:
