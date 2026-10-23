@@ -77,6 +77,7 @@ def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device:
 
     Returns
     -------
+    dict:
         A dictionary containing the model's predictions.
     """
     if device is None:
