@@ -89,11 +89,10 @@ def test_predict_returns_array():
     input_patches = _make_input_patches(n_months=1, n_tiles=2)
     metadata = _make_metadata(n_months=1, n_tiles=2)
 
-    config = {"target_transform": None}
     device = torch.device("cpu")
 
     with suppress_type_checks():
-        result = predict(mock_model, input_patches, metadata, device=device, config=config)
+        result = predict(mock_model, input_patches, metadata, device=device)
 
     assert isinstance(result, np.ndarray)
 
@@ -110,7 +109,7 @@ def test_predict_uses_cpu_when_no_device():
     metadata = _make_metadata(n_months=1, n_tiles=1)
 
     with suppress_type_checks():
-        predict(mock_model, input_patches, metadata, device=None, config={})
+        predict(mock_model, input_patches, metadata, device=None)
 
     mock_model.to.assert_called()
     mock_model.eval.assert_called()

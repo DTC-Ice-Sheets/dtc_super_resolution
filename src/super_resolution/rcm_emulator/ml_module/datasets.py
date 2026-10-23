@@ -3,7 +3,6 @@
 from math import cos, pi, sin
 
 import numpy as np
-import torch
 from torch.utils.data import Dataset
 
 RACMO_TRAIN_MEAN = 14.94593
@@ -34,7 +33,7 @@ class InferenceDataset(Dataset):
         input_patch = np.nan_to_num(input_patch, nan=0.0)  # replace NaN with 0
 
         # standardize the input
-        input_patch_stdz = standardize(input_patch)
+        input2d_patch_stdz = standardize(input_patch)
 
         # get contextual statistics
         vect_std = np.nanstd(input_patch, axis=(1, 2))
@@ -54,17 +53,7 @@ class InferenceDataset(Dataset):
         # compose 1D input vector with spatial mean, spatial std, and month encoding
         input1d = np.concatenate((spatial_mean, spatial_std, cosvect, sinvect), axis=0)
 
-        return input_patch_stdz, input1d
-
-
-def signed_log1p(x: torch.Tensor, eps: float = 1e-6) -> torch.Tensor:
-    """Apply log1p to magnitude, preserves sign. Safe for negative values."""
-    return torch.sign(x) * torch.log1p(torch.abs(x) + eps)
-
-
-def inverse_signed_log1p(x_transformed: torch.Tensor, eps: float = 1e-6) -> torch.Tensor:
-    """Inverse transform to recover original scale."""
-    return torch.sign(x_transformed) * (torch.expm1(torch.abs(x_transformed)) - eps)
+        return input2d_patch_stdz.astype(np.float32), input1d.astype(np.float32)
 
 
 def standardize(data: np.ndarray) -> np.ndarray:

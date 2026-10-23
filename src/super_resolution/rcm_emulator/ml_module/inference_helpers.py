@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 from super_resolution.rcm_emulator.ml_module.attention_unet.rcm_emulator_unet import SmaatUnet
 from super_resolution.rcm_emulator.ml_module.basic_unet.unet import UNetBaseline
-from super_resolution.rcm_emulator.ml_module.datasets import InferenceDataset, inverse_signed_log1p
+from super_resolution.rcm_emulator.ml_module.datasets import InferenceDataset
 
 # from super_resolution.monitoring import setup_logging
 # setup_logging()
@@ -60,7 +60,7 @@ def load_model(config: dict) -> nn.Module:
     return model
 
 
-def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device: torch.device, config: dict) -> dict:
+def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device: torch.device) -> np.ndarray:
     """
     Run inference on the model using the provided DataLoader.
 
@@ -74,13 +74,11 @@ def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device:
         A list of dictionaries containing metadata for each input patch.
     device: torch.device
         The device to run the inference on (CPU or GPU).
-    config: dict
-        A dictionary containing the model configuration, including the model type and weights path.
 
     Returns
     -------
-    dict
-        A dictionary containing the model's predictions.
+    np.ndarray
+        Model predictions with shape ``(time, tiles, height, width)``.
     """
     if device is None:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -103,22 +101,11 @@ def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device:
             with torch.no_grad():
                 out = model(x, z)
 
-                # inverse-transform the predictions if needed, based on the target_transform specified in the config
-                target_transform = config.get("target_transform")
-                if target_transform == "log":
-                    out = inverse_signed_log1p(out)
-                elif target_transform == "normalization":
-                    out = out * dataset.target_train_std + dataset.target_train_mean
-                elif target_transform is not None:
-                    logger.warning(
-                        "Unknown target_transform '%s'. Predictions returned untransformed.", target_transform
-                    )
-
                 predictions.append(out.cpu().numpy())
+        # for full antartica tiles = 139, for 1 location, tiles = 1
+        monthly_predictions.append(predictions)  # (months, tiles, height, width)
 
-        monthly_predictions.append(predictions)  # (12, 139, 224, 224)
-
-    return np.squeeze(np.array(monthly_predictions))
+    return np.array(monthly_predictions)    # always (T, N, H, W), also for T=1
 
 
 def run_postprocessing(
@@ -227,6 +214,11 @@ def run_postprocessing_loc(
     np.ndarray
         The post-processed predictions for the specific location.
     """
+    if predictions.shape[0] == 1:
+        predictions = predictions.reshape(1, predictions.shape[-2], predictions.shape[-1])  # (1, H, W)
+    else:
+        predictions = np.squeeze(predictions)  # (time, y, x)
+
     # Build a serializable copy of tile_meta (convert slice objects to dicts)
     tile_meta_serializable = {
         "lon": float(tile_meta["lon"]),

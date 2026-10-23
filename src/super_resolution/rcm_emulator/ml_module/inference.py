@@ -46,4 +46,4 @@ def run_inference(model_name: str, input_patches: list, metadata: list) -> dict:
     model = load_model(model_config)
 
     # Create a DataLoader for the input tiles
-    return predict(model, input_patches, metadata, device=device, config=model_config)
+    return predict(model, input_patches, metadata, device=device)
