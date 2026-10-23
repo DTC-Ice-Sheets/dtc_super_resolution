@@ -115,10 +115,10 @@ def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device:
                     )
 
                 predictions.append(out.cpu().numpy())
+        # for full antartica tiles = 139, for 1 location, tiles = 1
+        monthly_predictions.append(predictions)  # (months, tiles, height, width)
 
-        monthly_predictions.append(predictions)  # (12, 139, 224, 224)
-
-    return np.squeeze(np.array(monthly_predictions))
+    return np.array(monthly_predictions)    # always (T, N, H, W), also for T=1
 
 
 def run_postprocessing(
@@ -227,6 +227,11 @@ def run_postprocessing_loc(
     np.ndarray
         The post-processed predictions for the specific location.
     """
+    if predictions.shape[0] == 1:
+        predictions = predictions.reshape(1, predictions.shape[-2], predictions.shape[-1])  # (1, H, W)
+    else:
+        predictions = np.squeeze(predictions)  # (time, y, x)
+
     # Build a serializable copy of tile_meta (convert slice objects to dicts)
     tile_meta_serializable = {
         "lon": float(tile_meta["lon"]),
