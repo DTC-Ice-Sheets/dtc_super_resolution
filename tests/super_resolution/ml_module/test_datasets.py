@@ -1,14 +1,11 @@
 """Tests for the ml_module datasets module."""
 
 import numpy as np
-import torch
 
 from super_resolution.rcm_emulator.ml_module.datasets import (
     RACMO_TRAIN_MEAN,
     RACMO_TRAIN_STD,
     InferenceDataset,
-    inverse_signed_log1p,
-    signed_log1p,
     standardize,
     unstandardize,
 )
