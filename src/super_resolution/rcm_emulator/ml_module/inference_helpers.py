@@ -60,7 +60,7 @@ def load_model(config: dict) -> nn.Module:
     return model
 
 
-def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device: torch.device) -> dict:
+def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device: torch.device) -> np.ndarray:
     """
     Run inference on the model using the provided DataLoader.
 
@@ -77,8 +77,8 @@ def predict(model: nn.Module, input_patches: np.ndarray, metadata: list, device:
 
     Returns
     -------
-    dict:
-        A dictionary containing the model's predictions.
+    np.ndarray
+        Model predictions with shape ``(time, tiles, height, width)``.
     """
     if device is None:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
