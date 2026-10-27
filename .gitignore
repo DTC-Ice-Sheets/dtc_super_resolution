@@ -9,7 +9,10 @@ venv/
 env/
 .venv/
 .env/
+
+# secrets
 .env
+.pypirc
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints
@@ -30,8 +33,9 @@ build/
 # ruff
 .ruff_cache/
 
-# local data
-scripts/local_data/*
+# Sphinx autosummary generated stubs
+docs/source/_autosummary/
 
-# pycache
-__pycache__
+# local data
+.scrapy/
+.data/

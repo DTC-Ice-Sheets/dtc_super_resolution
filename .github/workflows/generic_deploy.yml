@@ -177,19 +177,17 @@ jobs:
       #     poetry publish
 
       # Comment out the documentation BUILD stage which is primarily there to support the DTC-IS Development Guide.
-      # - name: Build documentation
-      #   run: |
-      #     cd docs/
-      #     apt-get update
-      #     apt-get install -y build-essential
-      #     poetry run make html
+      - name: Build documentation
+        run: |
+          cd docs/
+          poetry run make html
 
       # Comment out the documentation DEPLOY stage which is primarily there to support the DTC-IS Development Guide.
-      # - name: Deploy documentation to GitHub Pages
-      #   uses: peaceiris/actions-gh-pages@v4
-      #   with:
-      #     github_token: ${{ secrets.GH_ADMIN_PAT }}
-      #     publish_dir: /app/docs/build/html # Path to the generated HTML files
+      - name: Deploy documentation to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GH_ADMIN_PAT }}
+          publish_dir: /app/docs/build/html # Path to the generated HTML files
 
       - name: Delete old branches from the git repo
         run: |

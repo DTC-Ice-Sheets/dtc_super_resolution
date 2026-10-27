@@ -6,7 +6,22 @@
 Super Resolution Module
 =================================
 
-DTC Ice Sheets Super Resolution Module will leverage super-resolution modeling techniques to enhance the monitoring and prediction of surface climate conditions over Greenland and Antarctica.
+The super_resolution module is a sub-component of the
+`Digital Twin Component for Ice Sheets (DTC-IS) <https://dtc-ice-sheets.org/>`_, an ESA-funded, EO-driven digital twin
+project.
+
+This software package leverages super-resolution modeling techniques to enhance the monitoring and prediction of surface
+climate conditions over Greenland and Antarctica and can be run in isolation from the digital twin.
+
+For a more interactive way of exploring the system, please visit the digital twin's
+`dashboard <https://dashboards.dtc-ice-sheets.org/>`_.
+
+The remainder of this documentation page provides an overview of the super_resolution module and details about how
+to get it running locally.
 
 .. toctree::
    :maxdepth: 1
+
+   Overview <overview>
+   Quick Start <quick-start>
+   API Reference <api>
