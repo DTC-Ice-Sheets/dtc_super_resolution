@@ -9,16 +9,8 @@ on:
   workflow_dispatch:  # allow manual triggering of the workflow
 
 jobs:
-  build_container_if_needed:
-    if: github.actor != 'ew-version-bumper[bot]'
-    uses: ./.github/workflows/generic_build_container_if_needed.yml
-    with:
-      package_name: super_resolution
-    secrets: inherit
-
   deploy:
     if: github.actor != 'ew-version-bumper[bot]'
-    needs: build_container_if_needed
     uses: ./.github/workflows/generic_deploy.yml
     with:
       package_name: super_resolution

@@ -92,6 +92,7 @@ jobs:
         # TODO: swap this out for a better base container.
         run: |
           apt-get update
+          apt-get install -y build-essential
           apt-get install -y git
         # Bumping versions with github app token: https://github.com/orgs/community/discussions/25305
       - uses: actions/create-github-app-token@v1
@@ -156,8 +157,7 @@ jobs:
               version=$(poetry version --short)
               git commit -am "Bump version to $version"
               git tag "$version" || exit 1
-              git push --tags
-              git push origin main
+              git push --atomic origin main "refs/tags/$version"
           else
               git tag "$version" || exit 1
               git push --tags
@@ -174,6 +174,7 @@ jobs:
       # - name: Publish package to PyPI
       #   run: |
       #     poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN }}
+      #     poetry build
       #     poetry publish
 
       # Comment out the documentation BUILD stage which is primarily there to support the DTC-IS Development Guide.
