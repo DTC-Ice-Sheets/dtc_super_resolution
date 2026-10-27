@@ -92,8 +92,7 @@ jobs:
         # TODO: swap this out for a better base container.
         run: |
           apt-get update
-          apt-get install -y make
-          apt-get install -y git
+          apt-get install -y make git
         # Bumping versions with github app token: https://github.com/orgs/community/discussions/25305
       - uses: actions/create-github-app-token@v1
         id: app-token
