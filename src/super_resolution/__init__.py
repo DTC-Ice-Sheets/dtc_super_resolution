@@ -1,1 +1,1 @@
-"""Package init."""
+"""Super resolution package."""
