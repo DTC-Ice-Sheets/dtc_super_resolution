@@ -70,30 +70,17 @@ jobs:
           rm -f .gh_token.txt
 
   deploy_package_and_cleanup:
-    needs: generate_container_name
+    # releases should only happen from main
     if: ${{ github.ref_name == 'main' }}
-    # delete docker images that are no longer needed (notionally because we just merged the associated branch into main)
     runs-on: ubuntu-latest
-    container:
-      image: ${{ needs.generate_container_name.outputs.image_name }}
-      credentials:
-        username: ${{ secrets.HARBOR_USERNAME }}
-        password: ${{ secrets.HARBOR_PASSWORD }}
     defaults:
       run:
         shell: bash -eo pipefail {0}
-        working-directory: /app
     permissions:
       contents: write
       pull-requests: write
     steps:
-      - name: Install dependencies not included in image
-        # Note we need to install git first or actions/checkout@v3 will use GitHub's REST API instead.
-        # TODO: swap this out for a better base container.
-        run: |
-          apt-get update
-          apt-get install -y make git
-        # Bumping versions with github app token: https://github.com/orgs/community/discussions/25305
+      # Bumping versions with github app token: https://github.com/orgs/community/discussions/25305
       - uses: actions/create-github-app-token@v1
         id: app-token
         with:
@@ -104,13 +91,25 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Copy checked out repo to /app
-        # Poetry determines whether to create a new venv or use an existing one based on the location of the package
-        # code in the file system. In the container Dockerfile, we already created a venv with this package's
-        # dependencies. We need to copy over the repository code into the Dockerfile WORKDIR (/app) so that the next
-        # step reuses the venv that already exists.
-        run: |
-          cp -r ${GITHUB_WORKSPACE}/. /app/
+      - name: Set up Python
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+
+      - name: Load cached venv
+        id: load-cached-poetry-venv
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-3.12-${{ hashFiles('**/poetry.lock') }}
 
       - name: Prepare repository for interaction
         # we have to manually set the username and email before we can commit and push
@@ -127,12 +126,17 @@ jobs:
           git tag -d $(git tag -l)
           git fetch --tags
 
+      - name: Configure git authentication
+        env:
+          GH_ADMIN_PAT: ${{ secrets.GH_ADMIN_PAT }}
+        run: git config --global url."https://${GH_ADMIN_PAT}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+      - name: Install dependencies
+        if: steps.load-cached-poetry-venv.outputs.cache-hit != 'true'
+        run: poetry install --with dev --no-root
+
       - name: Install package
-        # The Dockerfile installs only the package dependencies, not the package itself (allowing us to only rebuild the
-        # container if the dependencies change, rather than every time the package code changes). In the CI/CD, we copy
-        # repository code into the container and install just the package itself!
-        run: |
-          poetry install --only-root
+        run: poetry install --with dev
 
       - name: Build package
         run: |
@@ -176,18 +180,16 @@ jobs:
       #     poetry build
       #     poetry publish
 
-      # Comment out the documentation BUILD stage which is primarily there to support the DTC-IS Development Guide.
       - name: Build documentation
         run: |
           cd docs/
           poetry run make html
 
-      # Comment out the documentation DEPLOY stage which is primarily there to support the DTC-IS Development Guide.
       - name: Deploy documentation to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GH_ADMIN_PAT }}
-          publish_dir: /app/docs/build/html # Path to the generated HTML files
+          publish_dir: docs/build/html # Path to the generated HTML files
 
       - name: Delete old branches from the git repo
         run: |
