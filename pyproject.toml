@@ -33,6 +33,7 @@ torch = { version = "2.10.0", source = "pytorch-cpu" }
 tqdm = "^4.68.4"
 zarr = "^3.2.1"
 scipy = "^1.18.0"
+fsspec = {extras = ["http"], version = "^2026.9.0"}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.0.2"
