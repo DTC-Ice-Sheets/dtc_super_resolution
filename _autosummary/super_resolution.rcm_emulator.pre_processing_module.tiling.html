@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>super_resolution.rcm_emulator.pre_processing_module.tiling &mdash; Super Resolution  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=acee47a5" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="super_resolution.rcm_emulator_entrypoint" href="super_resolution.rcm_emulator_entrypoint.html" />
+    <link rel="prev" title="super_resolution.rcm_emulator.pre_processing_module.reprojection" href="super_resolution.rcm_emulator.pre_processing_module.reprojection.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Super Resolution
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start.html">Quick Start</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="super_resolution.html">super_resolution</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="super_resolution.monitoring.html">super_resolution.monitoring</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="super_resolution.rcm_emulator.html">super_resolution.rcm_emulator</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="super_resolution.rcm_emulator.ml_module.html">super_resolution.rcm_emulator.ml_module</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="super_resolution.rcm_emulator.pre_processing_module.html">super_resolution.rcm_emulator.pre_processing_module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="super_resolution.rcm_emulator_entrypoint.html">super_resolution.rcm_emulator_entrypoint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="super_resolution.rcm_emulator_loc_entrypoint.html">super_resolution.rcm_emulator_loc_entrypoint</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Super Resolution</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="super_resolution.html">super_resolution</a></li>
+          <li class="breadcrumb-item"><a href="super_resolution.rcm_emulator.html">super_resolution.rcm_emulator</a></li>
+          <li class="breadcrumb-item"><a href="super_resolution.rcm_emulator.pre_processing_module.html">super_resolution.rcm_emulator.pre_processing_module</a></li>
+      <li class="breadcrumb-item active">super_resolution.rcm_emulator.pre_processing_module.tiling</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/super_resolution.rcm_emulator.pre_processing_module.tiling.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-super_resolution.rcm_emulator.pre_processing_module.tiling">
+<span id="super-resolution-rcm-emulator-pre-processing-module-tiling"></span><h1>super_resolution.rcm_emulator.pre_processing_module.tiling<a class="headerlink" href="#module-super_resolution.rcm_emulator.pre_processing_module.tiling" title="Link to this heading"></a></h1>
+<p>Module for generating RACMO and ERA5 tiles for super-resolution training and inference.</p>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.build_loc_tiles" title="super_resolution.rcm_emulator.pre_processing_module.tiling.build_loc_tiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_loc_tiles</span></code></a>(lon, lat, era5_ds, racmo_ds)</p></td>
+<td><p>Build one ERA5 input tile and one RACMO target tile centered on a user-selected lon/lat (EPSG:4326) location.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.clip_data_to_intersection" title="super_resolution.rcm_emulator.pre_processing_module.tiling.clip_data_to_intersection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clip_data_to_intersection</span></code></a>(racmo, era5)</p></td>
+<td><p>Clip RACMO and ERA5 datasets to their intersection.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.dict_to_slice" title="super_resolution.rcm_emulator.pre_processing_module.tiling.dict_to_slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict_to_slice</span></code></a>(slice_dict)</p></td>
+<td><p>Convert a dictionary representation of a slice back to a slice object.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.generate_tile_indices" title="super_resolution.rcm_emulator.pre_processing_module.tiling.generate_tile_indices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_tile_indices</span></code></a>(racmo, era5, ...[, ...])</p></td>
+<td><p>Generate paired RACMO / ERA5 index slices for all tiles.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.load_tiles_metadata" title="super_resolution.rcm_emulator.pre_processing_module.tiling.load_tiles_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_tiles_metadata</span></code></a>(filename)</p></td>
+<td><p>Load tile metadata from a JSON file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.make_tiles" title="super_resolution.rcm_emulator.pre_processing_module.tiling.make_tiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_tiles</span></code></a>(era5, racmo, tile_size, ...[, ...])</p></td>
+<td><p>Generate tiles for training or inference.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.plot_tiles" title="super_resolution.rcm_emulator.pre_processing_module.tiling.plot_tiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_tiles</span></code></a>(era5, racmo, tiles[, n])</p></td>
+<td><p>Plot a subset of tiles with RACMO and ERA5 patches.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.save_tiles_metadata" title="super_resolution.rcm_emulator.pre_processing_module.tiling.save_tiles_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_tiles_metadata</span></code></a>(tiles, filename)</p></td>
+<td><p>Save tile metadata to a JSON file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.save_tiles_to_disk" title="super_resolution.rcm_emulator.pre_processing_module.tiling.save_tiles_to_disk"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_tiles_to_disk</span></code></a>(era5, racmo_files, tiles, ...)</p></td>
+<td><p>Save RACMO and ERA5 tile patches to disk as compressed .npz files.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.slice_to_dict" title="super_resolution.rcm_emulator.pre_processing_module.tiling.slice_to_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">slice_to_dict</span></code></a>(slice_obj)</p></td>
+<td><p>Convert a slice object to a dictionary representation.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="super_resolution.rcm_emulator.pre_processing_module.tiling.build_loc_tiles">
+<span class="sig-name descname"><span class="pre">build_loc_tiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">era5_ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">racmo_ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">era5_tile_px</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">48</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">racmo_tile_px</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">224</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.build_loc_tiles" title="Link to this definition"></a></dt>
+<dd><p>Build one ERA5 input tile and one RACMO target tile centered on a user-selected lon/lat (EPSG:4326) location.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lon</strong> (<em>float</em>) – Longitude of the location selected on the map, in EPSG:4326.</p></li>
+<li><p><strong>lat</strong> (<em>float</em>) – Latitude of the location selected on the map, in EPSG:4326.</p></li>
+<li><p><strong>era5_ds</strong> (<em>xr.Dataset</em>) – ERA5 dataset already reprojected onto the EPSG:3031 grid
+(dims: time, variable-per-DataArray, y, x).</p></li>
+<li><p><strong>racmo_ds</strong> (<em>xr.Dataset</em>) – RACMO dataset on its native EPSG:3031 grid
+(must contain ‘surface_mass_balance_glaciated’ or similar).</p></li>
+<li><p><strong>era5_tile_px</strong> (<em>int</em>) – Height/width (in ERA5 pixels) of the input tile. Default 48.</p></li>
+<li><p><strong>racmo_tile_px</strong> (<em>int</em>) – Height/width (in RACMO pixels) of the target tile. Default 224.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>input_tile</strong> (<em>np.ndarray</em>) – Shape [T, 1, len(era5_vars), era5_tile_px, era5_tile_px]</p></li>
+<li><p><strong>target_tile</strong> (<em>np.ndarray</em>) – Shape [T, 1, racmo_tile_px, racmo_tile_px]</p></li>
+<li><p><strong>tile_meta</strong> (<em>dict</em>) – Info about the tile location (slices, center coords, etc.)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="super_resolution.rcm_emulator.pre_processing_module.tiling.clip_data_to_intersection">
+<span class="sig-name descname"><span class="pre">clip_data_to_intersection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">racmo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">era5</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataArray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataArray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataArray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.clip_data_to_intersection" title="Link to this definition"></a></dt>
+<dd><p>Clip RACMO and ERA5 datasets to their intersection.</p>
+<p>Because both grids are co-registered (same origin, ERA5 = scale x RACMO),
+the intersection is simply the overlapping region of the two arrays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>racmo</strong> (<em>xr.DataArray</em>) – RACMO data array (2D) in EPSG:3031 projection.</p></li>
+<li><p><strong>era5</strong> (<em>xr.DataArray</em>) – ERA5 data array (2D) in EPSG:3031 projection.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the clipped RACMO and ERA5 data arrays.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[xr.DataArray, xr.DataArray]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="super_resolution.rcm_emulator.pre_processing_module.tiling.dict_to_slice">
+<span class="sig-name descname"><span class="pre">dict_to_slice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slice_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">slice</span></span></span><a class="headerlink" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.dict_to_slice" title="Link to this definition"></a></dt>
+<dd><p>Convert a dictionary representation of a slice back to a slice object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>slice_dict</strong> (<em>dict</em>) – A dictionary with ‘start’, ‘stop’, and ‘step’ keys.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A slice object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>slice</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="super_resolution.rcm_emulator.pre_processing_module.tiling.generate_tile_indices">
+<span class="sig-name descname"><span class="pre">generate_tile_indices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">racmo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">era5</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tile_racmo_h</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tile_racmo_w</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride_frac</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_pad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.generate_tile_indices" title="Link to this definition"></a></dt>
+<dd><p>Generate paired RACMO / ERA5 index slices for all tiles.</p>
+<p>Because both grids are co-registered (same origin, ERA5 = scale x RACMO),
+ERA5 pixel k maps to RACMO pixels [k*scale, (k+1)*scale).
+The stride is snapped to a multiple of the scale factors so tiles
+always align exactly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>racmo</strong> (<em>xr.DataArray</em>) – RACMO data array (2D) in EPSG:3031 projection.</p></li>
+<li><p><strong>era5</strong> (<em>xr.DataArray</em>) – ERA5 data array (2D) in EPSG:3031 projection.</p></li>
+<li><p><strong>tile_racmo_h</strong> (<em>int</em>) – Height of the RACMO tile in pixels.</p></li>
+<li><p><strong>tile_racmo_w</strong> (<em>int</em>) – Width of the RACMO tile in pixels.</p></li>
+<li><p><strong>scale_x</strong> (<em>int</em>) – Scale factor in the x-direction (ERA5 pixels per RACMO pixel).</p></li>
+<li><p><strong>scale_y</strong> (<em>int</em>) – Scale factor in the y-direction (ERA5 pixels per RACMO pixel).</p></li>
+<li><p><strong>stride_frac</strong> (<em>float</em>) – Fraction of tile size used as stride.
+1.0 → non-overlapping,  0.5 → 50 % overlap, etc.</p></li>
+<li><p><strong>context_pad</strong> (<em>tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>) – Extra ERA5 pixels added on each side of the ERA5 patch (height, width),
+providing spatial context beyond the RACMO target region.
+E.g. context_pad=(2, 2) gives an ERA5 patch of
+(tile_era5_h + 4) x (tile_era5_w + 4).
+Tiles where the padded ERA5 patch would exceed the array bounds
+are dropped.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>racmo_slice_y/x  - isel slices into racmo_clip
+era5_slice_y/x   - isel slices into era5_clip (padded)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="super_resolution.rcm_emulator.pre_processing_module.tiling.load_tiles_metadata">
+<span class="sig-name descname"><span class="pre">load_tiles_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.load_tiles_metadata" title="Link to this definition"></a></dt>
+<dd><p>Load tile metadata from a JSON file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Path to the input JSON file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Each dict contains slices for RACMO and ERA5 tiles.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="super_resolution.rcm_emulator.pre_processing_module.tiling.make_tiles">
+<span class="sig-name descname"><span class="pre">make_tiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">era5</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">racmo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tile_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_pad_h</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_pad_w</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride_frac</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.make_tiles" title="Link to this definition"></a></dt>
+<dd><p>Generate tiles for training or inference.</p>
+<p>Each tile consists of a RACMO patch and a corresponding ERA5 patch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>era5</strong> (<em>xr.DataArray</em>) – ERA5 data array (2D) in EPSG:3031 projection.</p></li>
+<li><p><strong>racmo</strong> (<em>xr.DataArray</em>) – RACMO data array (2D) in EPSG:3031 projection.</p></li>
+<li><p><strong>tile_size</strong> (<em>int</em>) – Size of the tile in pixels.</p></li>
+<li><p><strong>context_pad_h</strong> (<em>int</em>) – Height of the era5 context padding in pixels.</p></li>
+<li><p><strong>context_pad_w</strong> (<em>int</em>) – Width of the era5 context padding in pixels.</p></li>
+<li><p><strong>stride_frac</strong> (<em>float</em>) – Fraction of tile size used as stride.
+1.0 → non-overlapping,  0.5 → 50 % overlap, etc.</p></li>
+<li><p><strong>log</strong> (<em>bool</em>) – If True, log information about the tiles and context padding.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of dictionaries, each containing slices for RACMO and ERA5 tiles.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="super_resolution.rcm_emulator.pre_processing_module.tiling.plot_tiles">
+<span class="sig-name descname"><span class="pre">plot_tiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">era5</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">racmo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tiles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="headerlink" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.plot_tiles" title="Link to this definition"></a></dt>
+<dd><p>Plot a subset of tiles with RACMO and ERA5 patches.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>era5</strong> (<em>xr.DataArray</em>) – ERA5 data array (2D) in EPSG:3031 projection.</p></li>
+<li><p><strong>racmo</strong> (<em>xr.DataArray</em>) – RACMO data array (2D) in EPSG:3031 projection.</p></li>
+<li><p><strong>tiles</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>) – Each dict contains slices for RACMO and ERA5 tiles.</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Number of tiles to plot (randomly sampled).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Matplotlib figure containing the plot of tiles.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plt.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="super_resolution.rcm_emulator.pre_processing_module.tiling.save_tiles_metadata">
+<span class="sig-name descname"><span class="pre">save_tiles_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tiles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.save_tiles_metadata" title="Link to this definition"></a></dt>
+<dd><p>Save tile metadata to a JSON file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tiles</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>) – Each dict contains slices for RACMO and ERA5 tiles.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Path to the output JSON file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="super_resolution.rcm_emulator.pre_processing_module.tiling.save_tiles_to_disk">
+<span class="sig-name descname"><span class="pre">save_tiles_to_disk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">era5</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">racmo_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tiles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nan_frac</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.save_tiles_to_disk" title="Link to this definition"></a></dt>
+<dd><p>Save RACMO and ERA5 tile patches to disk as compressed .npz files.</p>
+<p>For each RACMO file, we iterate over the tiles and save the corresponding
+RACMO and ERA5 patches to disk.</p>
+<p>Tiles are stored as .npz files:  tile_&lt;row&gt;_&lt;col&gt;_&lt;year&gt;.npz with keys era5 and racmo.
+We filter out ocean-only tiles before saving using the RACMO land mask (NaN fraction check).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>era5</strong> (<em>xr.DataArray</em>) – ERA5 data array (2D) in EPSG:3031 projection.</p></li>
+<li><p><strong>racmo_files</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – List of paths to RACMO .zarr files.</p></li>
+<li><p><strong>tiles</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>) – Each dict contains slices for RACMO and ERA5 tiles.</p></li>
+<li><p><strong>output_dir</strong> (<em>str</em>) – Path to the output directory.</p></li>
+<li><p><strong>max_nan_frac</strong> (<em>float</em>) – Maximum fraction of NaN to_numpy() allowed in a tile.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="super_resolution.rcm_emulator.pre_processing_module.tiling.slice_to_dict">
+<span class="sig-name descname"><span class="pre">slice_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slice_obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">slice</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#super_resolution.rcm_emulator.pre_processing_module.tiling.slice_to_dict" title="Link to this definition"></a></dt>
+<dd><p>Convert a slice object to a dictionary representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>slice_obj</strong> (<em>slice</em>) – A slice object to convert.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary with ‘start’, ‘stop’, and ‘step’ keys.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="super_resolution.rcm_emulator.pre_processing_module.reprojection.html" class="btn btn-neutral float-left" title="super_resolution.rcm_emulator.pre_processing_module.reprojection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="super_resolution.rcm_emulator_entrypoint.html" class="btn btn-neutral float-right" title="super_resolution.rcm_emulator_entrypoint" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+super\_resolution.monitoring
+============================
+
+.. automodule:: super_resolution.monitoring
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      setup_logging
+   

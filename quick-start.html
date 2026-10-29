@@ -1,0 +1,180 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Start &mdash; Super Resolution  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=acee47a5" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Super Resolution
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#choose-an-entrypoint">Choose an entrypoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-command-help">Getting command help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Super Resolution</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Quick Start</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/quick-start.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="quick-start">
+<h1>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h1>
+<p>The package provides two command-line entrypoints for running the RCM emulator
+against prepared GCM and RCM datasets. Both run preprocessing, model inference,
+and postprocessing, then save the result as a Zarr dataset.</p>
+<section id="choose-an-entrypoint">
+<h2>Choose an entrypoint<a class="headerlink" href="#choose-an-entrypoint" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">super_resolution.rcm_emulator_loc_entrypoint</span></code> runs the emulator for one
+requested location. Supply the location as a tuple of latitude and longitude:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">poetry run python -m super_resolution.rcm_emulator_loc_entrypoint \</span>
+<span class="go">    --gcm_zarr_path /path/to/gcm_data.zarr \</span>
+<span class="go">    --rcm_zarr_path /path/to/rcm_data.zarr \</span>
+<span class="go">    --location 75.0 -20.0 \</span>
+<span class="go">    --output_zarr_path /path/to/location_predictions.zarr \</span>
+<span class="go">    --model-name model_baseline_unet</span>
+</pre></div>
+</div>
+<p>The location coordinates are decimal degrees in <code class="docutils literal notranslate"><span class="pre">(latitude,</span> <span class="pre">longitude)</span></code>
+order. Use the location-specific entrypoint when you only need a prediction at
+one point rather than the domain-wide output.</p>
+<p><code class="docutils literal notranslate"><span class="pre">super_resolution.rcm_emulator_entrypoint</span></code> runs the emulator over the
+entire region:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">poetry run python -m super_resolution.rcm_emulator_entrypoint \</span>
+<span class="go">    --gcm_zarr_path /path/to/gcm_data.zarr \</span>
+<span class="go">    --rcm_zarr_path /path/to/rcm_data.zarr \</span>
+<span class="go">    --output_zarr_path /path/to/predictions.zarr \</span>
+<span class="go">    --model-name model_baseline_unet</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Running inference across the full region requires substantial compute
+resources and may take a long time. We recommend that the rcm_emulator_loc_entrypoint is used where possible.</p>
+</div>
+</section>
+<section id="arguments">
+<h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">--gcm_zarr_path</span></code></dt><dd><p>Path to the GCM input dataset. It must include the ERA5 variables
+<code class="docutils literal notranslate"><span class="pre">d2m</span></code>, <code class="docutils literal notranslate"><span class="pre">msl</span></code>, <code class="docutils literal notranslate"><span class="pre">sp</span></code>, <code class="docutils literal notranslate"><span class="pre">sst</span></code>, <code class="docutils literal notranslate"><span class="pre">t2m</span></code>, <code class="docutils literal notranslate"><span class="pre">tp</span></code>, <code class="docutils literal notranslate"><span class="pre">u10</span></code>, and <code class="docutils literal notranslate"><span class="pre">v10</span></code>,
+with non-empty <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, and <code class="docutils literal notranslate"><span class="pre">time</span></code> dimensions.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--rcm_zarr_path</span></code></dt><dd><p>Path to the RCM input dataset in consolidated Zarr format.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--location</span></code> (location-specific entrypoint only)</dt><dd><p>Latitude and longitude in decimal degrees, in that order. For example,
+<code class="docutils literal notranslate"><span class="pre">--location</span> <span class="pre">75.0</span> <span class="pre">-20.0</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--output_zarr_path</span></code></dt><dd><p>Destination path for the output Zarr dataset. The entrypoint writes with
+overwrite mode, so an existing dataset at this path will be replaced.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--model-name</span></code></dt><dd><p>Model to use for inference. Choose <code class="docutils literal notranslate"><span class="pre">model_baseline_unet</span></code> or
+<code class="docutils literal notranslate"><span class="pre">model_attention_unet</span></code>.</p>
+</dd>
+</dl>
+</section>
+<section id="getting-command-help">
+<h2>Getting command help<a class="headerlink" href="#getting-command-help" title="Link to this heading"></a></h2>
+<p>Each entrypoint accepts <code class="docutils literal notranslate"><span class="pre">--help</span></code> to show its command-line options:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">poetry run python -m super_resolution.rcm_emulator_entrypoint --help</span>
+<span class="go">poetry run python -m super_resolution.rcm_emulator_loc_entrypoint --help</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="overview.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

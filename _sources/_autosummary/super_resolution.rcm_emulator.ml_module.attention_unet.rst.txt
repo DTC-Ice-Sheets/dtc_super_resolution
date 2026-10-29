@@ -1,0 +1,14 @@
+super\_resolution.rcm\_emulator.ml\_module.attention\_unet
+==========================================================
+
+.. automodule:: super_resolution.rcm_emulator.ml_module.attention_unet
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   rcm_emulator_parts
+   rcm_emulator_unet
