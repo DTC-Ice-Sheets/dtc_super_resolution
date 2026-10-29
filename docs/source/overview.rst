@@ -27,7 +27,7 @@ but differ fundamentally in their input data, training strategy, and target vari
 
 The first module is climate-model emulator that follows the U-Net architecture introduced by Doury et al.(2022) 
 and subsequently applied to Surface Mass Balance (SMB) downscaling over Antarctica by van der Meer et al. (2023).
-The deep learning-based regional climate model (RCM) emulator learns to reconstruct high-resolution surface mass balance 
+The deep learning-based regional climate model (RCM) emulator learns to reconstruct high-resolution SMB
 from coarse atmospheric forcing, thereby providing a computationally efficient alternative to explicitly rerunning a 
 high-resolution dynamical RCM.
 
