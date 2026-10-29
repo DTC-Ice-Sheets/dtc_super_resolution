@@ -1,7 +1,7 @@
 Overview
 ========
 
-The **Enhanced Surface Climate** module of the DTC Ice Sheets provides high-resolution surface climate information 
+The **Enhanced Surface Climate** module of the DTC Ice Sheets digital twin, provides high-resolution surface climate information 
 for the Antarctic ice sheets (a future update will include Greenland), focusing on surface mass balance (SMB) and 
 surface melt. 
 Climate models are too coarse to capture small local melt events in Antarctica, which can have a high influence on ice 
