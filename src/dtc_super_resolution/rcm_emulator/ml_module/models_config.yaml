@@ -1,0 +1,15 @@
+model_baseline_unet:
+  model_type: Baseline                # can be "Baseline" or "Attention"
+  weights_path: "http://dtc-query-api-bucket.s3-website.gra.io.cloud.ovh.net/super_resolution/model_weights/model_baseline_unet.pth"  # Update this path to the actual model file
+  n_channel_x: 8                      # not using ssl because no data on land
+  n_channel_z: 18                     # 2 * channels_x + 2
+  size: 64
+  filter: 64
+
+model_attention_unet:
+  model_type: Attention
+  weights_path: "http://dtc-query-api-bucket.s3-website.gra.io.cloud.ovh.net/super_resolution/model_weights/model_attention_unet_v2.pth"
+  n_channel_x: 8
+  n_channel_z: 18
+  size: 64
+  filter: 64

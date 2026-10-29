@@ -1,0 +1,15 @@
+# When pushing to a branch, test
+name: super_resolution_test
+
+on:
+  push:
+    branches-ignore:
+      - main # all branches except main (and implicitly not tags)
+
+jobs:
+  test:
+    uses: ./.github/workflows/generic_test.yml
+    with:
+      package_name: dtc_super_resolution
+      notebooks_allowed: true
+    secrets: inherit
