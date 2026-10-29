@@ -39,7 +39,7 @@ fsspec = {extras = ["http"], version = "^2026.9.0"}
 pytest = "^9.0.2"
 typeguard = "^4.4.4"
 pre-commit = "^4.5"
-ruff = "^0.14.14"
+ruff = "^0.17.2"
 bandit = "^1.9.3"
 pytest-cov = "^7.0.0"
 sphinx = "^9.1.0"
