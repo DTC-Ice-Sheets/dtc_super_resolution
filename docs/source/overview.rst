@@ -18,7 +18,7 @@ Scientific background
 ---------------------
 
 Regional climate models typically operate at resolutions of tens of kilometres over Antarctica, which can smooth 
-the strong spatial gradients that control surface melt and surface mass balance (SMB), while satellite observations 
+the strong spatial gradients that control surface melt and SMB, while satellite observations 
 provide complementary information on melt but do not directly quantify all relevant surface-climate variables. 
 The two components of this module use deep learning models to bridge spatial and/or temporal scale gaps, 
 but differ fundamentally in their input data, training strategy, and target variable.
