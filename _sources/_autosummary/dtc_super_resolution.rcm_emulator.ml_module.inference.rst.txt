@@ -1,0 +1,12 @@
+dtc\_super\_resolution.rcm\_emulator.ml\_module.inference
+=========================================================
+
+.. automodule:: dtc_super_resolution.rcm_emulator.ml_module.inference
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      run_inference
+   

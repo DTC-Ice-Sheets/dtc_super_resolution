@@ -1,0 +1,12 @@
+dtc\_super\_resolution.rcm\_emulator\_loc\_entrypoint
+=====================================================
+
+.. automodule:: dtc_super_resolution.rcm_emulator_loc_entrypoint
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      main
+   

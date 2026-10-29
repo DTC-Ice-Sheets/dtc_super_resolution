@@ -1,0 +1,14 @@
+dtc\_super\_resolution.rcm\_emulator
+====================================
+
+.. automodule:: dtc_super_resolution.rcm_emulator
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   ml_module
+   pre_processing_module

@@ -1,0 +1,12 @@
+dtc\_super\_resolution.monitoring
+=================================
+
+.. automodule:: dtc_super_resolution.monitoring
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      setup_logging
+   

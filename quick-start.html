@@ -88,9 +88,9 @@ against prepared GCM and RCM datasets. Both run preprocessing, model inference,
 and postprocessing, then save the result as a Zarr dataset.</p>
 <section id="choose-an-entrypoint">
 <h2>Choose an entrypoint<a class="headerlink" href="#choose-an-entrypoint" title="Link to this heading"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">super_resolution.rcm_emulator_loc_entrypoint</span></code> runs the emulator for one
+<p><code class="docutils literal notranslate"><span class="pre">dtc_super_resolution.rcm_emulator_loc_entrypoint</span></code> runs the emulator for one
 requested location. Supply the location as a tuple of latitude and longitude:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">poetry run python -m super_resolution.rcm_emulator_loc_entrypoint \</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">poetry run python -m dtc_super_resolution.rcm_emulator_loc_entrypoint \</span>
 <span class="go">    --gcm_zarr_path /path/to/gcm_data.zarr \</span>
 <span class="go">    --rcm_zarr_path /path/to/rcm_data.zarr \</span>
 <span class="go">    --location 75.0 -20.0 \</span>
@@ -101,9 +101,9 @@ requested location. Supply the location as a tuple of latitude and longitude:</p
 <p>The location coordinates are decimal degrees in <code class="docutils literal notranslate"><span class="pre">(latitude,</span> <span class="pre">longitude)</span></code>
 order. Use the location-specific entrypoint when you only need a prediction at
 one point rather than the domain-wide output.</p>
-<p><code class="docutils literal notranslate"><span class="pre">super_resolution.rcm_emulator_entrypoint</span></code> runs the emulator over the
+<p><code class="docutils literal notranslate"><span class="pre">dtc_super_resolution.rcm_emulator_entrypoint</span></code> runs the emulator over the
 entire region:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">poetry run python -m super_resolution.rcm_emulator_entrypoint \</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">poetry run python -m dtc_super_resolution.rcm_emulator_entrypoint \</span>
 <span class="go">    --gcm_zarr_path /path/to/gcm_data.zarr \</span>
 <span class="go">    --rcm_zarr_path /path/to/rcm_data.zarr \</span>
 <span class="go">    --output_zarr_path /path/to/predictions.zarr \</span>
@@ -139,8 +139,8 @@ overwrite mode, so an existing dataset at this path will be replaced.</p>
 <section id="getting-command-help">
 <h2>Getting command help<a class="headerlink" href="#getting-command-help" title="Link to this heading"></a></h2>
 <p>Each entrypoint accepts <code class="docutils literal notranslate"><span class="pre">--help</span></code> to show its command-line options:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">poetry run python -m super_resolution.rcm_emulator_entrypoint --help</span>
-<span class="go">poetry run python -m super_resolution.rcm_emulator_loc_entrypoint --help</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">poetry run python -m dtc_super_resolution.rcm_emulator_entrypoint --help</span>
+<span class="go">poetry run python -m dtc_super_resolution.rcm_emulator_loc_entrypoint --help</span>
 </pre></div>
 </div>
 </section>

@@ -1,0 +1,18 @@
+dtc\_super\_resolution.rcm\_emulator.ml\_module.basic\_unet.unet\_parts
+=======================================================================
+
+.. automodule:: dtc_super_resolution.rcm_emulator.ml_module.basic_unet.unet_parts
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      DoubleConv
+      Down
+      InitialConv
+      LinearUpsamplingZ
+      OutConv
+      Up
+      UpLastConv
+   

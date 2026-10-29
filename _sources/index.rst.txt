@@ -6,7 +6,7 @@
 Super Resolution Module
 =================================
 
-The super_resolution module is a sub-component of the
+The dtc_super_resolution module is a sub-component of the
 `Digital Twin Component for Ice Sheets (DTC-IS) <https://dtc-ice-sheets.org/>`_, an ESA-funded, EO-driven digital twin
 project.
 
@@ -16,7 +16,7 @@ climate conditions over Greenland and Antarctica and can be run in isolation fro
 For a more interactive way of exploring the system, please visit the digital twin's
 `dashboard <https://dashboards.dtc-ice-sheets.org/>`_.
 
-The remainder of this documentation page provides an overview of the super_resolution module and details about how
+The remainder of this documentation page provides an overview of the dtc_super_resolution module and details about how
 to get it running locally.
 
 .. toctree::
