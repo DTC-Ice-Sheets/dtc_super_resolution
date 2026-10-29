@@ -5,8 +5,8 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "super_resolution"
 version = "0.0.30"
-description = "Leverage super-resolution modeling techniques to enhance the monitoring and prediction of surface climate conditions over Greenland and Antarctica"
-authors = ["Katholike Universiteit Leuven"]
+description = "A DTC-IS module that leverages super-resolution modeling techniques to enhance the monitoring and prediction of surface climate conditions over Greenland and Antarctica."
+authors = ["Stef Lhermitte <stef.lhermitte@kuleuven.be>", "Earthwave Ltd <info@earthwave.co.uk>"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/dtc-ice-sheets/super_resolution"
@@ -47,7 +47,6 @@ sphinx-rtd-theme = "^3.0.2"
 sphinx-copybutton = "^0.5.2"
 commitizen = "^4.11.6"
 pydoclint = "^0.8.3"
-data-download-module = {git = "https://github.com/dtc-ice-sheets/data_download_module.git"}
 
 [tool.poetry.group.deployment.dependencies]
 dtc-wrapper = { git = "https://github.com/DTC-Ice-Sheets/dtc_wrapper.git", tag = "0.0.42"}
